@@ -132,7 +132,8 @@ Here are some advanced Git interview questions that can help you demonstrate you
 
 ### **9. Explain the difference between `git rebase` and `git merge`.**
 - **`git merge`**: Combines the changes from one branch into another, creating a new commit that represents the merge.
-- **`git rebase`**: Reapplies commits from one branch onto another, creating a linear history. It can make the commit history cleaner but can be dangerous if used on shared branches due to rewriting history[7][9].
+- **`git rebase`**: Reapplies commits from one branch onto another, creating a linear history. 
+- It can make the commit history cleaner but can be dangerous if used on shared branches due to rewriting history.
 
 ### **10. How do you use `git bisect` to find a bug?**
 - **`git bisect`**: A binary search tool to find the commit that introduced a bug.
@@ -140,7 +141,8 @@ Here are some advanced Git interview questions that can help you demonstrate you
     1. Start bisecting: `git bisect start`.
     2. Mark the current commit as bad: `git bisect bad`.
     3. Mark a known good commit: `git bisect good <commit>`.
-    4. Git will check out a commit halfway between the good and bad commits. Test this commit and mark it as good or bad.
+    4. Git will check out a commit halfway between the good and bad commits. 
+        - Test this commit and mark it as good or bad.
     5. Repeat until Git identifies the first bad commit.
   - **End bisecting**: `git bisect reset`[5].
 
