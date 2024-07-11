@@ -2,28 +2,30 @@
 
 ### General Characteristics
 - **Volume:** A collection of blocks, each with a unique identifier.
-- **Filesystem:** Created on top of the volume at the OS level.
-- **Persistence:** Volumes persist independently of the running life of an EC2 instance.
 - **Attachment:** Both encrypted and unencrypted volumes can be attached to an EC2 instance simultaneously.
-- **Mountable and Bootable:** Block storage is mountable and bootable.
+- **Mountable and Bootable:** Block storage is **mountable and bootable**.
 
 ### EBS Volume Specifics
-- **Single Instance Mount:** EBS volumes can only be mounted to one instance at a time, except for EBS multi-attach.
-- **Concurrency:** When attaching volumes to multiple instances, concurrency must be managed to avoid data corruption.
-- **Availability Zone Bound:** Volumes are bound to an Availability Zone, and data is lost if the entire zone goes down.
-- **Provisioning:** Capacity must be provisioned in advance (size in GB & throughput in IOPS).
-- **Scaling:** No option for scaling as per use.
+- **Single Instance Mount:** EBS volumes can only be mounted to one instance at a time
+  - except for EBS multi-attach.
+  - exclusively on (io1 and io2) volumes
+  - can't be created as boot volumes.
+  - We need to take care of concurrency.
+
+- **Availability Zone Bound:** bound to an Availability Zone
 - **Instance Termination:** By default, the root EBS volume is deleted upon instance termination, while other attached volumes are not (can be overridden using the `DeleteOnTermination` attribute).
 - **Replication:** To replicate an EBS volume across AZ or region, a snapshot must be copied.
+  - take a snapshot
+  - make a new ebs volume
+  - attach it to the new instance.
 
 ### EBS Volume Upgrade
-- **Modifications:** Increase volume size, change volume type, or adjust performance without detaching the volume or restarting the instance if Elastic Volumes are supported.
-- **Charges:** No charge to modify the configuration; charged for the new configuration after modification starts.
+- **Modifications:** Increase volume size, change volume type, or adjust performance without detaching.
+- **Charges:** No charge to modify the configuration.
 - **Modification Time:** Can take from a few minutes to several hours, depending on the changes.
-- **Cancellation:** Volume modification requests cannot be canceled once submitted.
 - **Size Changes:** Only volume size can be increased, not decreased.
 - **Performance Changes:** Volume performance can be increased or decreased, but not the size.
-- **Type Changes:** Changing from gp2 to gp3 without specifying IOPS or throughput provisions the gp3 volume with either equivalent performance or baseline gp3 performance, whichever is higher.
+
 
 ### EBS Volume Types
 
@@ -78,6 +80,21 @@
 - **Magnetic Generation Volumes:**
   - **Suited for Small Data Sets:**
     - **Performance:** Approx. 100 IOPS
+### EBS ENCRYPTION
+- EBS encryption is only available on certain instance types.
+- There is no direct way to encrypt an existing unencrypted volume, or to remove encryption from an encrypted volume. 
+  - However, you can migrate data between encrypted and unencrypted volumes.
+## Snapshots
+- Snapshots are incremental
+- EBS backups use IO and we should not run them while the application is handling a lot of traffic
+- Snapshots are stored in S3 (we are not able to see them)
+- It is not necessary to detach the volume to do a snapshot, but it is recommended
+-  EBS volumes restored from snapshots need to be pre-warmed (using fio or dd commands to read the entire volume)
+- You can’t delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first deregister the AMI before you can delete the snapshot.
+- Snapshots can be automated using Amazon Data Lifecycle Manage
+
+
+
 
 #### Instance Store Volumes
 - Provides block storage devices, raw volumes which can be mounted to a system
@@ -87,7 +104,8 @@
 -- Instance stores are included in the price of EC2 instances with which they come with
   - Instance stores have to be attached at launch time, they can not be added afterwards!
 - If an EC2 instance moves between hosts the instance store volume loses all its data
-One of the primary benefit of instance stores is performance, ex: D3 instance provides 4.6 GB/s throughput, I3 volumes provide 16 GB/s of sequential throughput with NVMe SSD
+
+
 ##### Instance store considerations:
 - Instance store volumes are local to EC2 hosts
 - Instance store can be added only at launch
