@@ -144,5 +144,5 @@ Here are some advanced Git interview questions that can help you demonstrate you
     4. Git will check out a commit halfway between the good and bad commits. 
         - Test this commit and mark it as good or bad.
     5. Repeat until Git identifies the first bad commit.
-  - **End bisecting**: `git bisect reset`[5].
+  - **End bisecting**: `git bisect reset`.
 
