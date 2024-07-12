@@ -42,4 +42,32 @@
 10. **Can you explain how to delete a DaemonSet and its associated Pods?**
     -use the command `kubectl delete daemonset <daemonset-name>`.
 
+### **Handling of DaemonSets by `kubectl drain`**
 
+1. **Default Behavior:**
+   - By default, `kubectl drain` does not evict DaemonSet-managed pods. This is because DaemonSet pods are designed to run on every node in the cluster, and the DaemonSet controller will immediately recreate any missing DaemonSet pods on the node being drained.
+
+2. **Using `--ignore-daemonsets` Flag:**
+   - To successfully drain a node that has DaemonSet-managed pods, you must use the `--ignore-daemonsets` flag. 
+   - This tells `kubectl drain` to ignore DaemonSet pods and proceed with the eviction of other pods.
+   - Command example:
+     ```sh
+     kubectl drain <node-name> --ignore-daemonsets
+     ```
+
+3. **DaemonSet Pods Are Not Evicted:**
+   - Even when using the `--ignore-daemonsets` flag, DaemonSet pods are not actually evicted. Instead, they are ignored during the drain process. 
+
+4. **DaemonSets Ignore Unschedulable Taints:**
+   - DaemonSet pods are designed to ignore the `node.kubernetes.io/unschedulable` taint, which is applied to nodes being drained. 
+   - Unschedulable taint they can tolerate.
+
+### **Comparison with Other Workloads**
+
+| Feature                       | DaemonSets                                   | Other Workloads (Deployments, StatefulSets, etc.) |
+|-------------------------------|----------------------------------------------|---------------------------------------------------|
+| **Eviction by Default**       | Not evicted by default                       | Evicted by default                                |
+| **Flag Required for Drain**   | `--ignore-daemonsets`                        | No special flag required                          |
+| **Pod Re-creation**           | Pods are recreated immediately by controller | Pods are rescheduled to other nodes               |
+| **Respecting Unschedulable**  | Ignore unschedulable taints                  | Respect unschedulable taints                      |
+| **PodDisruptionBudgets (PDBs)**| Not applicable                              | PDBs are respected                                |
