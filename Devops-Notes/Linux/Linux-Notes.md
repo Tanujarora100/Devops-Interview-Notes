@@ -4,9 +4,11 @@ High Disk Usage Issue
 - If EBS volume take a snapshot and increase the disk space for EC2 Instance.
 1. EC2 ASG is Going Down- `top` Command or `ps aux --sort=-%cpu | head -n 11`
 2. **How does Anacron manage scheduling?**
-    - Anacron maintains a timestamp file for each job in the system's spool directory (**`/var/spool/anacron`**). It compares the last execution time stored in the timestamp file with the current time to determine if a job needs to be executed.
+    - Anacron maintains a timestamp file for each job in the system's spool directory (**`/var/spool/anacron`**). 
+    - It compares the last execution time stored in the timestamp file with the current time to determine if a job needs to be executed.
 3. **What happens if a scheduled Anacron job is missed?**
-    - Anacron detects missed executions by comparing the current time with the expected time of the last execution. If a job is missed, Anacron executes it when the system is next booted or when Anacron is run manually.
+    - Anacron detects missed executions by comparing the current time with the expected time of the last execution. 
+    - If a job is missed, Anacron executes it when the system is next booted or when Anacron is run manually.
 4. **How do you configure Anacron jobs?**
     - Anacron jobs are defined in configuration files located in the **`/etc/anacrontab`** file or in individual files in the **`/etc/cron.{daily,weekly,monthly}`** directories.
 5. **How does Anacron differ from Cron?**
@@ -16,38 +18,35 @@ High Disk Usage Issue
     - Verify the permissions of the files and directories accessed by the cron job.
 7. **Explain the format of a crontab entry.**
     - Crontab entries consist of six fields separated by spaces:
-        
         ```bash
         minute hour day month day_of_week command
-        
         ```
-        
 8. How to see the partition sizes :
     1. `fdisk -l`
     2. check linux version - `uname -a` or `'cat /etc/*release`
 9. Limit the memory usage of the process - `ulimit -Sv 1000`
 10. Check the full path of file `readlink -f file.txt`
 11. **What is Zombie Process?**
-    
-    **Ans:** It is a process whose execution is completed but even the information exists in the process table. It occurs for the child process because the parent process needs to read the child process status. Once it is completed using the wait system call, **then the zombie process is removed from the process table.** This is known as Zombie Process.
+- Process Creation: When a parent process creates a child process using the fork() system call, both processes start running concurrently.
+- Child Process Completes: The child process finishes its execution and exits. Normally, when a process exits, it releases all its resources (like memory and file descriptors).
+- Exit Status: Even though the child process has finished, it leaves behind an exit status. This status needs to be read by the parent process to know how the child terminated (whether it was successful or if there was an error).
+- Parent Process Responsibility: The parent process reads the exit status of the child process using the wait() system call. This action is known as "reaping" the child process.
+- Zombie State: If the parent process does not call wait(), the child process remains in the process table as a "zombie". 
+    - It is essentially a "dead" process that has not been fully cleaned up.
     
 12. System calls in Linux:
-    
-    **Ans:** The process management system calls in Linux:
-    
     - **fork():** Used to create a new process.
     - **exec():** Execute new process.
     - **wait():** wait until process execution.
     - **exit():** exit from the process.
-    
     System calls to get the Process id :
-    
     - **getpid():** to find the unique process id.
     - **getppid():** to find the unique parent process id.
 13. A user cannot telnet or ssh to the server:
     1. server might be down
     2. Server sshd service is not running
     3. firewall can be blocking it.
+
 14. Difference in tar and .gz
     1. tar puts multiple files in a tar file
     2. gzip compress that archive file
@@ -55,9 +54,6 @@ High Disk Usage Issue
 15. List directory only inside a directory
     1. `find . -type d`
 16. Difference in TCP and UDP
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/8569671e-bad9-4645-8fe5-2f133f063b24/7113dfba-b45e-404c-82eb-dae889c33394/Untitled.png)
-    
 17. check disk space - `df -h` 
 18. Check Swap Memory `free -gh` 
 19. hostname check - `hostname` 
@@ -94,10 +90,10 @@ High Disk Usage Issue
 42. Check cpu usage for a process - `ps aux` or `top`
 43. check if process is running - `ps -ef | grep -i httpd`
 44. How to kill a process - `kill -9 pid`
-45. What is Kernel: Kernel is the core component between hardware and the process, it is like a middleware which is responsible for communication.
+45. What is Kernel: Kernel is the core component between hardware and the process, it is like a `middleware which is responsible for communication.`
 46. Search a word in file and replace it in entire file: 
     1. `sed` command is used to replace the word in entire file
-    2. `sed 's/MAINTAINCE_ENABLED/MAINTAINCE_DISABLED/g' config.cfg`
+    2. `sed -i.bak 's/MAINTAINCE_ENABLED/MAINTAINCE_DISABLED/g' config.cfg`
 47. FTP Command is used for: To exchange the file to and from a remote computer.
 48. How to setup alias : `vim .bashrc` file and set the alias
 49. Default Ports:
@@ -108,9 +104,8 @@ High Disk Usage Issue
     5. HTTPS-443
     6. FTP-21
 50. How to check if a package is installed or not: `rpm -qa | grep -i net-tools`
-    
     ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/8569671e-bad9-4645-8fe5-2f133f063b24/5f269589-b6b9-43c7-a8c6-323301be113d/Untitled.png)
-    
+
 51. Difference in Upgrade and Update Command:
     1. update: install new packages
     2. upgrade: perform same as update but removes older packages.
@@ -121,22 +116,17 @@ High Disk Usage Issue
 55. Check the usb devices - `lsusb`
 56. How to check IP Server is accessible or not - `ping` or `telnet`
 57. How to check the info of the ports - `netstat -tulpn`
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/8569671e-bad9-4645-8fe5-2f133f063b24/2a7ca155-a8eb-4168-a623-0dec18824f81/Untitled.png)
-    
 58. How to check route table of the Machine- `netstat -route`
 59. How to check network interfaces - `netstat -i` 
 60. Difference in SSH and telnet: Telnet is not secured.
 61. How to set a username and password that never expires `chage -M -1 Tanuj`
-62. Why etc/passwd and etc/shadow file cannot be merged : existence of two files as passwd file is a text file and the shadow file is the hashed file, shadow file is accessible by root only
+62. Why etc/passwd and etc/shadow file cannot be merged : existence of two files as passwd file is a text file and the shadow file is the hashed file
+- shadow file is accessible by root only
 63. List files opened by a specific process - `lsof -p PID`
 64. Taking alot of time after reboot: filesystem can be corrupted or ext2 does not have journaling feature.
 65. File is unable to be created on a mount point
     1. check space - `df -h`
     2. check inode usage - `df -i`
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/8569671e-bad9-4645-8fe5-2f133f063b24/fdd8fbf5-cfa5-444b-ba67-e6de8967711f/Untitled.png)
-    
 66. How to set a sticky bit and difference in small s and capital S
     1. Sticky bit is a special permissions for file and directory and superuser can delete or rename the file only even if other users have the write permission to the directory
     2. For executable files, the sticky bit has no effect on modern systems. However, on directories, it is primarily used to prevent users from deleting or renaming each other's files in a shared directory like /tmp. This ensures that users can create and modify their own files within the directory, but cannot delete or modify files owned by other users.
@@ -146,9 +136,7 @@ High Disk Usage Issue
     2. When the setuid bit is set on an executable file, it's represented by the letter **`s`** or **`S`** in the owner's execute permission position.
     - **`s`**: If the file has both the setuid bit and execute permission for the owner set.
     - **`S`**: If the file has the setuid bit set but does not have execute permission for the owner.
-    
-    For example:
-    
+
     - **`rwsr-xr-x`** : The setuid bit is set (**`s`**), and execute permission is also set for the owner (**`rwx`**).
     - **`rws--x--x`** : The setuid bit is set (**`S`**), but execute permission for the owner is not set (**`--`**).
 68. Explain Booting Process of Linux.
