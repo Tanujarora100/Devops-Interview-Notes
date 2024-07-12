@@ -48,7 +48,7 @@
 
 ### **Scaling Cool-downs**
 - **Cool-down Period**: Ensures ASG doesn’t launch or terminate additional instances before the previous scaling activity takes effect.
-- default is 5 minutes, maximum is 60 minutes.
+- **default is 5 minutes, maximum is 60 minutes**.
 
 ### **Suspend and Resume Scaling Processes**
 - **Suspend/Resume**: Suspend and resume scaling processes for troubleshooting or making changes.
