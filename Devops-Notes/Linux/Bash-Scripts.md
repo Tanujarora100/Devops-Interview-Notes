@@ -7,14 +7,9 @@ mkdir -p "$BACKUP_DIR"
 tar -czf "$BACKUP_DIR/backup-$TIMESTAMP.tar.gz -C $CURRENT_DIR 
 echo " BACKUP COMPLETED"
 if[ $? eq 0]; then
-
     echo " Backup Succeeded!!!!!"
-
 else
-
     echo " Backup Failed"
-
-chmod +x backup.sh
 ```
 ----------------------------------------
 ## SCRIPT TO TAKE INPUT
@@ -43,21 +38,15 @@ find . -type f -name "$file"
 --------------------------------------------
 
 # LAST MODIFIED IN 7 Days
-
+```sh
 echo " Enter the directory you want to search "
-
 read directory
-
 if [ -z directory ]; then
-
  echo " Directory Not given exiting........"
-
  exit 1
-
 fi
-
 find "$directory" -type d -mtime -7
-
+```
 ------------------------------------------------
 
 # DELETE EMPTY FILES
@@ -72,15 +61,10 @@ fi
 ----------------------------------------
 
 # DELETE FILES IN A SPECIFIC DIRECTORY
-
 ```bash
-
 read -p "Enter Directory" directory
-
 if [! -d directory] ||[ -z directory]; then
-
     echo " Directory name is not given! exiting ......"
-
 else
     find "$directory" -type f -empty -delete
 ```
@@ -91,21 +75,14 @@ else
 echo "Enter a directory name"
 read directory
 echo " Enter the maximum file size"
-read filesize
-
+read -s filesize
 if[ -z "$directory"] || [ -z "$filesize"]; then
-
     echo " Directory name is not given! exiting ......"
-
 else
-
     find "$directory" -type f -size +"$filesize"
 ```
---------------------------------------------------------
-
- 
-
-#SCRIPT TO DELETE THE TEMP FILES
+-------------------------------------------------------
+# SCRIPT TO DELETE THE TEMP FILES
 ```bash
 echo "Enter the directory name "
 read directory
@@ -119,17 +96,14 @@ else
 
 # LOG ANALYSIS SCRIPT
 
- 
-
+```bash
 count_error_msg() {
-
 local file_name ="$1"
-
 if [-f "$file-name"]; then
 
-                local error_count= $(grep -c -i "ERROR" "$FILE_NAME)
+local error_count= $(grep -c -i "ERROR" "$FILE_NAME")
 
-                echo "Total Number of error messages in file $FILE_NAME: $error_count"
+echo "Total Number of error messages in file $FILE_NAME: $error_count"
 
 else
 
@@ -139,70 +113,47 @@ else
 
 fi
 
- 
-
- 
-
 summarize_logs() {
-
 local file_name= "$1"
-
 if [-f "$file_name"]; then
-
 echo " Summary of logs entries by date"
-
 awk '{print $1}' "$file_name" | sort| uniq -c
 
 else
 
-                echo " Error File does not exist "
-
-                exit 1
-
-fi
-
----------------------------------------------------------------
-
-#SCRIPT TO LIST FILES IN DIRECTORY
-
-echo " Enter the directory "
-
-read directory
-
-if [ ! -d directory ] || [ -z directory]; then
-
-    echo " Error with directory specified"
+    echo " Error File does not exist "
 
     exit 1
 
+fi
+```
+---------------------------------------------------------------
+
+# SCRIPT TO LIST FILES IN DIRECTORY
+```bash
+echo " Enter the directory "
+read directory
+if [ ! -d directory ] || [ -z directory]; then
+    echo " Error with directory specified"
+    exit 1
 else
-
     ls -l "$directory"/
-
+```
 -----------------------------------------------------------
 
 # UPDATE THE SYSTEMS
-
-if ["$(uname -s)"=='Linux"]; then
-
+```bash
+if [$(uname -s)"=='Linux" ]; then
  if [ -f /etc/debian_version]; then
-
-                sudo apt update && sudo apt upgrade -y
-
+        sudo apt update && sudo apt upgrade -y
 elif [ -f /etc/redhat-release]; then
-
  sudo yum update && sudo yum upgrade -y
-
-else:
-
+else
 echo "Not supported "
-
 fi
-
 echo " Only for Linux Systems "
-
 fi
-
+```
 -------------------------------------------
 
 # ROTATE LOGS
@@ -216,28 +167,20 @@ echo "Logs rotated to $ROTATE_DIRECTORY"
 ```
 ----------------------------------------
 
-#CHECK PROCESS IS RUNNING OR NOT
-
+# CHECK PROCESS IS RUNNING OR NOT
+```bash
 PROCESS_NAME ="nginx"
-
 if pgrep '$PROCESS_NAME" > dev/null; then
-
-                echo " Running"
-
+echo " Running"
 else
-
-                echo "Not running"
-
+    echo "Not running"
+```
 ---------------------------------------------------------------------
 
-#SECOND WAY
-
+## SECOND WAY TO CHECK PROCESS RUNNING
+```bash
 count_process=$(ps -ef| grep -i "$PROCESS_NAME" | grep -v "grep"|  wc -l )
-
-if [ count_process -gt 1 ]; then
-
+if [ count_process -eq 1 ]; then
  echo "Process running"
-
 else
-
-                echo "Not running"
+    echo "Not running"

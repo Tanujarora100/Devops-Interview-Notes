@@ -58,7 +58,8 @@ High Disk Usage Issue
 18. Check Swap Memory `free -gh` 
 19. hostname check - `hostname` 
 20. check ip of the machine - `ip addr show or hostname -i`
-21. check current user - `whoami`
+21. How to check a certain port for traffic - `tcpdump -i eth0`
+22. check current user - `whoami`
 22. Create file - `touch`, `vim,nano`
 23. grep and egrep - egrep can search multiple words at one time also.
 24. read file without cat command - `less` , `head` , `more`,  `nano or vim`
@@ -104,8 +105,6 @@ High Disk Usage Issue
     5. HTTPS-443
     6. FTP-21
 50. How to check if a package is installed or not: `rpm -qa | grep -i net-tools`
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/8569671e-bad9-4645-8fe5-2f133f063b24/5f269589-b6b9-43c7-a8c6-323301be113d/Untitled.png)
-
 51. Difference in Upgrade and Update Command:
     1. update: install new packages
     2. upgrade: perform same as update but removes older packages.
@@ -129,16 +128,7 @@ High Disk Usage Issue
     2. check inode usage - `df -i`
 66. How to set a sticky bit and difference in small s and capital S
     1. Sticky bit is a special permissions for file and directory and superuser can delete or rename the file only even if other users have the write permission to the directory
-    2. For executable files, the sticky bit has no effect on modern systems. However, on directories, it is primarily used to prevent users from deleting or renaming each other's files in a shared directory like /tmp. This ensures that users can create and modify their own files within the directory, but cannot delete or modify files owned by other users.
-    3. Others with the full permission cannot rename or move a file or delete it only owner can or superuser.
-67. Difference in -S and -s in setuidBit
-    1. The setuid (set user ID) bit is a special permission in Unix-like operating systems that allows users to execute a program with the permissions of the program's owner rather than the permissions of the user who runs the program. When the setuid bit is set on an executable file, the program is executed with the privileges of the file's owner, typically root (the superuser).
-    2. When the setuid bit is set on an executable file, it's represented by the letter **`s`** or **`S`** in the owner's execute permission position.
-    - **`s`**: If the file has both the setuid bit and execute permission for the owner set.
-    - **`S`**: If the file has the setuid bit set but does not have execute permission for the owner.
 
-    - **`rwsr-xr-x`** : The setuid bit is set (**`s`**), and execute permission is also set for the owner (**`rwx`**).
-    - **`rws--x--x`** : The setuid bit is set (**`S`**), but execute permission for the owner is not set (**`--`**).
 68. Explain Booting Process of Linux.
     1. **BIOS/UEFI Initialisation:**
         - BIOS or UEFI firmware initialises hardware components like CPU, RAM, and storage devices.

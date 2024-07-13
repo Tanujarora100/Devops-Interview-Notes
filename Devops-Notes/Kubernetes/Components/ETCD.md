@@ -2,28 +2,26 @@
 # ETCD
 
 ## Overview
-ETCD is a distributed key-value store that stores the cluster state. It replicates data across all its instances, ensuring data availability even if one instance crashes. It is crucial for Kubernetes as it stores all cluster configuration data.
+ETCD is a distributed key-value store that stores the cluster state. It replicates data across all its instances, ensuring data availability even if one instance crashes. 
 
 ### Key Features
 - **Document Format**: Stores information in a document format where changes to one document do not affect other similar documents.
-- **Cluster State Storage**: Every change made to a node is updated in the ETCD server, and Kubernetes considers a change successful once it is updated in ETCD.
+- **Cluster State Storage**: Every change made to a node is updated in the ETCD server
 
 ## Setup and Configuration
 
 ### Manual Setup
 - **Download and Run**: The ETCD binary needs to be downloaded manually and run as a service on the master node.
-- **Default Port**: By default, it listens on port 2379.
+- **Default Port**: listens on port 2379.
 - **KubeAdmin Setup**: When setting up the cluster using KubeAdmin, ETCD is automatically deployed as a static pod on the master node in the `kube-system` namespace.
 
 ### ETCDCTL Utility
 - **Usage**: `etcdctl` is the default command-line utility that comes with the binary itself.
-- **Commands**:
-  - `etcdctl set key1 value1` - Store information as key-value.
-  - `etcdctl get key1` - Retrieve information of the key-value.
+
 
 ### High Availability
 - **Multiple Master Nodes**: In a cluster with multiple master nodes, the ETCD service runs on each master node and communicates on port 2380.
-- **Configuration**: The initial configuration needs to ensure master nodes communicate with each other.
+
 
 ## ETCD Versions
 
@@ -37,12 +35,7 @@ ETCD is a distributed key-value store that stores the cluster state. It replicat
   - `etcdctl snapshot save`
   - `etcdctl endpoint health`
   - `etcdctl get`
-- **Version 2**:
-  - `etcdctl set key1 value1`
-  - `etcdctl backup`
-  - `etcdctl cluster-health`
-  - `etcdctl mk`
-  - `etcdctl mkdir`
+
 
 ### Setting API Version
 - **Environment Variable**: Set the environment variable to version 3 and export it to ensure persistence.
@@ -55,13 +48,6 @@ ETCD is a distributed key-value store that stores the cluster state. It replicat
 
 ## Installation
 
-### Steps
-1. Follow the release notes for any ETCD release.
-2. Download and unzip the ETCD and `etcdctl` binary from [ETCD Releases](https://github.com/etcd-io/etcd/releases/).
-3. Move the extracted binaries to `/usr/local/bin` or `/usr/bin`.
-
-## Commands
-
 ### Backup a Cluster's ETCD
 ```sh
 ETCDCTL_API=3 etcdctl \
@@ -71,10 +57,6 @@ ETCDCTL_API=3 etcdctl \
 snapshot save <backup-filename>
 ```
 
-### Restore a Cluster from an ETCD Backup
-```sh
-ETCDCTL_API=3 etcdctl snapshot restore --data-dir="/var/lib/etcd-snapshot" <backup-filename>
-```
 
 ## Highly Available Topology
 
