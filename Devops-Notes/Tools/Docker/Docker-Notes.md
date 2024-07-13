@@ -2,11 +2,11 @@
 ## Difference between ADD and COPY
 
 ### COPY
-- **Function**: Copies files from the host to the container. It is a straightforward file copy operation.
+- It is a straightforward file copy operation.
 - **Example**: `COPY . /app`
 
 ### ADD
-- **Function**: Similar to COPY but has some additional features. It can also fetch remote URLs and extract tarballs.
+- It can also fetch remote URLs and extract tarballs.
 - **Example**: `ADD http://example.com/file.tar.gz /tmp/`
 
 ## Difference between ENTRYPOINT and CMD
@@ -26,49 +26,41 @@
 ## Docker Networks
 
 ### List Docker Networks
-To see a list of all available Docker networks, use the `docker network ls` command.
 ```sh
 docker network ls
 ```
 
 ### Create a Custom Bridge Network
-You can create a custom bridge network to isolate containers from the host network. This is useful when you want containers to communicate with each other privately.
 ```sh
 docker network create my_custom_network
 ```
 
 ### Create a Container on a Specific Network
-When running a container, you can specify the network it should connect to using the `--network` flag.
 ```sh
 docker run --name container1 --network my_custom_network -d nginx
 ```
 
 ### Inspect Network Details
-To view details about a specific network, use the `docker network inspect` command.
 ```sh
 docker network inspect my_custom_network
 ```
 
 ### Create a Container with a Specific IP Address
-You can specify a static IP address for a container within a custom bridge network using the `--ip` flag.
 ```sh
 docker run --name container2 --network my_custom_network --ip 172.18.0.10 -d nginx
 ```
 
 ### Connect an Existing Container to a Network
-You can also connect an existing container to a network using the `docker network connect` command.
 ```sh
 docker network connect my_custom_network container1
 ```
 
 ### Disconnect a Container from a Network
-To disconnect a container from a network, use the `docker network disconnect` command.
 ```sh
 docker network disconnect my_custom_network container1
 ```
 
 ### Remove a Custom Network
-To remove a custom network, use the `docker network rm` command.
 ```sh
 docker network rm my_custom_network
 ```
@@ -76,7 +68,8 @@ docker network rm my_custom_network
 ## Docker Network Types
 
 ### Bridge Network (bridge)
-- **Description**: The default network mode for Docker containers when no network is specified. It creates an internal private network on the host, and containers can communicate with each other using container names.
+- **Description**: The default network mode for Docker containers when no network is specified. 
+- It creates an internal private network on the host, and containers can communicate with each other using container names.
 - **Use Cases**: Suitable for most containerized applications where containers need to communicate on the same host.
 
 ### Host Network (host)
@@ -89,7 +82,8 @@ docker network rm my_custom_network
 - **Use Cases**: Multi-host, multi-container applications orchestrated with Docker Swarm.
 
 ### Macvlan Network (macvlan)
-- **Description**: Allows containers to have their own MAC addresses and appear as separate devices on the host network. Each container has a unique network identity.
+- **Description**: Allows containers to have their own MAC addresses and appear as separate devices on the host network. 
+- Each container has a unique network identity.
 - **Use Cases**: When containers need to be directly on an external network, e.g., connecting containers to physical networks or VLANs.
 
 ### None Network (none)
@@ -100,7 +94,7 @@ docker network rm my_custom_network
 - **Use Cases**: Isolating containers, customizing DNS settings, or when you need multiple bridge networks on the same host.
 
 ### Overlay2 Network (overlay2)
-- **Description**: Introduced in Docker 20.10, the Overlay2 network driver is optimized for container-to-container communication within the same network namespace.
+- **Description**: Introduced in `Docker 20.10`, the Overlay2 network driver is optimized.
 
 ### Cilium Network (cilium)
 - **Description**: Cilium is an open-source networking and security project that offers advanced networking features, including API-aware network security and load balancing.
@@ -121,12 +115,21 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+    depends_on:
+     - mongo_database
   backend:
     image: node:14
     working_dir: /app
     volumes:
       - ./backend:/app
     command: npm start
+  mongo_database:
+   image: mongo 
+   ports:
+     - "27017:27017"
+   environment:
+     MONGO_INIT_USERNAME='USERNAME'
+     MONGO_INIT_PASSWORD='PASSWORD'
 ```
 
 ### Docker Compose Commands
@@ -176,8 +179,7 @@ services:
 - **SSH Authentication**: Use SSH keys for secure access.
 - **Daemon Configuration**: Add IP addresses to the `daemon.json` file to restrict access and use a secured port.
 - **TLS Certificates**: Secure communication using TLS certificates.
-  - Set the environment variable `DOCKER_TLS=true`.
-  - Use `tlsverify`, `tlscert`, and `tlskey` for encryption (note: these do not guarantee authentication).
+  - Set the environment variable `DOCKER_TLS=true`
   - Use port 2376 for encrypted traffic.
 
 ### Example Configuration
@@ -192,23 +194,6 @@ services:
 }
 ```
 
-## Second Level of Security: Adding Authentication
-
-### Enabling Authentication
-- **TLS Verify Flag**: Enable authentication by setting the `tlsverify` flag.
-- **CA Certificate**: Use a CA certificate for authentication.
-![alt text](image.png)
-### Example Commands
-```sh
-# Start Docker daemon with TLS and authentication
-dockerd --tlsverify --tlscacert=ca.pem --tlscert=server-cert.pem --tlskey=server-key.pem -H=0.0.0.0:2376
-
-# Connect to Docker daemon securely
-docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$HOST:2376 version
-```
-
-## Additional Security Measures
-
 ### Protect the Docker Daemon Socket
 - **Default Unix Socket**: Docker runs through a non-networked Unix socket by default.
 - **SSH Protection**: Use SSH to protect the Docker daemon socket.
@@ -216,17 +201,7 @@ docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$HO
   DOCKER_HOST=ssh://USER@HOST
   ```
 
-### Rootless Mode
-- **Run Docker as Non-Root**: Use rootless mode to run Docker daemon and containers as an unprivileged user.
-
 ### Regular Updates
-- **Keep Software Updated**: Regularly update the host OS, Docker Engine, and kernel to protect against known vulnerabilities.
-
-### Limit Inter-Container Communication
-- **Disable ICC**: Launch Docker daemon with ICC disabled to restrict container communication.
-  ```sh
-  dockerd --icc=false
-  ```
 
 ### Use Docker Secrets
 - **Manage Sensitive Data**: Use Docker Secrets to securely manage sensitive data like passwords and tokens.
@@ -266,3 +241,27 @@ RUN chown -R nginx:nginx /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
+## How Docker Daemon Communicates with Docker Client
+
+Docker uses a client-server architecture where the Docker client and Docker daemon communicate to manage and execute Docker containers.
+   - Client issue commands like `docker build`, `docker pull`.
+  - Docker daemon (`dockerd`) is a background process 
+   - These Communicate over the REST API on Socket `/var/run/docker.sock`
+   - Need to create a TCP Socket if the docker daemon and docker client are on remote servers.
+
+### **Example Communication Flow**
+   - The Docker client translates command into an API request.
+   - The Docker client sends the API request to the Docker daemon over (Unix socket or TCP).
+   - The Docker daemon receives the API request, processes it
+
+### **Security Considerations**
+
+- **Authentication and Authorization**
+  - Docker supports various authentication methods, including username/password, client certificates, and token-based authentication, to secure communication between the client and daemon[7].
+
+- **Enabling Remote Access via TCP Socket**
+  ```json
+  {
+    "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
+  }
+  ```

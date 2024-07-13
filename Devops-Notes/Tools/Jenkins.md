@@ -3,9 +3,11 @@
 - Using SCM polling
 - Through scheduled builds (cron jobs)
 - Via webhooks from version control systems like GitHub
+
 ### What are Jenkins agents (nodes)?
 - Jenkins agents, or nodes, are machines that Jenkins uses to execute build, test, and deployment tasks. 
-- The Jenkins server itself is the master node, and additional machines can be configured as agent nodes to distribute workloads.
+- The Jenkins server itself is the master node, and additional machines.
+
 ### How do you secure a Jenkins instance?
 - Use role-based access control (RBAC)
 - Secure Jenkins with HTTPS
@@ -13,8 +15,7 @@
 - Use the Matrix-based security plugin
 
 ### What is the Blue Ocean plugin in Jenkins?
-- Blue Ocean is a modern user interface for Jenkins, designed to simplify the creation, visualization, and management of Jenkins Pipelines. 
-- It provides a more intuitive and visually appealing way to interact with Jenkins.
+- Blue Ocean is a modern user interface for Jenkins, designed to simplify the creation.
 
 ### How do you manage credentials in Jenkins?
 - Credentials in Jenkins can be managed using the "Credentials" plugin. 
@@ -27,12 +28,12 @@
 - Use distributed builds to balance the load
 - Increase the heap size for the Jenkins JVM
 - Use the "Throttle Concurrent Builds" plugin
-- Optimize the number of executors based on available resources.
+- Optimize the number of executors
 
 ### How do you ensure high availability and disaster recovery for Jenkins?
 - Use Jenkins in a master-agent architecture with multiple agents
 - Regularly back up Jenkins configurations and job data
-- Use a load balancer to distribute traffic among multiple Jenkins instances
+- Use a load balancer to distribute traffic
 
 ### WRITE SAMPLE PIPELINE 
 ```groovy
@@ -88,11 +89,8 @@ pipeline{
 ## **Jenkins Security and Admin User Management**
 
 ### **Jenkins Security**
-
-Jenkins takes security seriously and provides several mechanisms to secure your Jenkins instance. Here are some key aspects and best practices for Jenkins security:
-
 #### **1. Security Advisories**
-Jenkins regularly publishes security advisories to inform users about vulnerabilities in Jenkins core and plugins. These advisories include details about the vulnerabilities, affected versions, and recommended fixes[1][4].
+Jenkins regularly publishes security advisories to inform users about vulnerabilities in Jenkins core and plugins. 
 
 #### **2. Access Control**
 Jenkins uses a two-pronged approach to access control:
@@ -176,7 +174,23 @@ else
 fi
 ```
 
-### **Steps to Use the Script:**
+## Throttle Builds in Jenkins
 
-1. **Create the Script:**
-2. **Schedule the Script:**
+**Throttle builds** in Jenkins refers to the ability to limit the number of concurrent builds of a project or a group of projects. This is particularly useful in scenarios where running multiple builds simultaneously can lead to resource contention, performance degradation, or conflicts.
+
+### **Key Features of Throttle Concurrent Builds Plugin**
+
+1. **Throttling Modes**
+   - **Throttle this project alone**: Limits the number of concurrent builds for a specific project. You can configure the maximum total concurrent builds and the maximum concurrent builds per node.
+
+
+2. **Pipeline Integration**
+   - The plugin supports throttling within Jenkins Pipelines using the `throttle()` step. 
+
+
+### **Benefits of Throttling Builds**
+
+- **Resource Management**
+- **Conflict Avoidance**
+- **Improved Stability**
+

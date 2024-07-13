@@ -1,5 +1,5 @@
 #### How does Terraform manage dependencies?
-- Terraform uses a dependency graph to manage dependencies between resources. It automatically understands the order of operations needed based on resource dependencies.
+- Terraform uses a dependency graph to manage dependencies between resources.
 
 ``` hcl
 resource "aws_instance" "web" {
@@ -29,8 +29,8 @@ resource "aws_autoscaling_group" "example" {
 ```
 #### What is the purpose of the terraform_remote_state data source and how is it used?
 - The terraform_remote_state data source in Terraform enables sharing and retrieving outputs from a separate Terraform state file. 
-- It facilitates communication between different Terraform configurations or teams working on related infrastructure. This promotes reusability, consistency, and easier collaboration between different Terraform projects.
-```h
+
+```hcl
 data "terraform_remote_state" "networking" {
  backend = "s3"
   config = {
@@ -39,6 +39,7 @@ data "terraform_remote_state" "networking" {
      region = "us-west-2"
    }
 }
+
 resource "aws_instance" "example" {
  // Use the remote state output as input for resource configuration
  subnet_id = data.terraform_remote_state.networking.outputs.subnet_id
@@ -88,8 +89,7 @@ module "example_module" {
 
 
 #### What does the terraform plan command do?
-- Terraform plan creates an execution plan, showing what actions Terraform will take to achieve
-the desired state defined in the configuration.
+- Terraform plan creates an execution plan, showing what actions Terraform will take to achieve the desired state.
 
 #### What is Terraform’s “target” argument and how can it be useful?
 - The “target” argument in Terraform allows you to specify a single resource or module to be targeted for an operation.
@@ -99,20 +99,15 @@ terraform apply -target="aws_security_group.my_sg"
 
 #### What is the terraform apply command used for?
 - Terraform apply applies the changes required to reach the desired state of the configuration.
-It executes the plan created by terraform plan.
 - Here the terraform state file is created.
 
 #### What is the purpose of the terraform destroy command?
-- Terraform destroy is used to destroy the infrastructure managed by Terraform. It removes all
-the resources defined in the configuration.
-- If you want to selectively destroy only certain resources in your Terraform configuration while keeping others intact, you can use the -target option with the terraform destroy command.
+- Terraform destroy is used to destroy the infrastructure managed by Terraform.
 ```h
 terraform destory -target <id> 
 ```
 
 #### How do you define and use variables in Terraform?
-- Variables in Terraform are defined using the variable block and can be used by referring to
-them with var.<variable_name>.
 ```
 variable "instance_type" {
 description = "Type of EC2 instance"
@@ -129,8 +124,7 @@ instance_type = var.instance_type
 terraform import aws_instance.example i-1234567890abcdef0
 ```
 #### What are provisioners in Terraform?
-- execute scripts or commands on a local or remote machine as part of
-the resource lifecycle.
+- execute scripts or commands on a local or remote machine as part 
 ```
 resource "aws_instance" "example" {
 ami = "ami-0c55b159cbfafe1f0"
@@ -153,12 +147,11 @@ instance_type = var.environment == "prod" ? "t2.large" : "t2.micro"
 }
 ```
 #### What is the terraform destroy command used for?
-- Terraform destroy is used to destroy the infrastructure managed by Terraform. It removes all
-the resources defined in the configuration.
+- Terraform destroy is used to destroy the infrastructure managed by Terraform.
 
 #### How do you handle provider dependencies in Terraform?
 - Make a providers.tf
-- required_providers block in
+- `required_providers` block in
 the terraform block, specifying the version constraints.
 ```
 terraform {
@@ -169,6 +162,7 @@ version = "~> 3.0"
 }
 }}
 ```
+
 #### What are locals in Terraform and how do you use them?
 - Locals in Terraform are used to define local values that can be reused within a module. 
 ```
@@ -182,8 +176,7 @@ instance_type = local.instance_type
 }
 ```
 #### What is the terraform console command used for?
-- Terraform console opens an interactive console for evaluating expressions, testing
-interpolation syntax, and debugging configurations.
+- Terraform console opens an interactive console for evaluating expressions, testing.
 
 #### How do you use a lock file in Terraform?
 - A lock file (.terraform.lock.hcl) is used to lock provider versions
@@ -412,8 +405,9 @@ resource "aws_instance" "example" {
 
 #### Handling State Drift
 - State drift occurs when the real-world infrastructure diverges from the state file. 
-Regularly reconciling state drift by using the **terraform refresh command** or importing resources can help maintain consistency.
-- Terraform provides commands like terraform state rm and terraform import to manage state drift effectively
+- Regularly reconciling state drift by using the **terraform refresh command** or importing resources 
+- Terraform provides commands like terraform state rm.
+
 #### Migrate Local Config to remote backend
 - Configure the backend
 ```
@@ -426,9 +420,9 @@ dynamodb_table=”terraform_state_db”
 }}
 ```
 - Do terraform init promt will come
-Local_exec and remote_exec
+### Local_exec and remote_exec
 Local Exec:
-The local-exec provisioner runs a command locally on the machine where Terraform is being executed. This is useful for tasks that need to be performed on the local machine rather than on the remote resource.
+The local-exec provisioner runs a command locally on the machine where Terraform is being executed.
 resource "aws_instance" "web" {
   ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
@@ -441,7 +435,7 @@ resource "aws_instance" "web" {
 
 
 #### Remote-Exec Provisioner
-- The remote-exec provisioner runs commands on the remote resource after it has been created. 
+
 ```
 resource "aws_instance" "web" {
   ami           = "ami-0c55b159cbfafe1f0"
@@ -465,7 +459,7 @@ resource "aws_instance" "web" {
 }
 ```
 #### DynamoDB Concurrency Control for Terraform Remote Backend
-- DynamoDB uses an **optimistic locking mechanism** to manage concurrency.
+- DynamoDB uses an **optimistic locking mechanism**
     - Two Writes together is not taken
     - **Version Attribute**: Each item in the DynamoDB table has a version attribute. 
     - When an item is read, its version number is also retrieved. 
@@ -473,7 +467,8 @@ resource "aws_instance" "web" {
     - If the version matches, the update proceeds, and the version number is incremented. If the version does not match, the update is rejected, and a **`ConditionalCheckFailedException`** is thrown.
 
 
-- **LockID**: The DynamoDB table used for state locking has a primary key, typically named **`LockID`**, which uniquely identifies the lock. When Terraform needs to perform an operation that modifies the state, it attempts to acquire a lock by writing a new item with a unique **`LockID`**, **At each time only one process can acquire the lock**
+- **LockID**: The DynamoDB table used for state locking has a primary key, typically named **`LockID`**, which uniquely identifies the lock. 
+  - When Terraform needs to perform an operation that modifies the state, it attempts to acquire a lock by writing a new item with a unique **`LockID`**, **At each time only one process can acquire the lock**
 
 
 ### **Configuration Example**
@@ -496,14 +491,12 @@ terraform {
 
 ### **Purpose**
 The `terraform taint` command is used to manually mark a resource as tainted, indicating that it needs to be destroyed and recreated during the next `terraform apply` operation. 
-- This is useful when a resource is in an undesirable or unexpected state, but its configuration hasn’t changed.
 
 ### **Usage**
 - **Command**: `terraform taint [options] <address>`
 - **Example**: `terraform taint aws_instance.example`
 
-- **No Immediate Changes**: It does not immediately modify the actual infrastructure but ensures that the resource will be replaced during the next `terraform apply`.
-- **Deprecation**: As of Terraform v0.15.2, the `terraform taint` command is deprecated. 
+- **Deprecation**: 
 - The recommended approach is to use the `-replace` option with `terraform apply` (e.g., `terraform apply -replace="aws_instance.example"`).
 
 ### **Use Cases**
@@ -532,7 +525,6 @@ The `terraform taint` command is used to manually mark a resource as tainted, in
 - **Avoid Storing Secrets in State**: AWS Secrets Manager, HashiCorp Vault, or encrypted files[6].
 - **Use Static Analysis Tools**:
 - Implement tools like `terraform validate`, `TFLint.
-- **Compliance Testing**: Use tools like `terraform-compliance` to enforce compliance policies by running tests against your Terraform plans.
 - **Continuous Monitoring and Drift Detection**: Implement drift detection tools like `driftctl` to monitor for changes
 
 #### What is the "Random" provider? What is it used for
@@ -542,7 +534,7 @@ The `terraform taint` command is used to manually mark a resource as tainted, in
 ## **Null Resource**
 
 A **null resource** in Terraform is a resource that does not manage any real infrastructure but can be used to execute provisioners or other actions that are not tied to a specific resource. 
-- This can be useful for running scripts, commands, or other operations that need to be part of your Terraform workflow but do not directly create or manage infrastructure.
+- This can be useful for running scripts, commands, or other operations that need to be part of your Terraform workflow.
 
 ### **Example Usage**
 
@@ -553,9 +545,6 @@ resource "null_resource" "example" {
   }
 }
 ```
-
-In this example, the `null_resource` is used to run a local command that prints "Hello world" to the console[4][13].
-
 ## **Dynamic Blocks**
 
 **Dynamic blocks** in Terraform allow you to programmatically generate nested blocks within a resource, data source, provider, or provisioner. 
@@ -593,11 +582,11 @@ resource "aws_security_group" "sandbox_sg" {
 }
 ```
 
-In this example, the `dynamic` block is used to create multiple `ingress` rules for an AWS security group based on the values provided in the `settings` variable[2][5][8].
-
 ## **Data Sources**
 
-**Data sources** in Terraform allow you to fetch data from external sources or existing infrastructure. This data can then be used to configure other resources within your Terraform configuration. Data sources are read-only and do not create or manage infrastructure but provide information that can be used dynamically.
+**Data sources** in Terraform allow you to fetch data from external sources or existing infrastructure. 
+- This data can then be used to configure other resources within your Terraform configuration. 
+- Data sources are read-only and do not create or manage infrastructure but provide information that can be used dynamically.
 
 ### **Example Usage**
 
@@ -616,10 +605,6 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
 }
 ```
-
-In this example, the `aws_ami` data source is used to fetch the most recent AMI that matches the specified filters. 
-- The AMI ID is then used to launch an AWS EC2 instance.
-
 ## **Combining Concepts**
 
 ### **Example Usage**
@@ -652,8 +637,6 @@ resource "null_resource" "example" {
 ```
 ### You want to know from which paths Terraform is loading providers referenced in your Terraform configuration (*.tf files). You need to enable debug messages to find this out. Which of the following would achieve this?
 - Set the environment variable TF_LOG=TRACE
-
-In Terraform, the `variables.tf` and `terraform.tfvars` files serve distinct but complementary purposes, essential for managing infrastructure as code (IaC) efficiently.
 
 ## **Variables Declaration vs. Assignment**
 

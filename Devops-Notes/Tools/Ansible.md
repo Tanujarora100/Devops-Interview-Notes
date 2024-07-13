@@ -1,14 +1,4 @@
 
-
-### How does Ansible work?**
-- SSH or WinRM
-- YAML-based 
-- agentless architecture
-- push based 
-
-### What is an Ansible playbook?**
-- YAML file that contains a series of tasks
-
 ### What are the advantages of using Ansible?**
 - **Agentless**: .
 - **Simple syntax**:
@@ -192,13 +182,6 @@ You can create an AWS EC2 key pair using the `ec2_key` module.
     key_material: "{{ lookup('file', 'path/to/public_key.pub') }}"
 ```
 
-### **4. How to upgrade the Ansible version to the latest version?**
-You can upgrade Ansible using `pip`.
-
-```sh
-pip install --upgrade ansible
-```
-
 ###  How to generate encrypted passwords for the user module in Ansible?**
 You can generate encrypted passwords using the `mkpasswd` utility from the `whois` package.
 ```sh
@@ -240,3 +223,91 @@ Ansible connects to the Docker API using the `community.docker.docker_container`
     image: nginx
     state: started
 ```
+## Dynamic Inventory in Ansible
+
+Dynamic inventory in Ansible allows for real-time, automated management of infrastructure resources, which is particularly useful in cloud environments where resources frequently change.
+
+### **Key Concepts**
+
+1. **Dynamic Inventory Sources**
+   - Dynamic inventory sources can include cloud providers (AWS, Azure, GCP), LDAP directories, CMDB systems, and other external databases.
+2. **Inventory Plugins vs. Inventory Scripts**
+   - **Inventory Plugins**: These are the preferred method for dynamic inventory in Ansible. Plugins are more integrated with Ansible’s core and provide better performance and maintainability.
+   - **Inventory Scripts**: These are custom scripts that output inventory data in JSON format. While still supported, they are less efficient and more complex to manage compared to plugins.
+
+### **How Dynamic Inventory Works**
+
+1. **Configuration**
+   - Dynamic inventory is configured through inventory files, which can be written in `YAML or JSON`. 
+   - Example configuration for AWS EC2 using the `aws_ec2` plugin:
+     ```yaml
+     plugin: aws_ec2
+     regions:
+       - us-west-2
+     keyed_groups:
+       - key: tags
+         prefix: tag
+       - key: instance_type
+         prefix: instance_type
+       - key: placement.region
+         prefix: aws_region
+     ```
+3. **Caching**
+   - To improve performance, dynamic inventory plugins can cache results. This reduces the load on external systems and speeds up subsequent queries.
+   - Example of enabling caching in the `aws_ec2` plugin:
+     ```yaml
+     plugin: aws_ec2
+     cache: yes
+     cache_plugin: jsonfile
+     cache_timeout: 7200
+     cache_connection: /tmp/aws_inventory
+     ```
+
+### **Benefits of Dynamic Inventory**
+
+1. **Real-Time Updates**
+   - Automatically reflects changes in the infrastructure.
+   - Reduces the risk of configuration drift.
+
+2. **Scalability**
+   - Supports complex environments with multiple regions, tags, and instance types.
+
+3. **Flexibility**
+   - Can integrate with various external systems, allowing for a wide range of use cases.
+
+### **Developing Custom Dynamic Inventory Scripts**
+
+1. **Script Requirements**
+   - Must output JSON in a specific format that Ansible can parse.
+   - Should handle the `--list` and `--host` arguments to provide the full inventory and details for individual hosts, respectively.
+
+2. **Basic Structure of a Custom Script**
+   - Example in Python:
+     ```python
+     import json
+
+     def get_inventory():
+         inventory = {
+             "webprod": {
+                 "hosts": ["web1", "web2"],
+                 "vars": {"http_port": "80"}
+             },
+             "_meta": {
+                 "hostvars": {
+                     "web1": {"http_port": "80"},
+                     "web2": {"http_port": "80"}
+                 }
+             }
+         }
+         return inventory
+
+     if __name__ == "__main__":
+         print(json.dumps(get_inventory()))
+     ```
+
+3. **Using the Custom Script**
+   - Command to use the custom script as the inventory source:
+     ```sh
+     ansible-playbook -i /path/to/custom_inventory_script.py playbook.yml
+     ```
+
