@@ -3,43 +3,74 @@
 - **Agentless**: .
 - **Simple syntax**:
 - **Idempotent**
-- **Extensible**:
 - **Declarative**:
 
-## **Intermediate Ansible Interview Questions**
-
 ### What is Ansible Galaxy?**
-Ansible Galaxy is a repository for sharing Ansible roles. 
+- Ansible Galaxy is a repository for sharing Ansible roles. 
 
 ### How do you handle errors in Ansible?**
-Errors in Ansible can be handled using:
 - **ignore_errors**: Allows the playbook to continue even if a task fails.
 - **failed_when**: Custom conditions
 - **rescue**: Blocks to define tasks to run if a task fails.
-- **always**:
 
 ### What is Ansible Vault?**
-Ansible Vault is a feature that allows you to encrypt sensitive data such as passwords, keys, and other secrets within Ansible playbooks. 
+- Ansible Vault is a feature that allows you to encrypt sensitive data such as passwords, keys, and other secrets within Ansible playbooks. 
 
 ###  How does the Ansible synchronize module work?**
-The synchronize module is a wrapper around rsync to synchronize files and directories between the local machine and remote hosts.
+- The synchronize module is a wrapper around rsync to synchronize files and directories between the local machine and remote hosts.
 
-### How does the Ansible firewalld module work?**
-The firewalld module manages firewall rules on systems using firewalld. It allows you to add, remove, and configure firewall rules
 
 ### What is Ansible Tower?**
-Ansible Tower is an enterprise framework for controlling, securing, and managing Ansible automation.
+- Ansible Tower is an enterprise framework for controlling, securing, and managing Ansible automation.
 
 ### How do you perform rolling updates using Ansible?**
-To perform rolling updates, you can divide the **servers into batches and execute playbook tasks sequentially** on each batch. Use the `serial` keyword to control the number of hosts updated at a time and `delegate_to` to manage dependencies between tasks.
+- To perform rolling updates, you can divide the **servers into batches and execute playbook tasks sequentially** on each batch. 
+- Use the `serial` keyword to control the number of hosts updated at a time and `delegate_to` to manage dependencies between tasks.
+```yaml
+---
+- name: Rolling update of web servers
+  hosts: webservers
+  serial: 2
+  tasks:
+    - name: Take web server out of load balancer rotation
+      command: /usr/bin/take_out_of_pool {{ inventory_hostname }}
+      delegate_to: 127.0.0.1
 
+    - name: Update web server
+      yum:
+        name: acme-web-stack
+        state: latest
+
+    - name: Add web server back to load balancer rotation
+      command: /usr/bin/add_back_to_pool {{ inventory_hostname }}
+      delegate_to: 127.0.0.1
+```
 ### Explain the key Ansible terms: Inventory, Modules, Roles, and Handlers.**
 - **Inventory**: A list of hosts and groups of hosts on which Ansible commands and playbooks operate.
-- **Modules**: Reusable, standalone scripts that Ansible runs on remote hosts. Examples include `apt`, `yum`, `copy`, and `template`.
+- **Modules**: Reusable, standalone scripts that Ansible runs on remote hosts.
 - **Roles**: A way to organize playbooks into reusable components. 
-- Roles can include tasks, variables, files, templates, and handlers.
+  - Roles can include tasks, variables, files, templates, and handlers.
 - **Handlers**: Special tasks that are triggered by other tasks using the `notify` directive
+```yaml
 
+---
+- name: Update all Hosts
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Update all packages to the latest version
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+      notify:
+        - echo_handler
+
+handlers:
+  - name: echo_handler
+    ansible.builtin.command:
+      cmd: echo "Update completed"
+```
 
 ### How do you upgrade Ansible?**
 
@@ -63,6 +94,7 @@ Alternatively, you can disable fact gathering globally by setting `gathering = e
 ```ini
 [defaults]
 gathering = explicit
+
 ```
 
 ### How are variables merged in Ansible?**
@@ -72,8 +104,6 @@ Variables in Ansible are merged based on the precedence rules. By default, varia
 [defaults]
 hash_behaviour = merge
 ```
-
-This setting allows you to merge dictionaries instead of overriding them. For example:
 
 ```yaml
 # group_vars/all.yml
@@ -89,8 +119,8 @@ With `hash_behaviour = merge`, the `common_vars` dictionary will contain both `k
 
 ### What are Cache Plugins in Ansible? Any idea how they are enabled?**
 Cache plugins in Ansible allow you to store gathered facts or inventory data to improve performance. 
-- The default cache plugin is `memory`, which only caches data for the current execution.
-- Persistent cache plugins like `jsonfile`, `redis`, and `memcached` can store data across runs.
+- The default cache plugin is `memory`, which only caches.
+- Persistent cache plugins like `jsonfile`, `redis`, and `memcached`.
 
 To enable a cache plugin, you can set it in the `ansible.cfg` file:
 
@@ -116,7 +146,8 @@ Registered variables are used to capture the output of a task and store it in a 
 ```
 
 ### How do Network Modules work in Ansible?**
-Network modules in Ansible are used to manage network devices. They gather information and configure devices using various protocols like SSH, NETCONF, and REST APIs. 
+- Network modules in Ansible are used to manage network devices. 
+- They gather information and configure devices using various protocols like SSH, NETCONF, and REST APIs. 
 ```yaml
 - name: Configure a Cisco IOS device
   cisco.ios.ios_config:
@@ -126,29 +157,18 @@ Network modules in Ansible are used to manage network devices. They gather infor
       - ip address 192.168.1.1 255.255.255.0
 ```
 
-### **20. How does Ansible manage multiple communication protocols?**
-Ansible manages multiple communication protocols using connection plugins. The `ansible_connection` variable specifies the connection type, such as `ssh`, `winrm`, `local`, or `network_cli`.
-
-Example inventory file specifying different connection types:
-
+### How does Ansible manage multiple communication protocols?**
+Ansible manages multiple communication protocols using connection plugins. The `ansible_connection` variable specifies the connection type, such as `ssh`, `winrm`.
 ```ini
 [linux]
 server1 ansible_connection=ssh
-
 [windows]
 server2 ansible_connection=winrm
-
 [network]
-router1 ansible_connection=network_cli ansible_network_os=ios
+router1 ansible_connection=network_cli 
 ```
-
-## **Intermediate Ansible Questions**
-
-### **1. How to handle different machines needing different user accounts or ports to log in with using Ansible?**
+###  How to handle different machines needing different user accounts or ports to log in with using Ansible?**
 You can specify different user accounts and ports in the inventory file or using group variables.
-
-Example inventory file:
-
 ```ini
 [webservers]
 web1 ansible_user=admin ansible_port=2222
@@ -170,20 +190,9 @@ Or in a playbook:
     var: hostvars[inventory_hostname]
 ```
 
-### **3. How to create an AWS EC2 key using Ansible?**
-You can create an AWS EC2 key pair using the `ec2_key` module.
-
-```yaml
-- name: Create an EC2 key pair
-  amazon.aws.ec2_key:
-    name: my_key
-    state: present
-    region: us-west-2
-    key_material: "{{ lookup('file', 'path/to/public_key.pub') }}"
-```
 
 ###  How to generate encrypted passwords for the user module in Ansible?**
-You can generate encrypted passwords using the `mkpasswd` utility from the `whois` package.
+using the `mkpasswd` utility from the `whois` package.
 ```sh
 mkpasswd --method=SHA-512
 ```
@@ -230,9 +239,9 @@ Dynamic inventory in Ansible allows for real-time, automated management of infra
 ### **Key Concepts**
 
 1. **Dynamic Inventory Sources**
-   - Dynamic inventory sources can include cloud providers (AWS, Azure, GCP), LDAP directories, CMDB systems, and other external databases.
+   - Dynamic inventory sources can include cloud providers (AWS, Azure, GCP), LDAP directories.
 2. **Inventory Plugins vs. Inventory Scripts**
-   - **Inventory Plugins**: These are the preferred method for dynamic inventory in Ansible. Plugins are more integrated with Ansible’s core and provide better performance and maintainability.
+   - **Inventory Plugins**: These are the preferred method for dynamic inventory in Ansible.
    - **Inventory Scripts**: These are custom scripts that output inventory data in JSON format. While still supported, they are less efficient and more complex to manage compared to plugins.
 
 ### **How Dynamic Inventory Works**
@@ -253,7 +262,7 @@ Dynamic inventory in Ansible allows for real-time, automated management of infra
          prefix: aws_region
      ```
 3. **Caching**
-   - To improve performance, dynamic inventory plugins can cache results. This reduces the load on external systems and speeds up subsequent queries.
+   - To improve performance, dynamic inventory plugins can cache results.
    - Example of enabling caching in the `aws_ec2` plugin:
      ```yaml
      plugin: aws_ec2
@@ -266,23 +275,11 @@ Dynamic inventory in Ansible allows for real-time, automated management of infra
 ### **Benefits of Dynamic Inventory**
 
 1. **Real-Time Updates**
-   - Automatically reflects changes in the infrastructure.
-   - Reduces the risk of configuration drift.
 
 2. **Scalability**
-   - Supports complex environments with multiple regions, tags, and instance types.
-
 3. **Flexibility**
-   - Can integrate with various external systems, allowing for a wide range of use cases.
-
-### **Developing Custom Dynamic Inventory Scripts**
-
-1. **Script Requirements**
-   - Must output JSON in a specific format that Ansible can parse.
-   - Should handle the `--list` and `--host` arguments to provide the full inventory and details for individual hosts, respectively.
-
+   - Can integrate with various external system
 2. **Basic Structure of a Custom Script**
-   - Example in Python:
      ```python
      import json
 
@@ -300,13 +297,10 @@ Dynamic inventory in Ansible allows for real-time, automated management of infra
              }
          }
          return inventory
-
      if __name__ == "__main__":
          print(json.dumps(get_inventory()))
      ```
-
 3. **Using the Custom Script**
-   - Command to use the custom script as the inventory source:
      ```sh
      ansible-playbook -i /path/to/custom_inventory_script.py playbook.yml
      ```
