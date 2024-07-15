@@ -37,6 +37,5 @@
 - **VPC Integration:** Lambda functions can be configured to access resources within a VPC, allowing them to interact with private subnets and security groups.
 
 ### Execution Environment
-- **Runtime:** AWS Lambda supports multiple runtimes, including Node.js, Python, Java, Go, Ruby, .NET Core, and custom runtimes via **AWS Lambda Layers**.
 - **Execution Context:** Each function runs in an isolated execution environment, which includes the runtime, memory, and temporary storage.
 

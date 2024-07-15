@@ -72,5 +72,5 @@
 - **Launch Templates**:
   - Allow multiple versions.
   - configuration reuse and inheritance.
-  - Provision both On-Demand and Spot instances.
+  - **Provision both On-Demand and Spot instances**
   - Recommended by AWS.
