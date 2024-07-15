@@ -1,4 +1,3 @@
-The Horizontal Pod Autoscaler (HPA) in Kubernetes is a powerful feature that automatically adjusts the number of pod replicas in a deployment, replica set, or stateful set based on observed metrics like CPU utilization, memory usage, or custom metrics.
 
 ## **Key Concepts of Horizontal Pod Autoscaler**
 
@@ -10,8 +9,6 @@ The Horizontal Pod Autoscaler (HPA) in Kubernetes is a powerful feature that aut
 ### **2. How HPA Works**
 - **Metrics Collection:** HPA continuously monitors resource usage metrics (e.g., CPU, memory) of the pods using the Kubernetes metrics server.
 - **Target Utilization:** You define a target resource utilization level (e.g., 70% CPU utilization).
-- **Scaling Decision:** HPA calculates the desired number of replicas based on the current resource usage and the target utilization. 
-- If the average usage exceeds the target, it scales up the number of replicas; if it’s below, it scales down.
 - **Control Loop:** HPA operates in a loop, periodically checking metrics and adjusting the number of replicas accordingly.
 
 ### **3. Configuration and API Versions**
@@ -52,7 +49,7 @@ spec:
 - **Custom Metrics:** HPA can scale based on custom metrics provided by external sources or custom metrics adapters.
 
 ### **7. Integration with Cluster Autoscaler**
-- **Cluster Autoscaler:** Works at the infrastructure level to add or remove nodes based on the overall resource requirements of the cluster. Combining HPA with Cluster Autoscaler ensures that there are enough nodes to accommodate the scaled pods.
+- **Cluster Autoscaler:** Works at the infrastructure level to add or remove nodes based on the overall resource requirements of the cluster.
 
 ### **8. Best Practices**
 - **Set Appropriate Metrics:** Ensure that the metrics used for scaling are appropriate for the application's performance characteristics.
@@ -120,7 +117,6 @@ spec:
    ```sh
    kubectl get hpa my-app-hpa
    ```
-To configure a Horizontal Pod Autoscaler (HPA) to use custom metrics in Kubernetes, you need to follow several steps. This involves setting up a metrics server, deploying a custom metrics adapter, and configuring the HPA to use these custom metrics. Below is a detailed guide to help you through the process.
 -------------------
 ## **Step-by-Step Guide to Configure HPA with Custom Metrics**
 
@@ -249,15 +245,3 @@ Apply the HPA configuration:
 ```sh
 kubectl apply -f my-app-hpa.yaml
 ```
-
-### **6. Verify the HPA Configuration**
-Check the status of the HPA to ensure it is using the custom metrics:
-```sh
-kubectl get hpa my-app-hpa
-```
-You should see output indicating the current and target values for the custom metric.
-
-### **7. Monitor and Adjust**
-Use tools like Prometheus and Grafana to visualize the custom metrics and monitor the HPA's scaling decisions. Adjust the HPA configuration as needed based on the observed behavior.
-
-

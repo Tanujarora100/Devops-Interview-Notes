@@ -1,3 +1,17 @@
+#### Feature of Terraform
+- Declarative in nature
+  - Match Current and Desired State of the state file.
+- HCL and JSON supported 
+- Developed by Hashicorp
+- Idempotent in nature.
+
+#### Flow of Terraform
+- Terraform init 
+- Terraform validate
+- Terraform plan 
+- Terraform apply 
+- Terraform destroy
+
 #### How does Terraform manage dependencies?
 - Terraform uses a dependency graph to manage dependencies between resources.
 
