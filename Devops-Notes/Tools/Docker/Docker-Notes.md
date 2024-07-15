@@ -12,7 +12,8 @@
 ## Difference between ENTRYPOINT and CMD
 
 ### CMD
-- **Function**: Specifies the default command and parameters for the container. It can be overridden at runtime.
+- **Function**: Specifies the default command and parameters for the container. 
+- It can be overridden at runtime.
 - **Example**: `CMD ["python3", "app.py"]`
 
 ### ENTRYPOINT
@@ -73,7 +74,7 @@ docker network rm my_custom_network
 - **Use Cases**: Suitable for most containerized applications where containers need to communicate on the same host.
 
 ### Host Network (host)
-- **Description**: Containers share the host network stack, making them directly accessible from the host and other containers without any network address translation (NAT).
+- **Description**: Containers share the host network stack, **making them directly accessible from the host** and other containers without any network address translation (NAT).
 - **Use Cases**: High-performance scenarios where containers need to bind to specific host ports, but it lacks network isolation.
 
 ### Overlay Network (overlay)
@@ -82,12 +83,13 @@ docker network rm my_custom_network
 - **Use Cases**: Multi-host, multi-container applications orchestrated with Docker Swarm.
 
 ### Macvlan Network (macvlan)
-- **Description**: Allows containers to have their own MAC addresses and appear as separate devices on the host network. 
+- **Description**: Allows containers to have their own MAC addresses and **appear as separate devices on the host network**. 
 - Each container has a unique network identity.
 - **Use Cases**: When containers need to be directly on an external network, e.g., connecting containers to physical networks or VLANs.
 
 ### None Network (none)
-- **Description**: Containers on this network have no network connectivity. It's often used for isolated testing or when the container only needs loopback connectivity.
+- **Description**: Containers on this network have no network connectivity. 
+- It's often used for isolated testing or when the container only needs loopback connectivity.
 - **Use Cases**: Limited use cases, primarily for debugging or security purposes.
 
 ### Custom Bridge Network (user-defined bridge)
@@ -97,7 +99,9 @@ docker network rm my_custom_network
 - **Description**: Introduced in `Docker 20.10`, the Overlay2 network driver is optimized.
 
 ### Cilium Network (cilium)
-- **Description**: Cilium is an open-source networking and security project that offers advanced networking features, including API-aware network security and load balancing.
+- **Description**: Cilium is an open-source networking and security project that offers advanced networking features
+  - API-aware network 
+  - security and load balancing.
 - **Use Cases**: Advanced networking and security requirements, often in Kubernetes environments.
 
 ### Gossip Network (gossip)
@@ -105,7 +109,8 @@ docker network rm my_custom_network
 
 ## Docker Compose
 
-Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to define your application's services, networks, and volumes in a single `docker-compose.yml` file, making it easier to manage complex Docker setups.
+Docker Compose is a tool for defining and running multi-container Docker applications. 
+- It allows you to define your application's services, networks, and volumes in a single `docker-compose.yml` file, making it easier to manage complex Docker setups.
 
 ### Example `docker-compose.yml`
 ```yaml
@@ -132,8 +137,6 @@ services:
      MONGO_INIT_PASSWORD='PASSWORD'
 ```
 
-### Docker Compose Commands
-
 - **Start Services**: 
   ```sh
   docker-compose up -d
@@ -159,11 +162,6 @@ services:
   docker-compose up -d --scale backend=2
   ```
 
-- **Execute Commands in a Running Container**: 
-  ```sh
-  docker-compose exec backend sh
-  ```
-
 # How to Secure the Docker Daemon
 
 ## Security Concerns
@@ -177,10 +175,10 @@ services:
 ### Best Practices
 - **Disable Root Users**: Prevent direct root access to the host.
 - **SSH Authentication**: Use SSH keys for secure access.
-- **Daemon Configuration**: Add IP addresses to the `daemon.json` file to restrict access and use a secured port.
+- **Daemon Configuration**: Whitelist the IP and Ports in the `daemon.json`
 - **TLS Certificates**: Secure communication using TLS certificates.
   - Set the environment variable `DOCKER_TLS=true`
-  - Use port 2376 for encrypted traffic.
+  - Use port `2376` for encrypted traffic.
 
 ### Example Configuration
 ```json
@@ -204,19 +202,6 @@ services:
 ### Regular Updates
 
 ### Use Docker Secrets
-- **Manage Sensitive Data**: Use Docker Secrets to securely manage sensitive data like passwords and tokens.
-  ```yaml
-  version: "3.8"
-  secrets:
-    my_secret:
-      file: ./super-secret-data.txt
-  services:
-    web:
-      image: nginx:latest
-      secrets:
-        - my_secret
-  ```
-
 ### User Namespace Remapping
 - **Prevent Privilege Escalation**: Enable user namespace remapping to isolate container user accounts.
   ```sh
@@ -245,7 +230,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 Docker uses a client-server architecture where the Docker client and Docker daemon communicate to manage and execute Docker containers.
    - Client issue commands like `docker build`, `docker pull`.
-  - Docker daemon (`dockerd`) is a background process 
+  -  Docker daemon (`dockerd`) is a background process 
    - These Communicate over the REST API on Socket `/var/run/docker.sock`
    - Need to create a TCP Socket if the docker daemon and docker client are on remote servers.
 
@@ -257,7 +242,7 @@ Docker uses a client-server architecture where the Docker client and Docker daem
 ### **Security Considerations**
 
 - **Authentication and Authorization**
-  - Docker supports various authentication methods, including username/password, client certificates, and token-based authentication, to secure communication between the client and daemon[7].
+  - Docker supports various authentication methods username/password, client certificates, token-based authentication
 
 - **Enabling Remote Access via TCP Socket**
   ```json

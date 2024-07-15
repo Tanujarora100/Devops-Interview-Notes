@@ -16,7 +16,7 @@
 ### What is Ansible Vault?**
 - Ansible Vault is a feature that allows you to encrypt sensitive data such as passwords, keys, and other secrets within Ansible playbooks. 
 
-###  How does the Ansible synchronize module work?**
+###  How does the Ansible synchronize module work?
 - The synchronize module is a wrapper around rsync to synchronize files and directories between the local machine and remote hosts.
 
 
