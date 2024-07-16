@@ -1,9 +1,118 @@
+### Why Ansible Over Puppet and Chef?
+- Python based
+- Agentless
+- SSH Keys 
+- Push Arch
+- Dynamic Inventory in ansible 
+
+### Ansible Inventory Types:
+- Static Inventory: INI, YAML file.
+- Dynamic Inventory: YAML file, JSON File.
+
+### Ansible Modules
+- Core Modules
+- Extra Modules: Can be stable or not
+
+### How You Will Copy Files Recursively:
+
+
+#### Example with Permissions
+
+```yaml
+- name: Copy directory with permissions
+  hosts: all
+  tasks:
+    - name: Copy directory and set permissions
+      ansible.builtin.copy:
+        src: /path/to/source_directory/
+        dest: /path/to/destination_directory/
+        directory_mode: '0755'
+        remote_src : yes
+        mode: '0644'
+        owner: root
+        group: root
+```
+
+### Using `synchronize` Module
+
+For large sets of files or directories, consider using the `ansible.builtin.synchronize` module, which is a wrapper around `rsync` and is more efficient for large-scale recursive copying.
+
+```yaml
+- name: Synchronize directory
+  hosts: all
+  tasks:
+    - name: Synchronize directory on remote machine
+      ansible.builtin.synchronize:
+        src: /path/to/source_directory/
+        dest: /path/to/destination_directory/
+        delegate_to: "{{ inventory_hostname }}"
+```
 
 ### What are the advantages of using Ansible?**
 - **Agentless**: .
 - **Simple syntax**:
 - **Idempotent**
 - **Declarative**:
+
+### Creating an Encrypted File
+
+```bash
+ansible-vault create secret.yml
+```
+
+After running this command, you will be prompted to enter and confirm a password. Once the password is set/
+
+### Encrypting an Existing File
+```bash
+ansible-vault encrypt existing_file.yml
+```
+### Viewing an Encrypted File
+
+```bash
+ansible-vault view secret.yml
+```
+
+### Editing an Encrypted File
+
+To edit an encrypted file, use the `ansible-vault edit` command:
+
+```bash
+ansible-vault edit secret.yml
+```
+### Decrypting a File
+```bash
+ansible-vault decrypt secret.yml
+```
+### Changing the Password of an Encrypted File
+
+```bash
+ansible-vault rekey secret.yml
+```
+
+### Example Playbook Using Encrypted Variables
+1. Encrypt a variable:
+
+```bash
+ansible-vault encrypt_string 'my_secret_password' --name 'db_password'
+```
+2. Use the encrypted variable in a playbook:
+
+```yaml
+- name: Example playbook using encrypted variable
+  hosts: localhost
+  vars:
+    db_password: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      62313365396662343061393464336163383764373764613633653634306231386433626436623361
+      6134333665353966363534333632666535333761666131620a663537646436643839616531643561
+      63396265333966386166373632626539326166353965363262633030333630313338646335303630
+      3438626666666137650a353638643435666633633964366338633066623234616432373231333331
+      6564
+  tasks:
+    - name: Print the encrypted variable
+      debug:
+        msg: "The database password is {{ db_password }}"
+```
 
 ### What is Ansible Galaxy?**
 - Ansible Galaxy is a repository for sharing Ansible roles. 
@@ -21,7 +130,10 @@
 
 
 ### What is Ansible Tower?**
-- Ansible Tower is an enterprise framework for controlling, securing, and managing Ansible automation.
+- By Redhat
+- Allow fine grained access control
+- Log Management
+- Collaboration with other teams.
 
 ### How do you perform rolling updates using Ansible?**
 - To perform rolling updates, you can divide the **servers into batches and execute playbook tasks sequentially** on each batch. 

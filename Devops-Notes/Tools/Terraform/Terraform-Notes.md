@@ -714,3 +714,102 @@ resource "null_resource" "example" {
    ```sh
    terraform plan -var-file="dev.tfvars"
    ```
+#### Question: When you created the environment using Terraform, what components did you create using Terraform?
+
+Answer: I created ec2 instances, s3 buckets, network security groups, application gateways
+
+#### Question: How can you make changes in the configuration of already created resources using Terraform?
+- To make changes in the configuration of already created resources, we can use the terraform import command.
+- Second is make changes in the configuration and run terraform apply again, terraform refresh is also there to check drifting.
+#### Question: What does Terraform do with the state file when it runs?
+
+- Terraform maintains a state file that maps the current status of the infrastructure with the configuration file. 
+- The state file is commonly stored either locally or in remote storage locations like Azure Storage or AWS S3.
+#### Question: In case the state file is lost, how do you resolve that issue?
+Answer: If the state file is lost, using the terraform import command can help. 
+### Question: What are the major features of Terraform that you find noteworthy?
+- Multi Cloud
+- Easy to use
+- Multiple providers
+- Awesome documentaton.
+#### Question: What is the full form of HCL?
+Answer: HCL stands for HashiCorp Configuration Language.
+
+#### What is the lifecycle block in Terraform?
+
+Answer: The lifecycle block is a nested block within a resource block, containing meta-arguments for resource behavior, such as create_before_destroy, prevent_destroy, and others.
+### Question: Have you heard about Bicep or ARM templates?
+Answer: Yes, I have heard about Bicep, and I have worked on ARM templates in the past.
+#### Question: Is it possible to destroy a single resource out of multiple resources using Terraform?
+Answer: Yes, it is possible. We can use the terraform destroy -target command followed by the resource type and name to destroy a specific resource.
+
+### Question: How do you preserve keys created using Terraform?
+- Keys created using Terraform can be preserved by storing them in the AWS CLI configuration folder under the credentials directory and instructing Terraform to use a specific profile during execution.
+
+#### Question: What happens if the Terraform state file is accidentally deleted?
+- If the Terraform state file is deleted, Terraform may duplicate all resources, leading to increased costs and potential issues with overlapping and cross-pollination between resources.
+
+#### Question: Have you worked with Terraform modules?
+Answer: Yes, I have worked with Terraform modules. 
+- There are root modules, child modules, and published modules in Terraform.
+
+#### Question: How do you manage Terraform code in multiple environments?
+- Answer: Terraform workspaces and reusable modules can be used to manage Terraform code in multiple environments, allowing separate state files for each workspace.
+
+#### Question: What is Terraform workspace used for?
+- Answer: Terraform workspace allows managing separate state files for each workspace, enabling different environment processing.
+
+#### Question: How do you provide variable values at runtime in Terraform?
+Answer: To provide variable values at runtime in Terraform, the default values in the variable file (variable.tf) can be removed, and the values can be provided when running the Terraform command.
+To provide variable values at runtime in Terraform, you can use several methods, including command-line flags, variable definition files (`.tfvars`), and environment variables.
+
+### 1. Command-Line Flags
+You can pass variable values directly when running Terraform commands using the `-var` flag. This method is useful for quick overrides or when dealing with a small number of variables.
+
+#### Example Command
+
+```bash
+terraform apply -var="ami=ami-123456" -var="instance_type=t2.micro"
+```
+### 2. Variable Definition Files (`.tfvars`)
+
+For more complex configurations or when dealing with many variables, you can use variable definition files. These files typically have the `.tfvars` extension and contain key-value pairs for your variables.
+
+#### Example `variables.tf`
+
+```hcl
+variable "ami" {
+  description = "The AMI ID"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "The instance type"
+  type        = string
+}
+```
+
+#### Example `terraform.tfvars`
+
+```hcl
+ami = "ami-123456"
+instance_type = "t2.micro"
+```
+```bash
+terraform apply -var-file="terraform.tfvars"
+```
+### 3. Environment Variables
+Terraform also supports setting variable values through environment variables. The environment variable must be prefixed with `TF_VAR_` followed by the variable name.
+
+#### Example Environment Variables
+
+```bash
+export TF_VAR_ami="ami-123456"
+export TF_VAR_instance_type="t2.micro"
+```
+
+When you run `terraform apply`, Terraform will use these environment variables to set the corresponding values.
+#### Question: Can you mention some drawbacks of Terraform based on your experience?
+- Some drawbacks include a lack of error handling
+- restriction to a specific language (HCL)
+- limitations on importing certain things.
