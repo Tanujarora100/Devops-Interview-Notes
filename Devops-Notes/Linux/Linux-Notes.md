@@ -117,7 +117,10 @@ High Disk Usage Issue
 57. How to check the info of the ports - `netstat -tulpn`
 58. How to check route table of the Machine- `netstat -route`
 59. How to check network interfaces - `netstat -i` 
-60. Difference in SSH and telnet: Telnet is not secured.
+60.  All Connections- `netstat -a`
+60. Difference in SSH and telnet: 
+- Telnet is not secured.
+- Data is not encrypted.
 61. How to set a username and password that never expires `chage -M -1 Tanuj`
 62. Why etc/passwd and etc/shadow file cannot be merged : existence of two files as passwd file is a text file and the shadow file is the hashed file
 - shadow file is accessible by root only

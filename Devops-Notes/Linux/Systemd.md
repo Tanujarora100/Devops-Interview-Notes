@@ -1,4 +1,4 @@
-In `systemd`, a unit is a standardized representation of system resources that can be managed by the suite of daemons and manipulated by the provided utilities. Units are categorized by the type of resource they represent, and each type has a specific purpose. Here are the different types of units in `systemd`:
+In `systemd`, a unit is a standardized representation of system resources that can be managed by the suite of daemons and manipulated by the provided utilities. 
 
 ## **Types of Systemd Units**
 
@@ -54,9 +54,6 @@ In `systemd`, a unit is a standardized representation of system resources that c
 - **Description**: Manage D-Bus system bus names.
 - **Example**: `org.freedesktop.systemd1.busname` for the `systemd` D-Bus interface.
 
-## **Summary**
-
-These unit types allow `systemd` to manage a wide range of system resources and services in a modular and flexible manner. Each unit type has a specific role and is defined by a unit file with a corresponding extension, such as `.service`, `.socket`, or `.mount`[1][2][3].
 
 `systemctl` is a command-line utility that interacts with `systemd`, the init system and service manager for many Linux distributions. `systemd` uses unit files to manage services and other system resources. Here's a detailed look at how `systemctl` works with service files:
 
@@ -189,7 +186,8 @@ Here are some additional interview questions on `systemd` that can help you prep
    - `systemd` is a system and service manager for Linux operating systems, designed to provide better boot performance and manage system processes after booting.
 
 2. **What is the purpose of `systemctl`?**
-   - `systemctl` is a command-line utility used to control and manage `systemd` services and units. It allows you to start, stop, restart, enable, disable, and check the status of services.
+   - `systemctl` is a command-line utility used to control and manage `systemd` services and units. 
+   - It allows you to start, stop, restart, enable, disable, and check the status of services.
 
 3. **How do you start and stop a service using `systemctl`?**
    - To start a service: `sudo systemctl start <service_name>`
@@ -201,11 +199,10 @@ Here are some additional interview questions on `systemd` that can help you prep
 5. **How do you check the status of a service?**
    - `sudo systemctl status <service_name>`
 
-## **Intermediate Questions**
 
 1. **What is a unit file in `systemd`?**
    - A unit file is a configuration file that defines how `systemd` manages a resource or service. 
-   - Each unit file has a specific type, such as `.service`, `.socket`, `.mount`, etc.
+   - Each unit file has a specific type, such as `.service`, `.socket`, `.mount`.
 
 2. **How do you reload `systemd` to recognize changes in unit files?**
    - `sudo systemctl daemon-reload`
@@ -217,7 +214,22 @@ Here are some additional interview questions on `systemd` that can help you prep
    - **[Unit]**: Contains general information about the service, such as `Description` and `After`.
    - **[Service]**: Specifies how the service should be run, including `ExecStart`, `ExecStop`, `Restart`.
    - **[Install]**: Defines installation information, such as `WantedBy`.
+```bash
+[Unit]
+Description=Sample Service
+After=network.target
+Wants=network-online.target
 
+[Service]
+Type=simple
+ExecStart=/usr/bin/sample-service
+Restart=on-failure
+RestartSec=5
+User=sampleuser
+
+[Install]
+WantedBy=multi-user.target
+```
 2. **How do you mask a service in `systemd`?**
    - `sudo systemctl mask <service_name>`: This prevents the service from being started manually or automatically.
 

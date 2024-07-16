@@ -59,7 +59,7 @@ dig google.com
 
 ### **SS Command**
 ```bash
-ss -tuln  # Lists all listening TCP and UDP ports
+ss -tuln 
 netstat -tulpn
 ```
 
@@ -70,8 +70,7 @@ netstat -tulpn
 sudo tcpdump -i eth0 
 ```
 ### **Wireshark**
-- **Command**: `wireshark`
-- **Purpose**: A graphical tool for detailed packet analysis.
+- **Command**: `wireshark`.
 ```bash
 sudo wireshark
 ```

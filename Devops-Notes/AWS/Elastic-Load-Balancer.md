@@ -46,7 +46,7 @@
 #### **Classic Load Balancer (CLB)**
 - **Legacy**: An older type of load balancer that supports both Layer 4 and Layer 7 traffic.
 - No web socket support and http2 support
-- waf is not compatible with this.
+- WAF is not compatible with this.
 
 ### **Key Concepts and Features**
 

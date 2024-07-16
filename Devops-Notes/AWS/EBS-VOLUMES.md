@@ -1,13 +1,13 @@
 ## Amazon EBS Overview
 
 ### General Characteristics
-- **Volume:** A collection of blocks, each with a unique identifier.
 - **Attachment:** Both encrypted and unencrypted volumes can be attached to an EC2 instance simultaneously.
-- **Mountable and Bootable:** Block storage is **mountable and bootable**.
+- **Mountable and Bootable:**
 
 ### EBS Volume Specifics
-- **Single Instance Mount:** EBS volumes can only be mounted to one instance at a time
-  - except for EBS multi-attach.
+- **Single Instance Mount:** 
+  - only be mounted to one instance at a time
+  - **except for EBS multi-attach.**
   - exclusively on (io1 and io2) volumes
   - can't be created as boot volumes.
   - We need to take care of concurrency.
@@ -83,23 +83,22 @@
 ### EBS ENCRYPTION
 - EBS encryption is only available on certain instance types.
 - There is no direct way to encrypt an existing unencrypted volume, or to remove encryption from an encrypted volume. 
-  - However, you can migrate data between encrypted and unencrypted volumes.
+  - **However, you can migrate data between encrypted and unencrypted volumes.**
 ## Snapshots
 - Snapshots are incremental
-- EBS backups use IO and we should not run them while the application is handling a lot of traffic
 - Snapshots are stored in S3 (we are not able to see them)
 - It is not necessary to detach the volume to do a snapshot, but it is recommended
 -  EBS volumes restored from snapshots need to be pre-warmed (using fio or dd commands to read the entire volume)
 - You can’t delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first deregister the AMI before you can delete the snapshot.
-- Snapshots can be automated using Amazon Data Lifecycle Manage
+- Snapshots can be automated using **Amazon Data Lifecycle Manage**
 
 
 
 
 #### Instance Store Volumes
-- Provides block storage devices, raw volumes which can be mounted to a system
+
 - They are similar to EBS, but they are local drives instead of being presented over the network
-- These volumes are physically connected to the EC2 host, instances on the host can access these volumes
+- These volumes are physically connected to the EC2 host
 - **Provides the highest storage performance in AWS**
 -- Instance stores are included in the price of EC2 instances with which they come with
   - Instance stores have to be attached at launch time, they can not be added afterwards!
@@ -107,7 +106,6 @@
 
 
 ##### Instance store considerations:
-- Instance store volumes are local to EC2 hosts
 - Instance store can be added only at launch
 - Data is lost on an instance stores in case the instance is moved, resized or there is a hardware failure
 - For instance store volumes we pay for it with the EC2 instance
