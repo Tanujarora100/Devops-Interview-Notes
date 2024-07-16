@@ -179,6 +179,8 @@ services:
 - **TLS Certificates**: Secure communication using TLS certificates.
   - Set the environment variable `DOCKER_TLS=true`
   - Use port `2376` for encrypted traffic.
+- Scan the images using Trivy.
+- Docker Scan trust
 
 ### Example Configuration
 ```json
@@ -250,3 +252,501 @@ Docker uses a client-server architecture where the Docker client and Docker daem
     "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
   }
   ```
+  To ensure that Docker containers automatically restart when the host is rebooted, you can use Docker's built-in restart policies. Here are the steps to achieve this:
+
+### **1. Enable Docker Service on Boot**
+
+```sh
+sudo systemctl enable docker
+```
+### **2. Set Restart Policies for Containers**
+
+- **no**: Do not automatically restart the container (default).
+- **on-failure[:max-retries]**: Restart the container if it exits due to an error. Optionally, limit the number of restart attempts.
+- **always**: Always restart the container if it stops.
+- **unless-stopped**: Always restart the container unless it is explicitly stopped.
+```sh
+docker run -d --restart always your_image
+```
+#### **Using `docker update` Command**
+To update the restart policy of an existing container, use the `docker update` command:
+```sh
+docker update --restart always your_container_id
+```
+### **3. Using Docker Compose**
+
+If you are using Docker Compose, you can specify the restart policy in the `docker-compose.yml` file:
+
+```yaml
+version: '3.8'
+services:
+  your_service:
+    image: your_image
+    restart: always
+```
+
+#### Charactertics of Docker Image
+- Rules for docker container
+- runtime, libraries, environment variables
+- Immutable
+- Layered Structure
+- Read only template
+
+#### Image from Existing Image
+
+1. **Create a Dockerfile**:
+3. **Build the Docker Image**:
+1. **Run a Container from an Existing Image**:
+   - Start a container from an existing image:
+     ```sh
+     docker run -it ubuntu:latest /bin/bash
+     ```
+2. **Make Changes to the Container**:
+3. **Commit the Changes to Create a New Image**:
+   - Find the container ID by running `docker ps`:
+     ```sh
+     docker ps
+     ```
+   - Commit the changes to create a new image:
+     ```sh
+     docker commit <container_id> my_custom_image
+     ```
+
+### Monitoring 
+- Docker events
+- Docker logs
+- Docker inspect
+- Docker network
+- Entrypoint
+
+#### How to do Canary Deployment Using Docker?
+- Step 1: Create Docker Services
+- Create two versions of your application service, one for the stable version and one for the canary version.
+```docker
+docker service create --name myapp_stable --replicas 3 myapp:stable
+docker service create --name myapp_canary --replicas 1 myapp:canary
+```
+- Step 2: Configure Load Balancing
+- Use a reverse proxy like Traefik or NGINX to route a small percentage of traffic to the canary service. 
+- Traefik Configuration: Create a traefik.toml file to configure Traefik.
+```yaml
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+[http]
+  [http.routers]
+    [http.routers.myapp]
+      rule = "Host(`myapp.local`)"
+      service = "myapp"
+
+  [http.services]
+    [http.services.myapp.loadBalancer]
+      [[http.services.myapp.loadBalancer.servers]]
+        url = "http://myapp_stable:80"
+      [[http.services.myapp.loadBalancer.servers]]
+        url = "http://myapp_canary:80"
+        weight = 1
+      [[http.services.myapp.loadBalancer.servers]]
+        url = "http://myapp_stable:80"
+        weight = 9
+```
+
+```docker
+docker service create --name traefik --constraint=node.role==manager --publish 80:80 --mount type=bind,source=/path/to/traefik.toml,target=/traefik.toml traefik:latest
+```
+- Step 4: Monitor and Adjust Traffic
+Monitor the canary deployment closely.
+## Docker Build Context
+
+The Docker build context is a crucial concept in Docker image creation. It refers to the set of files and directories that are accessible to the Docker engine during the build process. When you run the `docker build` command, you specify a context, which can be a local directory, a remote URL, or even a tarball. This context is sent to the Docker daemon, and all the files within it can be referenced in the Dockerfile.
+
+#### **Types of Build Contexts**
+
+1. **Local Directory**
+   - The most common build context is a local directory. When you specify a local directory as the context, Docker includes all files and subdirectories within that directory.
+   - Example:
+     ```sh
+     docker build -t myimage .
+     ```
+     Here, the `.` specifies the current directory as the build context.
+
+2. **Remote URL**
+   - You can also specify a remote URL, such as a Git repository, as the build context. Docker will clone the repository and use its contents as the context.
+   - Example:
+     ```sh
+     docker build -t myimage https://github.com/myrepo/myproject.git
+     ```
+
+3. **Tarball**
+   - A tarball can be used as a build context by piping its contents to the `docker build` command.
+   - Example:
+     ```sh
+     tar -czf - . | docker build -t myimage -
+     ```
+
+#### **Using the Build Context in Dockerfile**
+
+Within the Dockerfile, you can use instructions like `COPY` and `ADD` to include files from the build context into the image.
+
+- **COPY**: Copies files from the build context to the image.
+  ```dockerfile
+  COPY src/ /app/src/
+  ```
+- **ADD**: Similar to `COPY`, but also supports URLs and tar file extraction.
+  ```dockerfile
+  ADD https://example.com/file.tar.gz /app/
+  ```
+
+#### **Optimizing the Build Context**
+
+- **.dockerignore**: Functions similarly to `.gitignore`, specifying patterns for files and directories to exclude.
+  ```plaintext
+  node_modules
+  *.log
+  ```
+
+#### **Empty Build Context**
+
+In some cases, you may not need to include any files from the local filesystem. You can use an empty build context by passing a Dockerfile directly via standard input.
+
+- Example:
+  ```sh
+  docker build - < Dockerfile
+  ```
+
+#### **Multiple Build Contexts**
+
+With Dockerfile `1.4 and Buildx v0.8+, Docker now supports multiple build contexts`. This allows you to use files from different local directories as part of your build process.
+
+- Example:
+  ```sh
+  docker buildx build --build-context app1=app1/src --build-context app2=app2/src .
+  ```
+### Optimizing Bind Mounts for Large Projects
+
+#### **1. Use `.dockerignore` to Exclude Unnecessary Files**
+
+#### **2. Use Read-Only Bind Mounts When Possible**
+
+- **Purpose**: Improve security and performance by restricting write access to the bind mount.
+- **Implementation**:
+  - Add `readonly` option to the bind mount.
+  - Example:
+    ```sh
+    docker run -d \
+      --name devtest \
+      --mount type=bind,source="$(pwd)"/target,target=/app,readonly \
+      nginx:latest
+    ```
+
+#### **5. Optimize File Access Patterns**
+- **Implementation**:
+  - Organize project files to minimize the number of files in the bind mount.
+  - Use caching strategies to reduce the frequency of file access.
+
+#### **6. Use Docker Volumes for Persistent Data**
+
+- **Purpose**: Use Docker volumes for data that needs to persist beyond the lifecycle of a container. Volumes are managed by Docker and provide better performance and flexibility.
+- **Implementation**:
+  - Create and use Docker volumes for data persistence.
+  - Example:
+    ```sh
+    docker volume create my_data
+    docker run -d \
+      --name devtest \
+      --mount source=my_data,target=/app/data \
+      nginx:latest
+    ```
+
+#### **8. Use Multi-Stage Builds**
+
+- **Implementation**:
+  - Example:
+    ```dockerfile
+    FROM golang:1.16 AS builder
+    WORKDIR /app
+    COPY . .
+    RUN go build -o main .
+
+    FROM alpine:latest
+    WORKDIR /root/
+    COPY --from=builder /app/main .
+    CMD ["./main"]
+    ```
+---
+
+## Docker Build Secrets
+
+A build secret is sensitive information, such as a password or API token, used in your application's build process. 
+- Unlike` build arguments or environment variables, which persist in the final image`, build secrets are securely exposed to the build process without being included in the final image.
+
+#### **Secret Mounts**
+
+Secret mounts allow you to expose secrets to build containers as files. This is done using the `--mount` flag in `RUN` instructions within the Dockerfile.
+
+- **Example Usage**:
+  ```dockerfile
+  RUN --mount=type=secret,id=mytoken \
+      TOKEN=$(cat /run/secrets/mytoken) ...
+  ```
+
+- **Passing Secrets to Build**:
+  ```sh
+  docker build --secret id=mytoken,src=$HOME/.aws/credentials .
+  ```
+
+#### **Sources of Secrets**
+
+Secrets can be sourced from either files or environment variables. The type can be detected automatically or specified explicitly.
+
+- **From Environment Variable**:
+  ```sh
+  docker build --secret id=kube,env=KUBECONFIG .
+  ```
+
+- **Default Binding**:
+  ```sh
+  docker build --secret id=API_TOKEN .
+  ```
+  This mounts the value of `API_TOKEN` to `/run/secrets/API_TOKEN`.
+
+#### **Customizing Mount Points**
+
+By default, secrets are mounted to `/run/secrets/<id>`. You can customize this using the `target` option.
+
+- **Example**:
+  ```sh
+  docker build --secret id=aws,src=/root/.aws/credentials .
+  ```
+
+  ```dockerfile
+  RUN --mount=type=secret,id=aws,target=/root/.aws/credentials \
+      aws s3 cp ...
+  ```
+
+#### **SSH Mounts**
+
+SSH mounts are used for credentials like SSH agent sockets or keys, commonly for cloning private Git repositories.
+
+- **Example Dockerfile**:
+  ```dockerfile
+  # syntax=docker/dockerfile:1
+  FROM alpine
+  ADD git@github.com:me/myprivaterepo.git /src/
+  ```
+
+- **Passing SSH Socket**:
+  ```sh
+  docker buildx build --ssh default .
+  ```
+
+#### **Git Authentication for Remote Contexts**
+
+BuildKit supports `GIT_AUTH_TOKEN` and `GIT_AUTH_HEADER` for HTTP authentication with private Git repositories.
+
+- **Example**:
+  ```sh
+  GIT_AUTH_TOKEN=$(cat gitlab-token.txt) docker build \
+      --secret id=GIT_AUTH_TOKEN \
+      https://gitlab.com/example/todo-app.git
+  ```
+
+- **Using with `ADD`**:
+  ```dockerfile
+  FROM alpine
+  ADD https://gitlab.com/example/todo-app.git /src
+  ```
+
+#### **HTTP Authentication Scheme**
+
+By default, Git authentication uses the Bearer scheme. For Basic authentication, set the `GIT_AUTH_HEADER` secret.
+
+- **Example**:
+  ```sh
+  export GIT_AUTH_TOKEN=$(cat gitlab-token.txt)
+  export GIT_AUTH_HEADER=basic
+  docker build \
+      --secret id=GIT_AUTH_TOKEN \
+      --secret id=GIT_AUTH_HEADER \
+      https://gitlab.com/example/todo-app.git
+  ```
+
+#### **Multiple Hosts**
+
+You can set `GIT_AUTH_TOKEN` and `GIT_AUTH_HEADER` secrets on a per-host basis.
+
+- **Example**:
+  ```sh
+  export GITLAB_TOKEN=$(cat gitlab-token.txt)
+  export GERRIT_TOKEN=$(cat gerrit-username-password.txt)
+  export GERRIT_SCHEME=basic
+  docker build \
+      --secret id=GIT_AUTH_TOKEN.gitlab.com,env=GITLAB_TOKEN \
+      --secret id=GIT_AUTH_TOKEN.gerrit.internal.example,env=GERRIT_TOKEN \
+      --secret id=GIT_AUTH_HEADER.gerrit.internal.example,env=GERRIT_SCHEME \
+      https://gitlab.com/example/todo-app.git
+  ```
+## BIND MOUNTS
+### Sharing Local Files with Docker Containers
+
+Docker allows you to share files between your host system and containers using two primary methods: **volumes** and **bind mounts**. 
+
+### **Volume vs. Bind Mounts**
+
+**Volumes**:
+- **Usage**: Ideal for persisting data generated or modified inside the container.
+- **Behavior**: Managed by Docker, volumes are stored in a part of the host filesystem which is managed by Docker (`/var/lib/docker/volumes/` on Linux).
+- **Advantages**: Volumes are easier to back up, migrate, and manage compared to bind mounts.
+
+**Bind Mounts**:
+- **Usage**: Suitable for sharing specific files or directories from the host with the container, such as configuration files or source code.
+- **Behavior**: Directly maps a host directory or file to a container directory or file.
+- **Advantages**: Provides real-time access to host files, making it ideal for development environments.
+
+#### **Using Bind Mounts**
+
+To share files between the host and a container using bind mounts, you can use the `-v` (or `--volume`) and `--mount` flags with the `docker run` command.
+
+**Example with `-v` Flag**:
+```sh
+docker run -v /HOST/PATH:/CONTAINER/PATH -it nginx
+```
+- **Behavior**: If the host directory does not exist, Docker will create it automatically.
+
+**Example with `--mount` Flag**:
+```sh
+docker run --mount type=bind,source=/HOST/PATH,target=/CONTAINER/PATH,readonly nginx
+```
+- **Behavior**: Provides more advanced features and control. If the host directory does not exist, Docker will generate an error.
+
+### **File Permissions**
+
+When using bind mounts, it's crucial to ensure Docker has the necessary permissions to access the host directory. You can specify read-only (`:ro`) or read-write (`:rw`) access:
+
+**Read-Write Access**:
+```sh
+docker run -v /HOST/PATH:/CONTAINER/PATH:rw nginx
+```
+
+**Read-Only Access**:
+```sh
+docker run -v /HOST/PATH:/CONTAINER/PATH:ro nginx
+```
+
+#### **Example: Sharing a Directory**
+
+1. **Create a Directory and File on Host**:
+   ```sh
+   mkdir public_html
+   cd public_html
+   echo "<html><body><h1>Hello from Docker!</h1></body></html>" > index.html
+   ```
+
+2. **Run Container with Bind Mount**:
+   ```sh
+   docker run -d --name my_site -p 8080:80 -v $(pwd):/usr/local/apache2/htdocs/ httpd:2.4
+   ```
+----
+## Docker Build Arguments
+
+Docker build arguments (`ARG`) provide a flexible way to pass variables to the Docker build process. These arguments can be used to customize the build process without hardcoding values into the Dockerfile.
+#### **Key Features of Build Arguments**
+
+1. **Definition and Usage**:
+   - **`ARG` Instruction**: Defines a variable that users can pass at build-time to the Dockerfile.
+   - **Example**:
+     ```dockerfile
+     ARG GO_VERSION=1.21
+     FROM golang:${GO_VERSION}-alpine AS base
+     ```
+
+2. **Passing Build Arguments**:
+   - Use the `--build-arg` flag with the `docker build` command to pass build arguments.
+   - **Example**:
+     ```sh
+     docker build --build-arg GO_VERSION=1.19 .
+     ```
+
+3. **Default Values**:
+   - If a build argument is not provided during the build, Docker uses the default value specified in the Dockerfile.
+
+#### **Practical Use Cases**
+
+1. **Changing Runtime Versions**:
+   - Build arguments can be used to specify different versions of runtime environments, such as Go or Node.js, without modifying the Dockerfile for each version.
+   - **Example**:
+     ```dockerfile
+     ARG GO_VERSION=1.21
+     FROM golang:${GO_VERSION}-alpine AS base
+     ```
+
+2. **Injecting Values into Source Code**:
+   - Build arguments can be used to inject values into the application's source code at build time, avoiding hard-coded values.
+
+3. **Linker Flags (`-ldflags`)**:
+   - In Go, build arguments can be used with linker flags to set variables in the code.
+   - **Example**:
+     ```go
+     // cmd/server/main.go
+     var version string
+     func main() {
+         if version != "" {
+             log.Printf("Version: %s", version)
+         }
+     }
+     ```
+
+#### **Example Workflow**
+
+1. **Define Build Arguments in Dockerfile**:
+   ```dockerfile
+   ARG GO_VERSION=1.21
+   FROM golang:${GO_VERSION}-alpine AS base
+   WORKDIR /src
+   RUN --mount=type=cache,target=/go/pkg/mod/ \
+       --mount=type=bind,source=go.sum,target=go.sum \
+       --mount=type=bind,source=go.mod,target=go.mod \
+       go mod download -x
+
+   FROM base AS build-client
+   RUN --mount=type=cache,target=/go/pkg/mod/ \
+       --mount=type=bind,target=. \
+       go build -o /bin/client ./cmd/client
+
+   FROM base AS build-server
+   ARG APP_VERSION="v0.0.0+unknown"
+   RUN --mount=type=cache,target=/go/pkg/mod/ \
+       --mount=type=bind,target=. \
+       go build -ldflags "-X main.version=$APP_VERSION" -o /bin/server ./cmd/server
+
+   FROM scratch AS client
+   COPY --from=build-client /bin/client /bin/
+   ENTRYPOINT [ "/bin/client" ]
+
+   FROM scratch AS server
+   COPY --from=build-server /bin/server /bin/
+   ENTRYPOINT [ "/bin/server" ]
+   ```
+
+2. **Build with Custom Arguments**:
+   ```sh
+   docker build --build-arg GO_VERSION=1.19 --build-arg APP_VERSION=v0.0.1 --tag=buildme-server .
+   ```
+
+3. **Run the Container**:
+   ```sh
+   docker run buildme-server
+   ```
+
+   - The output should show the injected version:
+     ```
+     2023/04/06 08:54:27 Version: v0.0.1
+     2023/04/06 08:54:27 Starting server...
+     2023/04/06 08:54:27 Listening on HTTP port 3000
+     ```
+
+#### **Summary**
+
+- **Flexibility**: allowing for dynamic configuration.
+- **Customization** customization of runtime versions and the injection of values into source code.
