@@ -118,6 +118,8 @@ High Disk Usage Issue
 58. How to check route table of the Machine- `netstat -route`
 59. How to check network interfaces - `netstat -i` 
 60.  All Connections- `netstat -a`
+61. Process Vs Daemon: Daemon is a special process which runs in the background.
+
 60. Difference in SSH and telnet: 
 - Telnet is not secured.
 - Data is not encrypted.
@@ -156,3 +158,155 @@ High Disk Usage Issue
     7. **User Login:**
         - Once initialisation is complete, the system presents a login prompt or graphical login screen.
         - Users can log in and start using the system
+
+### If you have accidentally deleted the root user on a Linux system, you can regain access by following these steps:
+
+#### 1. Boot into Single-User Mode
+
+1. **Reboot the System**: Restart your machine.
+2. **Access GRUB Menu**: Hold down the `Shift` key (for BIOS-based systems) or press `Esc` repeatedly (for UEFI-based systems) during boot to access the GRUB menu.
+3. **Edit GRUB Entry**: Highlight the default boot entry and press `e` to edit it.
+4. **Modify Boot Parameters**: Find the line that starts with `linux` and append `init=/bin/bash` at the end of this line.
+5. **Boot with Modified Parameters**: Press `Ctrl + X` or `F10` to boot with these parameters.
+
+### 2. Remount the Filesystem
+
+Once you have booted into single-user mode, the root filesystem is mounted as read-only. You need to remount it as read-write to make changes.
+
+```bash
+mount -o remount,rw /
+```
+
+### 3. Recreate the Root User
+You can recreate the root user by editing the `/etc/passwd` and `/etc/shadow` files.
+#### Example `/etc/passwd` Entry for Root
+Open the `/etc/passwd` file with an editor like `vi` or `nano`:
+```bash
+nano /etc/passwd
+```
+Add the following line if it does not exist:
+```plaintext
+root:x:0:0:root:/root:/bin/bash
+```
+#### Example `/etc/shadow` Entry for Root
+Open the `/etc/shadow` file:
+
+```bash
+nano /etc/shadow
+```
+
+```plaintext
+root:*:17722:0:99999:7:::
+```
+### 4. Set the Root Password
+```bash
+passwd root
+```
+
+### 5. Reboot the System
+```bash
+exec /sbin/init
+```
+## KILL SIGNALS
+
+### Common Kill Signals
+
+| Signal Number | Signal Name | Description |
+|---------------|-------------|-------------|
+| 1             | SIGHUP      | Hangup detected on controlling terminal or death of controlling process. Often used to reload configuration files. |
+| 2             | SIGINT      | Interrupt from the keyboard (Ctrl+C). |
+| 3             | SIGQUIT     | Quit from the keyboard (Ctrl+$$. Generates a core dump. |
+| 9             | SIGKILL     | Kill signal. Forces the process to terminate immediately. Cannot be caught, blocked, or ignored. |
+| 15            | SIGTERM     | Termination signal. Requests the process to terminate gracefully. |
+| 18            | SIGCONT     | Continue if stopped. |
+| 19            | SIGSTOP     | Stop the process. Cannot be caught or ignored. |
+| 20            | SIGTSTP     | Stop typed at the terminal (Ctrl+Z). |
+| 11            | SIGSEGV     | Invalid memory reference. Generates a core dump. |
+| 6             | SIGABRT     | Abort signal from abort(3). Generates a core dump. |
+
+
+### Special Considerations
+
+- **SIGKILL (9)**: This signal cannot be caught, blocked, or ignored. It forces the process to terminate immediately without performing any cleanup.
+- **SIGTERM (15)**: This is the default signal sent by the `kill` command. It allows the process to terminate gracefully, performing any cleanup operations.
+- **SIGSTOP (19) and SIGCONT (18)**: These signals are used to stop and continue processes, respectively. They are useful for pausing and resuming processes without terminating them.
+
+### Advanced Usage
+
+- **Sending signals to multiple processes:**
+  ```bash
+  kill -9 <PID1> <PID2> <PID3>
+  ```
+
+- **Using `pkill` to send signals by process name:**
+  ```bash
+  pkill -9 <process_name>
+  ```
+
+- **Using `killall` to send signals to all instances of a process:**
+  ```bash
+  killall -9 <process_name>
+  ```
+### Shadow Password in Linux
+
+The `/etc/shadow` file in Linux is a critical system file that stores secure user account information, specifically the hashed passwords and associated password aging information. This file is only accessible to the root user and certain privileged processes, enhancing the security of user passwords.
+
+#### Structure of `/etc/shadow`
+
+Each line in the `/etc/shadow` file corresponds to a user account and contains multiple fields separated by colons (`:`). Here is a breakdown of these fields:
+
+1. **Username**: The login name of the user.
+2. **Password**: The hashed password. This field can also contain special symbols like `!`, `!!`, or `*` to indicate different states of the password.
+3. **Last Password Change**: The date of the last password change, expressed as the number of days since January 1, 1970 (Unix epoch).
+4. **Minimum Password Age**: The minimum number of days required between password changes.
+5. **Maximum Password Age**: The maximum number of days a password is valid before the user must change it.
+
+#### Example Entry
+
+Here is an example entry from the `/etc/shadow` file:
+
+```plaintext
+user1:$6$randomsalt$hashedpassword:19278:0:99999:7:::
+```
+
+This entry represents the following:
+- **Username**: `user1`
+- **Password**: `$6$randomsalt$hashedpassword` (hashed using SHA-512)
+- **Last Password Change**: 19278 days since January 1, 1970
+- **Minimum Password Age**: 0 days
+- **Maximum Password Age**: 99999 days
+- **Password Warning Period**: 7 days
+- **Password Inactivity Period**: Not set
+- **Account Expiration Date**: Not set
+- **Reserved Field**: Not used
+
+#### Special Symbols in Password Field
+
+- **`*`**: Indicates that the account is locked and cannot be used for login.
+- **`!`**: Indicates that the password is locked, but other login methods (e.g., SSH keys) may still work.
+- **`!!`**: Typically indicates that the account has been created but no password has been set yet.
+
+#### Commands for Managing `/etc/shadow`
+
+- **`passwd`**: Change a user's password.
+- **`chage`**: Change the password aging information.
+- **`vipw -s`**: Safely edit the `/etc/shadow` file (locks the file during editing, similar to `visudo` for `/etc/sudoers`).
+
+#### Security Considerations
+
+The `/etc/shadow` file is not world-readable, unlike the `/etc/passwd` file, which is necessary for various system utilities to map user IDs to usernames. This restriction helps protect the hashed passwords from unauthorized access and potential brute-force attacks.
+
+#### Example Commands
+
+- **View `/etc/shadow`** (requires root privileges):
+
+    ```bash
+    sudo cat /etc/shadow
+    ```
+
+- **Change a user's password**:
+
+    ```bash
+    sudo passwd username
+    ```
+

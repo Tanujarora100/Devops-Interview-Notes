@@ -1,7 +1,4 @@
 **LVM Management**
-
-LVM (Logical Volume Manager) volumes are a method of managing disk drives on a Linux system. 
-
 Here are the key components of LVM:
 
 1. **Physical Volumes (PVs):**
