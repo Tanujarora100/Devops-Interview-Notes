@@ -3,6 +3,16 @@
 1. **What is Trivy?**
    - open-source security scanner
    - By Aqua Security
+2. **Trivy Severity**:
+   - Critical
+   - High 
+   - Low
+3. **Securing Images**
+   - Distroless images
+   - Trivy Tool
+   - Multi Stage Build
+   - Non root user 
+   
 2. **What types of vulnerabilities can Trivy detect?**
      - OS package vulnerabilities (e.g., Alpine, RHEL, CentOS)
      - Application dependencies vulnerabilities

@@ -359,7 +359,7 @@ docker service create --name traefik --constraint=node.role==manager --publish 8
 Monitor the canary deployment closely.
 ## Docker Build Context
 
-The Docker build context is a crucial concept in Docker image creation. It refers to the set of files and directories that are accessible to the Docker engine during the build process. When you run the `docker build` command, you specify a context, which can be a local directory, a remote URL, or even a tarball. This context is sent to the Docker daemon, and all the files within it can be referenced in the Dockerfile.
+The Docker build context is a crucial concept in Docker image creation. It refers to the set of files and directories that are accessible to the Docker engine during the build process. When you run the `docker build` command.
 
 #### **Types of Build Contexts**
 
@@ -750,3 +750,111 @@ Docker build arguments (`ARG`) provide a flexible way to pass variables to the D
 
 - **Flexibility**: allowing for dynamic configuration.
 - **Customization** customization of runtime versions and the injection of values into source code.
+## Docker Build Cache
+
+#### **How the Build Cache Works**
+
+- **Layered Architecture**: Each instruction in a Dockerfile creates a new layer.
+- **Cache Invalidation**: When a layer changes, Docker invalidates that layer and all subsequent layers.
+
+#### **Optimizing Build Cache Usage**
+
+1. **Order Your Layers**:
+   - Place instructions that change frequently (like copying source code) at the end of the Dockerfile.
+   - Example:
+     ```dockerfile
+     # Inefficient
+     COPY . .
+     RUN npm install
+     RUN npm build
+
+     # Efficient
+     COPY package.json yarn.lock .
+     RUN npm install
+     COPY . .
+     RUN npm build
+     ```
+
+2. **Keep Layers Small**:
+   - Use a `.dockerignore` file to exclude files and directories that are not needed.
+
+3. **Use the `RUN` Cache**:
+   - Use `RUN --mount=type=cache` to cache directories between builds.
+
+4. **Minimize the Number of Layers**:
+   - Combine multiple commands into a single `RUN` instruction using `&&`.
+   
+
+5. **Use Multi-Stage Builds**:
+   - Split the build process into multiple stages to keep the final image small and efficient.
+   - Example:
+     ```dockerfile
+     FROM alpine as builder
+     RUN apk add git
+     WORKDIR /repo
+     RUN git clone https://github.com/your/repository.git .
+
+     FROM nginx
+     COPY --from=builder /repo/docs/ /usr/share/nginx/html
+     ```
+
+6. **Use Appropriate Base Images**
+---
+### Docker Builders
+
+Docker builders are BuildKit daemons used to execute the build steps in a Dockerfile to produce container images or other artifacts. BuildKit is a powerful build engine that enhances the efficiency and flexibility of Docker builds. Here’s a detailed explanation based on the Docker documentation:
+
+#### **Key Concepts**
+
+1. **Default Builder**:
+   - Docker Engine automatically creates a default builder that uses the BuildKit library bundled with the daemon.
+   - This default builder is directly bound to the Docker daemon and its context. Changing the Docker context will also change the default builder context.
+
+2. **Build Drivers**:
+   - Build drivers refer to different builder configurations supported by Buildx. The main build drivers are:
+     - **`docker`**: Uses the BuildKit library bundled into the Docker daemon.
+     - **`docker-container`**: Creates a dedicated BuildKit container using Docker.
+     - **`kubernetes`**: Creates BuildKit pods in a Kubernetes cluster.
+     - **`remote`**: Connects directly to a manually managed BuildKit daemon.
+
+3. **Selected Builder**:
+   - The selected builder is the default builder used when running build commands.
+   - You can specify a builder by name using the `--builder` flag or the `BUILDX_BUILDER` environment variable.
+   - Use `docker buildx ls` to list available builder instances and see the selected builder (indicated by an asterisk `*`).
+---
+## **Managing Builders**
+
+1. **Create a New Builder**:
+   - You can create new builders using the `docker buildx create` command.
+   - By default, the `docker-container` driver is used if no `--driver` flag is specified.
+   - Example:
+     ```sh
+     docker buildx create --name my_builder
+     ```
+
+2. **List Available Builders**:
+   - Use `docker buildx ls` to see builder instances available on your system and the drivers they are using.
+     ```sh
+     docker buildx ls
+     ```
+     Output:
+     ```
+     NAME/NODE      DRIVER/ENDPOINT      STATUS   BUILDKIT PLATFORMS
+     default *      docker               running  v0.11.6 linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386
+     my_builder     docker-container     running  v0.11.6 linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386
+     ```
+
+3. **Switch Between Builders**:
+   - Use `docker buildx use <name>` to switch between builders.
+   - Example:
+     ```sh
+     docker buildx use my_builder
+     ```
+
+4. **Inspect a Builder**:
+   - Use `docker buildx inspect <builder-name>` 
+
+
+### What is Asterix In Builder
+   - This selected builder is the default for build operations executed via the Docker CLI.
+   - The asterisk (*) next to a builder name in Docker indicates the **currently selected builder**. 
