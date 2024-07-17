@@ -7,7 +7,6 @@ Pod Disruption Budgets (PDBs) are a crucial feature in Kubernetes designed to ma
 **Question:** You are planning to perform maintenance on a node in your Kubernetes cluster. How can you ensure that your application remains highly available during this maintenance?
 
 **Answer:** To ensure high availability during node maintenance, you can define a Pod Disruption Budget (PDB) for your application. 
-- For example, if your application has 5 replicas, you can create a PDB that specifies a minimum of 4 pods must be available at any time. This way, Kubernetes will ensure that at least 4 pods are running while one pod is being evicted for maintenance.
 
 ```yaml
 apiVersion: policy/v1
@@ -74,8 +73,8 @@ spec:
 
 **Question:** Your application is deployed across multiple zones in a Kubernetes cluster. How can you use PDBs to ensure high availability during zone-specific disruptions?
 
-**Answer:** In a multi-zone Kubernetes cluster, you can use PDBs in conjunction with anti-affinity rules to ensure high availability during zone-specific disruptions. 
-- For example, if your application has 6 replicas spread across 3 zones, you can set a PDB to ensure that at least 4 pods are always available.
+**Answer:** In a multi-zone Kubernetes cluster, you can use PDBs in conjunction with `anti-affinity rules to ensure high availability` during zone-specific disruptions. 
+- For example, if your application `has 6 replicas spread across 3 zones, you can set a PDB to ensure that at least 4 pods` are always available.
 
 ```yaml
 apiVersion: policy/v1
@@ -108,35 +107,19 @@ affinity:
 
 **Question:** How do PDBs help in managing involuntary disruptions such as hardware failures?
 
-**Answer:** While PDBs primarily protect against voluntary disruptions, they also help manage the impact of involuntary disruptions. By ensuring a minimum number of pods remain available, PDBs provide a buffer that can help absorb the impact of unexpected failures. For example, if a node fails and you have a PDB that specifies a minimum of 3 available pods, Kubernetes will try to reschedule the affected pods to maintain the desired availability.
+**Answer:** While PDBs primarily protect against voluntary disruptions, they also help manage the impact of involuntary disruptions. By ensuring a minimum number of pods remain available, PDBs provide a buffer that can help absorb the impact of unexpected failures. 
+- For example, if a node fails and you have a PDB that specifies a minimum of 3 available pods, Kubernetes will try to reschedule the affected pods to maintain the desired availability.
 
 
 ### **Consequences of Not Setting a PDB**
 
 1. **Increased Risk of Downtime:**
-   - Without a PDB, there is no mechanism to limit the number of pods that can be disrupted simultaneously.
-
 2. **Uncontrolled Disruptions:**
-   - Voluntary disruptions such as node maintenance, cluster upgrades, or scaling operations can proceed without regard to the application's availability requirements. 
-
 3. **Impact on Stateful Applications:**
    - For stateful applications that require a certain number of instances to maintain quorum (e.g., databases like etcd, ZooKeeper), not having a PDB can lead to a loss of quorum, making the application unable to process writes.
-
 4. **Increased Latency and Performance Degradation:**
-   - If too many pods are disrupted at once, the remaining pods may become overloaded.
 
 
-### **Considerations for Critical Applications**
-
-1. **Define Availability Requirements:**
-   - Understand the minimum number of pods that must be available to maintain the desired level of service. This helps in setting appropriate values for `minAvailable` or `maxUnavailable` in the PDB.
-
-2. **Use PDBs with Appropriate Controllers:**
-   - Ensure that PDBs are applied to deployments, stateful sets, or other controllers managing the critical application pods.
-
-
-3. **Combine with Other High Availability Strategies:**
-   - Use PDBs in conjunction with other strategies such as anti-affinity rules, multi-zone deployments, and replication to enhance the overall availability and resilience of the application.
 ## Differences Between Pod Disruption Budgets (PDBs) and Max Surge in Deployments
 
 
@@ -161,11 +144,10 @@ affinity:
 
 **Functionality:**
 - **MaxSurge:** Specifies the maximum number of pods that can be created above the desired number of pods during an update.
-- **MaxUnavailable:** Specifies the maximum number of pods that can be unavailable during the update process.
+- **MaxUnavailable:** Specifies the maximum number of pods that `can be unavailable during the update process.`
 
 **Use Cases:**
 - Max surge is useful during rolling updates to ensure that new pods are created before old pods are terminated, thereby maintaining service availability.
-- It helps balance the speed of updates with the load on cluster resources.
 
 **Example:**
 ```yaml

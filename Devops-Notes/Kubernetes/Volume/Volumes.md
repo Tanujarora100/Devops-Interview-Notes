@@ -1,8 +1,8 @@
-- A volume is a persistent storage which could be created and mounted at a location inside the containers of a pod. This allows the pod to persist the storage at that location even if it is restarted.
+A volume is a persistent storage which could be created and mounted at a location inside the containers of a pod.
 - Volume could be:
-    - **Local** (on the same node as the pod) - This is not acceptable if the cluster has multiple worker nodes as each node will store different data in their volumes.
-    - **Remote** (outside the cluster) - This works with multiple worker nodes as the storage is being managed remotely. 
-    - The remote storage provider must follow the **Container Storage Interface (CSI)** standards.
+    - **Local**
+    - **Remote** (outside the cluster)
+    	- The remote storage provider must follow the **Container Storage Interface (CSI)** standards.
 
 ## Creating a local volume on the node
 
@@ -57,13 +57,13 @@ spec:
 
 # Persistent Volumes
 
-![alt text](image-1.png)
-- **Persistent Volumes (PVs) are cluster wide storage volumes configured by the admin.** This allows the volumes to be centrally configured and managed by the admin. 
+- **Persistent Volumes (PVs) are cluster wide storage volumes configured by the admin.** 
 - The developer creating application (pods) can claim these persistent volumes by creating **Persistent Volume Claims (PVCs).**
-- Once the PVCs are created, K8s binds the PVCs with available PVs based on the requests in the PVCs and the properties set on the volumes. **A PVC can bind with a single PV only** (there is a 1:1 relationship between a PV and a PVC). 
-- If multiple PVs match a PVC, we can label a PV and select it using label selectors in PVC.
+- Once the PVCs are created, K8s binds the PVCs with available PVs based on the requests in the PVCs and the properties set on the volumes. 
+- **A PVC can bind with a single PV only** (there is a 1:1 relationship between a PV and a PVC). 
+	- If multiple PVs match a PVC, we can label a PV and select it using label selectors in PVC.
 - A smaller PVC can bind to a larger PV if all the other criteria in the PVC match the PV’s properties and there is no better option.
-- When a PV is created, it is in **Available** state until a PVC binds to it, after which it goes into **Bound** state. 
+	- When a PV is created, it is in **Available** state until a PVC binds to it, after which it goes into **Bound** state. 
 - If the PVC is deleted while the reclaim policy was set to `Retain`, the PV goes into **Released** state.
 - If no PV matches the given criteria for a PVC, the PVC remains in **Pending** state until a PV is created that matches its criteria. After this, the PVC will be bound to the newly created PV.
 - The properties involved in binding between PV and PVC are: Capacity, Access Modes, Volume Modes, Storage Class and Selector.
@@ -156,6 +156,6 @@ spec:
 
 `persistentVolumeReclaimPolicy` governs the behavior of PV when the associated PVC is deleted. Possible values:
 
-- `Retain` - retain the PV until it is manually deleted but it cannot be reused by other PVCs (default)
-- `Delete` - delete PV as well
+- `Retain` - retain the PV until it is manually deleted but it `cannot be reused by other PVCs (default)`
+- `Delete` - `delete PV as well`
 - `Recycle` - erase the data stored in PV and make it available to other PVCs

@@ -4,8 +4,8 @@ Static Pods are a special type of pod in Kubernetes that are `managed directly b
 
 ### **Key Characteristics**
 
-- **Managed by Kubelet**:  The kubelet monitors a specific directory for pod manifest files and manages the lifecycle.
-- **No API Server Involvement**:
+- Managed by Kubelet
+- No API Server Involvement
 - **Mirror Pods**: For visibility, the kubelet creates a mirror pod on the Kubernetes API server for each static pod. 
     - These mirror pods make it visible in the kubectl get pods commands.
 - **Node-Specific**: Static pods are always bound to the node where their manifest files are located. 
@@ -24,7 +24,7 @@ Static Pods are a special type of pod in Kubernetes that are `managed directly b
 
 #### **Steps to Create a Static Pod**
 
-1. **Create a Pod Manifest File**: Create a YAML file that defines the static pod. For example, to create a static pod running an Nginx container:
+1. **Create a Pod Manifest File**: 
 
     ```yaml
     apiVersion: v1

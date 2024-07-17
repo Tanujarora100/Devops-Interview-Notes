@@ -1,19 +1,12 @@
 
-## **Key Concepts of Horizontal Pod Autoscaler**
-
-### **1. Horizontal vs. Vertical Scaling**
-- **Horizontal Scaling:** Involves adding or removing pod replicas to distribute the load. This is the primary function of HPA.
-- **Vertical Scaling:** Involves increasing or decreasing the resources (CPU, memory) allocated to individual pods. 
-- This is managed by the Vertical Pod Autoscaler (VPA).
-
-### **2. How HPA Works**
-- **Metrics Collection:** HPA continuously monitors resource usage metrics (e.g., CPU, memory) of the pods using the Kubernetes metrics server.
+### **1. How HPA Works**
+- **Metrics Collection:** HPA continuously monitors resource usage metrics (e.g., CPU, memory) of the pods using the Kubernetes metrics server or Prometheus Adapter.
 - **Target Utilization:** You define a target resource utilization level (e.g., 70% CPU utilization).
-- **Control Loop:** HPA operates in a loop, periodically checking metrics and adjusting the number of replicas accordingly.
+- **Control Loop:** HPA works in Loop and keeps checking the resource usage.
 
 ### **3. Configuration and API Versions**
 - **API Versions:** HPA can be configured using `autoscaling/v1` (supports CPU-based scaling) or `autoscaling/v2` (supports multiple metrics including custom and external metrics).
-
+- `v2` supports the custom metrics here.
 
 ### **4. Example Configuration**
 
@@ -45,8 +38,8 @@ spec:
   ```
 
 ### **6. Handling Load Spikes and Stability**
-- **Thrashing Prevention:** HPA includes mechanisms to prevent frequent scaling actions (thrashing) by using stabilization windows and choosing the highest recommendation within a configurable time window.
-- **Custom Metrics:** HPA can scale based on custom metrics provided by external sources or custom metrics adapters.
+- **Thrashing Prevention:** HPA includes mechanisms to prevent frequent scaling actions (thrashing) by using `stabilization windows and choosing the highest recommendation within a configurable time window.`
+- **Custom Metrics:** In V2 Version of API.
 
 ### **7. Integration with Cluster Autoscaler**
 - **Cluster Autoscaler:** Works at the infrastructure level to add or remove nodes based on the overall resource requirements of the cluster.

@@ -3,12 +3,11 @@
 ### **Eviction API**
 
 **Purpose:**
-- The Eviction API in Kubernetes is used to programmatically trigger the eviction of pods from nodes. This is typically done to perform maintenance, upgrade nodes, or manage resources more effectively.
+- The Eviction API in Kubernetes is used to programmatically trigger the eviction of pods from nodes.
 
 **Functionality:**
 - When an eviction is requested via the Eviction API, an **`Eviction`** object is created, which triggers the graceful termination of the specified pod.
-- The API performs admission checks to ensure that the eviction does not violate any Pod Disruption Budgets (PDBs) that apply to the pod.
-
+- The API performs admission checks to ensure that the eviction does not violate any Pod Disruption Budgets (PDBs) 
 **How It Works:**
 1. **Request Eviction:** An eviction request is made by creating an `Eviction` object.
     ```yaml
@@ -20,53 +19,14 @@
     ```
 2. **Admission Checks:** The API server checks if the eviction respects the PDBs and other policies.
     - If the eviction is allowed, the pod is marked for termination.
-    - If the eviction would violate a PDB, the request is denied with a `429 Too Many Requests` status.
-3. **Graceful Termination:** The kubelet on the node where the pod is running initiates the graceful shutdown process, respecting the `terminationGracePeriodSeconds` setting.
+    - If the eviction would violate a PDB, the request is denied with a `429 Too Many Requests`.
+3. **Graceful Termination:** The kubelet on the node where the pod is running initiates the graceful shutdown process, respecting the `terminationGracePeriodSeconds`.
 4. **Pod Deletion:** After the grace period, the pod is forcefully terminated and removed from the API server.
 
 **Example Usage:**
 - Using `kubectl` to drain a node, which internally uses the Eviction API:
     ```sh
     kubectl drain <node-name> --ignore-daemonsets --delete-emptydir-data
-    ```
-
-### **Pod Disruption Budgets (PDBs)**
-
-**Purpose:**
-- PDBs are used to limit the number of pods that can be simultaneously disrupted during voluntary operations like maintenance, upgrades, and scaling. They help ensure that a minimum number of pods remain available to maintain application availability.
-
-**Functionality:**
-- **MinAvailable:** Specifies the minimum number of pods that must be available at any time.
-- **MaxUnavailable:** Specifies the maximum number of pods that can be unavailable at any time.
-
-**How It Works:**
-1. **Define PDB:** Create a PDB that specifies the availability requirements for your application.
-    ```yaml
-    apiVersion: policy/v1
-    kind: PodDisruptionBudget
-    metadata:
-      name: my-app-pdb
-    spec:
-      minAvailable: 4
-      selector:
-        matchLabels:
-          app: my-app
-    ```
-2. **Enforcement:** During voluntary disruptions, Kubernetes checks the PDB to ensure that the number of disrupted pods does not exceed the specified limits.
-3. **Blocking Operations:** If a proposed operation would violate the PDB, it is either blocked or limited to ensure compliance with the PDB.
-
-**Example Usage:**
-- Ensuring that at least 4 pods of an application are always available:
-    ```yaml
-    apiVersion: policy/v1
-    kind: PodDisruptionBudget
-    metadata:
-      name: my-app-pdb
-    spec:
-      minAvailable: 4
-      selector:
-        matchLabels:
-          app: my-app
     ```
 
 ### **Comparison: Eviction API vs. PDBs**
@@ -119,23 +79,53 @@ Suppose you have a deployment with 5 replicas and a PDB that specifies `minAvail
 3. **Expected Behavior:**
    - The `kubectl drain` command will attempt to evict the pods on the node.
    - Since evicting 2 pods would reduce the number of available pods to 3, which violates the PDB (`minAvailable: 4`), the drain operation will block and retry until the PDB conditions are met.
+   - `429 error` comes.
 
-### **Forcing a Drain Operation**
+#### **Forcing a Drain Operation**
+- Temporary delete the PDB is solution to this problem.
 
-In some cases, you might need to drain a node even if it violates the PDB. Kubernetes does not provide a built-in flag to ignore PDBs during a drain operation. However, you can manually handle such situations by temporarily modifying or deleting the PDB:
 
-1. **Delete the PDB:**
-    ```sh
-    kubectl delete pdb my-app-pdb
-    ```
 
-2. **Drain the Node:**
-    ```sh
-    kubectl drain <node-name> --ignore-daemonsets
-    ```
+## **Types of Evictions**
 
-3. **Recreate the PDB:**
-    ```sh
-    kubectl apply -f my-app-pdb.yaml
-    ```
+### **1. Node-Pressure Eviction**
+- Kubelet => High Resource Utilization
+
+### **2. API-Initiated Eviction**
+- Drain Operation=> API Server
+
+## **Internal Working of Eviction API**
+
+### **1. Node-Pressure Eviction**
+
+#### **Monitoring and Thresholds**
+- The kubelet continuously monitors the resource usage on the node.
+
+#### **Eviction Process**
+- **Pod Selection**: The kubelet selects Pods for eviction based on their Quality of Service (QoS) class. Best-effort Pods are evicted first, followed by Burstable, and Guaranteed Pods are evicted last.
+- **Pod Status Update**: The kubelet updates the Pod status to `Failed` with the reason `Evicted`.
+
+### **2. API-Initiated Eviction**
+
+#### **Eviction Request**
+
+
+#### **Validation**
+- The API server validates the eviction request against any existing Pod Disruption Budgets (PDBs). PDBs ensure that a minimum number of Pods remain available during voluntary disruptions.
+- If the eviction request violates a PDB, the request is denied with 429.
+
+#### **Pod Deletion**
+- If the eviction request is validated, the API server marks the Pod for deletion.
+
+### **Node-Pressure Eviction Example**
+1. **Resource Monitoring**: The kubelet monitors node resources.
+2. **Threshold Exceeded**: Memory usage exceeds the threshold.
+3. **Pod Selection**: The kubelet selects a Best-effort Pod for eviction.
+4. **Pod Termination**: The kubelet updates the Pod status to `Failed` with reason `Evicted` and terminates the Pod.
+
+### **API-Initiated Eviction Example**
+1. **Eviction Request**: An eviction request is sent using the Eviction API.
+2. **Validation**: The API server checks PDBs and validates the request.
+3. **Pod Deletion**: The API server marks the Pod for deletion.
+4. **Graceful Termination**: The kubelet respects the termination grace period and terminates the Pod.
 
