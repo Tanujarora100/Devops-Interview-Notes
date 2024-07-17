@@ -1,5 +1,6 @@
 The Kubernetes Metrics Server is a vital component for monitoring resource usage within a Kubernetes cluster. 
-- It collects metrics from the kubelets running on each node and exposes these metrics through the Kubernetes API server. 
+- It collects metrics from the kubelets
+- Expose these kubelet metrics to the kube api server.
 - These metrics are primarily used for autoscaling purposes, such as with the Horizontal Pod Autoscaler (HPA) and Vertical Pod Autoscaler (VPA). 
 
 ## **Overview**
