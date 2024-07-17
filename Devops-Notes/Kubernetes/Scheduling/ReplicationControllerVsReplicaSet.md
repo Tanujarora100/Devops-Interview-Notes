@@ -15,7 +15,7 @@
 
 1. **Why are Replica Sets preferred over Replication Controllers?**
    - Replica Sets are preferred because they support set-based selectors, which provide more flexibility in pod selection.
-   - Support Rolling Updates
+   - `Support Rolling Updates`
 
 2. **How do Deployments utilize Replica Sets?**
    - Deployments manage Replica Sets.

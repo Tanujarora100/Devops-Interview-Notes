@@ -1,186 +1,111 @@
-## Node Affinity and Anti Affinity
+**It is used to ensure the pods are scheduled on the right nodes.** It allows us to use complex logic to decide which node the pod should be scheduled on. It uses the concept of labelling nodes as seen in Node Selector.
 
-### **Overview**
-- **Purpose:** Constrain or prefer Pods to run on particular nodes using label selectors.
-- **Default Behavior:** Scheduler automatically places Pods based on resource availability and other factors.
+## Node Affinity Types
 
-### **Methods to Assign Pods to Nodes**
-1. **nodeSelector**
-2. **Affinity and Anti-affinity**
-3. **nodeName**
-4. **Pod Topology Spread Constraints**
+It defines the behavior of the node affinity when scheduling a new pod (`DuringScheduling`) and when a pod has been running (`DuringExecution`). 
 
-### **Node Labels**
-- Nodes have labels that can be manually attached or automatically populated by Kubernetes.
-- **Security Note:** Use labels that the kubelet cannot modify to prevent compromised nodes from setting labels.
+These are of types:
 
-### **Node Isolation/Restriction**
-- Use labels with the `node-restriction.kubernetes.io/` prefix for node isolation.
-- Ensure `NodeRestriction` admission plugin is enabled.
+- **`requiredDuringSchedulingIgnoredDuringExecution`**
+    - During pod scheduling, the node **must satisfy** the node affinity requirements. If none of the nodes satisfy the requirements, the pod will not be scheduled.
+    - `A pod already running should be allowed to keep running`.
+- `preferredDuringSchedulingIgnoredDuringExecution`
+    - During pod scheduling, the node **should ideally satisfy** the node affinity requirements. 
+    - If none of the nodes satisfy the requirements, `the pod will still be scheduled on a node.`
+    - A pod already running should be allowed to keep running.
+- `requiredDuringSchedulingRequiredDuringExecution` (planned to be released)
+    - During pod scheduling, the node **must satisfy** the node affinity requirements. If none of the nodes satisfy the requirements, the pod will not be scheduled.
+    - A pod already running on a node that does not satisfy the node affinity requirements will be evicted from that node
 
-### **nodeSelector**
-- Simplest form of node selection constraint.
-- Add `nodeSelector` field in Pod specification to specify required node labels.
-- Example:
-  ```yaml
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: my-pod
-  spec:
-    nodeSelector:
-      disktype: ssd
-    containers:
-    - name: my-container
-      image: my-image
-  ```
+![alt text](image.png)
 
-### **Affinity and Anti-affinity**
-- **Benefits:**
-  - More expressive than `nodeSelector`.
-  - Can specify soft (preferred) and hard (required) rules.
-  - Can use labels on other Pods for constraints.
-- **Types:**
-  - **Node Affinity:** Similar to `nodeSelector` but more expressive.
-    - `requiredDuringSchedulingIgnoredDuringExecution`: Must be met for scheduling.
-    - `preferredDuringSchedulingIgnoredDuringExecution`: Preferred but not mandatory.
-  - **Inter-pod Affinity/Anti-affinity:** Constrain Pods based on labels of other Pods.
-    - `requiredDuringSchedulingIgnoredDuringExecution`
-    - `preferredDuringSchedulingIgnoredDuringExecution`
+### Schedule a pod on a node with `compute` label `high` or `medium`
 
-#### **Node Affinity Example**
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: with-node-affinity
+	name: web-pod
 spec:
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: topology.kubernetes.io/zone
-            operator: In
-            values:
-            - antarctica-east1
-            - antarctica-west1
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
-        preference:
-          matchExpressions:
-          - key: another-node-label-key
-            operator: In
-            values:
-            - another-node-label-value
-  containers:
-  - name: with-node-affinity
-    image: registry.k8s.io/pause:2.0
+	containers:
+		- name: nginx
+			image: nginx
+	affinity:
+		nodeAffinity:
+			requiredDuringSchedulingIgnoredDuringExecution:
+				nodeSelectorTerms:
+					- matchExpressions:
+						- key: compute
+							operator: In
+							values:
+							- high
+							- medium
 ```
 
-### **Node Affinity Weight**
-- Specify a `weight` between 1 and 100 for `preferredDuringSchedulingIgnoredDuringExecution`.
-- Nodes with higher total scores are prioritized.
+### Schedule a pod on a node with `compute` label not `low`
 
-#### **Node Affinity Weight Example**
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: with-affinity-preferred-weight
+	name: web-pod
 spec:
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/os
-            operator: In
-            values:
-            - linux
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
-        preference:
-          matchExpressions:
-          - key: label-1
-            operator: In
-            values:
-            - key-1
-      - weight: 50
-        preference:
-          matchExpressions:
-          - key: label-2
-            operator: In
-            values:
-            - key-2
-  containers:
-  - name: with-node-affinity
-    image: registry.k8s.io/pause:2.0
+	containers:
+		- name: nginx
+			image: nginx
+	affinity:
+		nodeAffinity:
+			requiredDuringSchedulingIgnoredDuringExecution:
+				nodeSelectorTerms:
+					- matchExpressions:
+						- key: compute
+							operator: NotIn
+							values:
+							- low
 ```
 
-### **Inter-pod Affinity and Anti-affinity**
-- Constrain Pods based on labels of other Pods on the same node or other topological domains.
-- **Note:** Requires substantial processing and consistent labeling across nodes.
+### Schedule a pod on a node where `compute` label exists
 
-#### **Inter-pod Affinity Example**
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: with-pod-affinity
+	name: web-pod
 spec:
-  affinity:
-    podAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: security
-            operator: In
-            values:
-            - S1
-        topologyKey: topology.kubernetes.io/zone
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: security
-              operator: In
-              values:
-              - S2
-          topologyKey: topology.kubernetes.io/zone
-  containers:
-  - name: with-pod-affinity
-    image: registry.k8s.io/pause:2.0
+	containers:
+		- name: nginx
+			image: nginx
+	affinity:
+		nodeAffinity:
+			requiredDuringSchedulingIgnoredDuringExecution:
+				nodeSelectorTerms:
+					- matchExpressions:
+						- key: compute
+							operator: Exists
 ```
 
-### **nodeName**
-- Directly specify the node for the Pod.
-- **Limitations:**
-  - Pod will not run if the node does not exist or lacks resources.
-  - Node names in cloud environments may not be predictable or stable.
-- **Warning:** Intended for advanced use cases and custom schedulers.
+### Taints and Tolerations Vs Node Affinity
 
-#### **nodeName Example**
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-spec:
-  containers:
-  - name: nginx
-    image: nginx
-  nodeName: kube-01
-```
+![alt text](image-1.png)
 
-### **Pod Topology Spread Constraints**
-- Control how Pods are spread across the cluster among failure-domains.
-- **Use Cases:** Improve performance, availability, and utilization.
+Even after the node tolerations and the taints it is not guarantee that pods will prefer the correct node for them
 
-### **Operators for Affinity/Anti-affinity**
-- **Common Operators:**
-  - `In`, `NotIn`, `Exists`, `DoesNotExist`
-- **Node Affinity Only:**
-  - `Gt`, `Lt`
+We want to deploy the colored pods on matching nodes and ensure that other pods don’t get deployed on colored nodes. 
+- We also don’t want the colored pods to get deployed on other nodes.
+
+
+
+**If we taint the coloured nodes accordingly and apply tolerations to the pods,** we can prevent non-matching and other pods from being deployed on the colored nodes. **However, we cannot guarantee that a coloured pod will not get deployed on a non-tainted node.**
+
+![alt text](image-2.png)
+If we label the nodes according to their color and use node affinity to make coloured pods schedule on the corresponding coloured nodes, the coloured pods will always be deployed on matching nodes. However, this does not guarantee that other pods will not be deployed on coloured nodes.
+
+**We can combine both taints & tolerations and node affinity to achieve the desired result. Taints and tolerations ensure that other pods don’t get scheduled on colored nodes. Node affinity ensures that coloured pods get scheduled on the right nodes**.
+
+### Why Go For Node Affinity
+
+- If we go for node affinity then we label the nodes first with the color and then node selectors on the pods, the coloured pods will be 100% Scheduled on them
+- **But it creates a new problem**
+    - Now the non coloured nodes are also allowed on the same node itself because we are not using any taint here.
+- To Solve this
+    - Use combination of taints and tolerations + Node Affinity to prevent other pods to be placed on those nodes.
