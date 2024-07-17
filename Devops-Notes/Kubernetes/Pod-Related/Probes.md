@@ -5,7 +5,7 @@
 
 ### Types of Liveness Probes:
 - HTTP GET Probe: Sends an HTTP GET request to a specified endpoint. The container is considered healthy if the response status code is between 200 and 399.
-- TCP Socket Probe: Attempts to open a TCP connection to a specified port. The container is considered healthy if the connection is successful.
+- TCP Socket Probe: Attempts to open a TCP connection to a specified port..
 - Command Probe: Executes a command inside the container. The container is considered healthy if the command exits with a status code of 0.
 
 ```yaml

@@ -33,17 +33,16 @@ For Docker, you can use the command
 - A proxy repository acts as a `caching proxy for a remote repository`, fetching artifacts from external sources and storing them locally to improve performance and availability.
 
 ### What is Nexus Smart Proxy and how does it enhance performance?
-- Nexus Smart Proxy extends repository proxies to remote locations, providing local caching and faster access to artifacts for geographically distributed teams.
+- Nexus Smart Proxy extends repository proxies to remote locations, `providing local caching and faster access to artifacts` for geographically distributed teams.
 
-- You encounter a situation where a proxy repository is not syncing artifacts. How would you troubleshoot this issue.
-### Check the network connectivity between Nexus and the remote repository.
+#### You encounter a situation where a proxy repository is not syncing artifacts. How would you troubleshoot this issue.
+- Check the network connectivity between Nexus and the remote repository.
 - Verify the remote repository URL and credentials.
 - Review the Nexus logs.
 - Clear the proxy cache and attempt to sync again.
 
 ### What strategies would you use for managing large numbers of artifacts in Nexus?
 - Implementing cleanup policies.
-- Using repository groups to simplify access and organization.
 - Monitoring repository usage 
 - Archiving older artifacts.
 

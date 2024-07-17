@@ -7,16 +7,13 @@
 - **Non-Persistent:** Once added, ephemeral containers cannot be changed or removed.
 
 ### **How to Use Ephemeral Containers**
-
 Ephemeral containers are typically used when `kubectl exec` is insufficient, such as when a container has crashed or when using distroless images that lack debugging utilities.
 
 **Steps to Use Ephemeral Containers:**
-
 1. **Create a Pod:**
    ```sh
    kubectl run ephemeral-demo --image=registry.k8s.io/pause:3.1 --restart=Never
    ```
-
 2. **Attempt to Use `kubectl exec`:**
    ```sh
    kubectl exec -it ephemeral-demo -- sh
@@ -27,7 +24,6 @@ Ephemeral containers are typically used when `kubectl exec` is insufficient, suc
    ```sh
    kubectl debug -it ephemeral-demo --image=busybox:1.28 --target=ephemeral-demo
    ```
-   This command adds a new `busybox` container and attaches to it. The `--target` parameter targets the process namespace of another container.
 
 4. **View the State of the Ephemeral Container:**
    ```sh
@@ -45,8 +41,6 @@ Ephemeral containers are typically used when `kubectl exec` is insufficient, suc
    - Ephemeral containers are ideal for interactive troubleshooting when `kubectl exec` is insufficient.
 
 2. **Debugging Distroless Images:**
-   - Distroless images are minimal and do not include debugging utilities. Ephemeral containers allow you to add a container with the necessary tools to troubleshoot
-
 3. **Accessing Filesystems:**
    - Ephemeral containers can be used to access and interact with the filesystem of another container in the same Pod. 
    - This is useful for extracting files or performing memory dumps.
@@ -63,11 +57,10 @@ Ephemeral containers are typically used when `kubectl exec` is insufficient, suc
    - Ephemeral containers cannot expose network ports. This limits their ability to serve network traffic or to be used in scenarios where network communication is required.
 ## Security Concerns with Ephemeral Containers
 
-- Ephemeral containers can be used to gain access to the namespaces of other containers within the same Pod.
+- Ephemeral containers can be used to gain access to the namespaces of other containers.
 - Use (RBAC) to restrict who can create ephemeral containers. 
 - Ephemeral containers can potentially be used to create privileged containers
 - Misconfigurations can lead to security exposures, such as allowing ephemeral containers to access sensitive data or perform unauthorized actions.
-    - Use tools like Open Policy Agent (OPA) to enforce configuration policies and prevent misconfigurations.
-- Once an ephemeral container is added to a Pod, it cannot be changed or removed, which can lead to persistent security issues if the container is misconfigured.
+- Use tools like kyverno
 
 

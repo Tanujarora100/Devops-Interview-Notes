@@ -1,14 +1,13 @@
 Controller is a process in k8s which runs in the background and monitors the resource config in **`etcd` for state changes**. 
 - When the state of the resource changes, it makes necessary changes to the cluster to match the new state.
 
-All of the k8s resource types have controllers that monitor their state in the `etcd` and make necessary changes to the cluster. If a request to modify something in the cluster is approved by the `kube-apiserver`, the changes are written to the `etcd` store. The controller monitoring that resource is responsible to make the necessary changes.
+All of the k8s resource types have controllers that monitor their state in the `etcd` and make necessary changes to the cluster. If a request to modify something in the cluster is approved by the `kube-apiserver`, the changes are written to the `etcd` store. 
 
 ## Node Controller
-Node controller monitors the nodes and takes necessary actions
 It does that with the help of the API Server
 - Checks the status of the nodes every `5 seconds`
     - Node monitor grace period is `40 seconds`
-    - POD Eviction Timeout is `5 minutes`
+    - POD Eviction Timeout is `5 minutes` following the backoff exponential algorithm.
 - Removes the pods from the node and assign them to the replica set node.
 
 ## Deployment Controller
