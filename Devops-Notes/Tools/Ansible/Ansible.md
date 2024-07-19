@@ -417,3 +417,101 @@ Dynamic inventory in Ansible allows for real-time, automated management of infra
      ansible-playbook -i /path/to/custom_inventory_script.py playbook.yml
      ```
 
+The `async` keyword in Ansible allows you to run tasks asynchronously, meaning the tasks are executed in the background without blocking the execution of subsequent tasks. This is particularly useful for long-running operations that would otherwise cause delays or timeouts if run synchronously. Here’s a detailed explanation of how to use the `async` keyword in Ansible:
+
+## **Using the `async` Keyword**
+
+### **Basic Syntax**
+
+To run a task asynchronously, you need to specify two parameters:
+- `async`: The maximum runtime for the task in seconds.
+- `poll`: The interval in seconds at which Ansible checks the status of the task. Setting `poll: 0` makes the task run in a "fire and forget" mode, where Ansible does not wait for the task to complete.
+
+### **Example: Fire and Forget**
+
+In this example, the task will run for up to 45 seconds, but Ansible will not wait for it to complete:
+
+```yaml
+- hosts: all
+  tasks:
+    - name: Simulate long running operation
+      command: /bin/sleep 15
+      async: 45
+      poll: 0
+```
+
+### **Example: Polling for Status**
+
+In this example, the task will run for up to 45 seconds, and Ansible will check its status every 5 seconds:
+
+```yaml
+- hosts: all
+  tasks:
+    - name: Simulate long running operation
+      command: /bin/sleep 15
+      async: 45
+      poll: 5
+```
+
+### **Checking the Status of Asynchronous Tasks**
+
+If you need to check the status of an asynchronous task later, you can use the `async_status` module. Here’s how to do it:
+
+1. **Run the Asynchronous Task and Register the Job ID**:
+
+    ```yaml
+    - hosts: all
+      tasks:
+        - name: Start long running operation
+          command: /bin/sleep 1000
+          async: 1000
+          poll: 0
+          register: long_running_task
+    ```
+
+2. **Check the Status of the Asynchronous Task**:
+
+    ```yaml
+    - hosts: all
+      tasks:
+        - name: Check the status of the long running operation
+          async_status:
+            jid: "{{ long_running_task.ansible_job_id }}"
+          register: job_result
+          until: job_result.finished
+          retries: 30
+          delay: 10
+    ```
+
+### **Handling Multiple Asynchronous Tasks**
+
+To handle multiple asynchronous tasks, you can loop over them and register each task's job ID. Here’s an example:
+
+```yaml
+- hosts: all
+  tasks:
+    - name: Start multiple long running tasks
+      command: /bin/sleep 1000
+      async: 1000
+      poll: 0
+      register: async_tasks
+      loop: "{{ range(1, 5) | list }}"
+      loop_control:
+        loop_var: item
+
+    - name: Check the status of all long running tasks
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: job_result
+      until: job_result.finished
+      retries: 30
+      delay: 10
+      loop: "{{ async_tasks.results }}"
+      loop_control:
+        loop_var: item
+```
+
+### **Important Considerations**
+
+- **Exclusive Locks**: Avoid using `poll: 0` for tasks that require exclusive locks (e.g., package installations) if you plan to run other commands against the same resources later in the playbook.
+- **Cleanup**: When running with `poll: 0`, Ansible does not automatically clean up the async job cache file. You may need to use the `async_status` module with `mode: cleanup` to clean up manually.
