@@ -10,12 +10,10 @@
 
 ## Technical Details
 - Uses **NFSv4.1** protocol.
-- Every file system has an automatically generated ID number that is globally unique.
   - You can tag your file system with a name, and these names don’t need to be unique.
 - Security groups can be used to control access to EFS volumes.
 - Can scale up to **petabytes** whereas EBS Volumes can go upto 64tb max in io2 block express.
 - **AWS DataSync** provides a fast way to securely sync existing file systems with Amazon EFS.
-  - DataSync works over any network connection, including with AWS Direct Connect or AWS VPN.
 - Number of file systems for each customer account in an AWS Region: **1000** but there is no limit on EBS Volumes.
 - You can mount EFS filesystems onto EC2 instances running Linux or MacOS Big Sur. 
 - **Windows is not supported, supported in EBS Volumes.**
@@ -40,7 +38,6 @@
 
 ## EFS Replication
 - Keeps two file systems synchronized by automatically transferring only incremental changes without requiring additional infrastructure or a custom process.
-- EFS Replication is designed to provide a recovery point objective (RPO) and a recovery time objective (RTO) of minutes.
 - While EFS Replication is enabled, your applications can use the **replica file system in read-only mode for low network latency cross-Region access.**
 
 ## Data Consistency in EFS

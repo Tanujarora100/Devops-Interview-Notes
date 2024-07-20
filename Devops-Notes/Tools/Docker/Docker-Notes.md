@@ -858,3 +858,38 @@ Docker builders are BuildKit daemons used to execute the build steps in a Docker
 ### What is Asterix In Builder
    - This selected builder is the default for build operations executed via the Docker CLI.
    - The asterisk (*) next to a builder name in Docker indicates the **currently selected builder**. 
+
+### **Dockershim**
+
+Dockershim was a component in Kubernetes that allowed the use of Docker Engine as a container runtime. 
+- It was introduced because Docker Engine was not compatible with the Container Runtime Interface (CRI) when CRI was first released. 
+- Dockershim acted as a bridge between Docker Engine and CRI. However, maintaining Dockershim introduced complexity and inconsistency, leading to its deprecation and removal in Kubernetes v1.24. 
+- Users are encouraged to migrate to other CRI-compatible runtimes like containerd or CRI-O.
+
+### **Scratch Images**
+
+The `scratch` image is the most minimal base image in Docker, containing zero bytes. It serves as the starting point for building other images. When you create a Docker image from `scratch`, you are essentially starting with an empty filesystem. 
+- This is useful for creating lightweight images, especially when you have a statically compiled binary that includes all necessary dependencies. 
+- For example, the `hello-world` image is built from `scratch` and contains a statically compiled executable that doesn't require additional libraries[2].
+
+### **Alpine Images**
+
+Docker Alpine is a Dockerized version of Alpine Linux, known for its minimalism and security. The Alpine image is extremely lightweight, typically under 3 MB, and uses less than 100 MB of RAM. It includes BusyBox for basic Linux commands and uses `musl libc` instead of the heavier `glibc`. Alpine's lightweight nature makes it a popular choice for creating small, efficient container images. It also includes a package manager (`apk`) for installing additional software[3].
+
+### **Docker Best Practices**
+
+To build efficient and secure Docker images, follow these best practices:
+
+- **Multi-Stage Builds:** Use multi-stage builds to separate build-time dependencies from runtime dependencies, reducing the final image size.
+- **Layer Caching:** Structure Dockerfiles to take advantage of layer caching.
+- **Minimize Layers:** Combine commands to reduce the number of layers in the image.
+- **Use .dockerignore:** Exclude unnecessary files from the build context using a `.dockerignore` file.
+- **Run as Non-Root:** Configure containers to run as a non-root user for better security.
+- **Keep Images Small:** Use minimal base images like Alpine or `scratch`.
+
+### **Docker Command Case Sensitivity**
+
+Docker commands and file systems in Docker containers are case-sensitive, as Docker typically uses Linux-based filesystems like `overlayfs`. 
+- This means that file names and commands must match the exact case. For example, `Dockerfile` and `dockerfile` would be considered different files. 
+- If you need case insensitivity, you would have to use a filesystem that supports it, but this is generally not recommended due to potential compatibility issues. 
+- Instead, it's better to standardize on a consistent case convention in your code and scripts.
