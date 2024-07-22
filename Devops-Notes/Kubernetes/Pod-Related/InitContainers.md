@@ -32,5 +32,36 @@ spec:
     - Since scheduling is based on the effective requests/limits, init containers can affect the scheduling of the pod. 
 - Pods with high resource requests for init containers might wait longer to be scheduled if the cluster is resource-constrained.
 - Initialization Time
-- Handling Failures: If an init container fails, the pod will restart according to its restart policy, which can lead to repeated initialization attempts and potential delays in application startup.
+- Handling Failures: If an init container fails, the pod will restart according to its restart policy, which can lead to repeated initialization attempts
 - `There are no liveness probes or readiness probes in init containers`.
+## Real-Time Use Cases of Init Containers in Kubernetes
+
+### 2. **Configuration and Secret Management**
+Init containers can fetch configuration files or secrets from secure storage services like AWS Secrets Manager, HashiCorp Vault, or a similar service, and make them available to the main application.
+
+**Example**:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  initContainers:
+  - name: fetch-secrets
+    image: busybox
+    command: ['sh', '-c', 'fetch-secrets-script.sh']
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'use-secrets-script.sh']
+```
+Here, the init container runs a script to fetch secrets before the main application container starts[4].
+
+### 3. **Database Migrations**
+
+### 4. **Cache Warm-Up**
+Init containers can preload data into a cache to improve the performance of the main application.
+### 5. **Network Configuration**
+
+
+### 6. **Security Checks**

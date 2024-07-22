@@ -515,3 +515,97 @@ To handle multiple asynchronous tasks, you can loop over them and register each 
 
 - **Exclusive Locks**: Avoid using `poll: 0` for tasks that require exclusive locks (e.g., package installations) if you plan to run other commands against the same resources later in the playbook.
 - **Cleanup**: When running with `poll: 0`, Ansible does not automatically clean up the async job cache file. You may need to use the `async_status` module with `mode: cleanup` to clean up manually.
+
+## Ansible Role Directory Structure
+
+Ansible roles are a way to organize and reuse Ansible code. They allow you to group related tasks, handlers, variables, files, and templates into a single unit that can be easily shared and reused. Here’s a detailed overview of the standard directory structure for an Ansible role:
+
+### Standard Role Directory Structure
+
+When you create a role using the `ansible-galaxy init <role_name>` command, it generates a directory structure like the one below:
+
+```plaintext
+roles/
+├── <role_name>/
+│   ├── defaults/
+│   │   └── main.yml
+│   ├── files/
+│   ├── handlers/
+│   │   └── main.yml
+│   ├── meta/
+│   │   └── main.yml
+│   ├── tasks/
+│   │   └── main.yml
+│   ├── templates/
+│   ├── tests/
+│   │   ├── inventory
+│   │   └── test.yml
+│   └── vars/
+│       └── main.yml
+```
+
+### Explanation of Each Directory
+
+#### 1. `defaults/`
+- **File**: `main.yml`
+- **Purpose**: Contains default variables for the role. These variables have the lowest priority and can be easily overridden by other variable sources.
+
+#### 2. `files/`
+- **Purpose**: Contains static files that are used by the role. These files are typically referenced in tasks using the `copy` or `fetch` module.
+
+#### 3. `handlers/`
+- **File**: `main.yml`
+- **Purpose**: Contains handlers, which are tasks that are triggered by notifications from other tasks. Handlers are typically used to restart services or perform other actions that should only occur once after a series of changes.
+
+#### 4. `meta/`
+- **File**: `main.yml`
+- **Purpose**: Contains metadata about the role, including author information, license, supported platforms, and role dependencies.
+
+#### 5. `tasks/`
+- **File**: `main.yml`
+- **Purpose**: Contains the main list of tasks to be executed by the role. This is where most of the role's logic is defined. Tasks can be broken down into smaller files and included in `main.yml`.
+
+#### 6. `templates/`
+- **Purpose**: Contains Jinja2 templates that are used by the role. Templates are processed by Ansible to produce configuration files or other content that can be dynamically generated based on variables.
+
+#### 7. `tests/`
+- **Files**: `inventory`, `test.yml`
+- **Purpose**: Contains files for testing the role. This can include a sample inventory file and a test playbook to verify that the role works as expected.
+
+#### 8. `vars/`
+- **File**: `main.yml`
+- **Purpose**: Contains variables that are meant to be used internally by the role. These variables have a higher priority than those in the `defaults` directory.
+
+### Example Role Directory Structure
+
+Here’s an example of a role directory structure for a role named `webserver`:
+
+```plaintext
+roles/
+├── webserver/
+│   ├── defaults/
+│   │   └── main.yml
+│   ├── files/
+│   │   └── index.html
+│   ├── handlers/
+│   │   └── main.yml
+│   ├── meta/
+│   │   └── main.yml
+│   ├── tasks/
+│   │   └── main.yml
+│   ├── templates/
+│   │   └── httpd.conf.j2
+│   ├── tests/
+│   │   ├── inventory
+│   │   └── test.yml
+│   └── vars/
+│       └── main.yml
+```
+
+### Creating a Role Using `ansible-galaxy`
+
+To create a new role with the standard directory structure, use the `ansible-galaxy init` command:
+
+```bash
+ansible-galaxy init webserver
+```

@@ -326,6 +326,7 @@ aws elbv2 describe-target-health --target-group-arn <target-group-arn>
 1. **Use Multiple ALBs**:
 2. **Pre-Warming**:
 3. **Regular Testing**:
+![alt text](image-4.png)
 ### METRICS IN ALB:
 
 - `RequestCount`
@@ -333,3 +334,69 @@ aws elbv2 describe-target-health --target-group-arn <target-group-arn>
 - `HealthyHostCount`
 - `UnHealthyHostCount`
 - `TargetResponseTime`
+
+## Target Groups and Listeners in AWS Elastic Load Balancers
+
+### Target Groups
+
+A target group is a collection of resources (such as EC2 instances, IP addresses, or Lambda functions) that are registered to receive traffic from a load balancer.
+
+#### Example Configuration:
+```yaml
+apiVersion: elbv2
+kind: TargetGroup
+metadata:
+  name: my-target-group
+spec:
+  targetType: instance
+  protocol: HTTP
+  port: 80
+  healthCheckProtocol: HTTP
+  healthCheckPort: 80
+  healthCheckPath: /health
+  healthCheckIntervalSeconds: 30
+  healthCheckTimeoutSeconds: 5
+  healthyThresholdCount: 5
+  unhealthyThresholdCount: 2
+```
+
+### Listeners
+
+A listener is a process that checks for connection requests using the protocol and port you configure. Listeners are essential for your load balancer to receive traffic from clients.
+
+#### Key Features of Listeners:
+
+1. **Protocols and Ports**:
+   - **Protocols**: HTTP, HTTPS, TCP, SSL
+   - **Ports**: 1-65535
+
+2. **Listener Rules**:
+   - Rules determine how the load balancer routes requests to the targets.
+   - Each rule consists of a priority, conditions, and actions.
+
+3. **Action Types**:
+   - **Forward**: Forwards requests to target groups.
+   - **Redirect**: Redirects requests from one URL to another.
+   - **Fixed Response**: Returns a custom HTTP response.
+
+4. **SSL/TLS Termination**:
+   - HTTPS listeners can offload the work of encryption and decryption to the load balancer.
+   - You must deploy at least one SSL server certificate on the listener.
+
+#### Example Configuration:
+```yaml
+apiVersion: elbv2
+kind: Listener
+metadata:
+  name: my-listener
+spec:
+  loadBalancerARN: arn:aws:elasticloadbalancing:region:account-id:loadbalancer/app/my-load-balancer/50dc6c495c0c9188
+  protocol: HTTPS
+  port: 443
+  sslPolicy: ELBSecurityPolicy-2016-08
+  certificates:
+    - certificateARN: arn:aws:acm:region:account-id:certificate/12345678-1234-1234-1234-123456789012
+  defaultActions:
+    - type: forward
+      targetGroupARN: arn:aws:elasticloadbalancing:region:account-id:targetgroup/my-targets/73e2d6bc24d8a067
+```
