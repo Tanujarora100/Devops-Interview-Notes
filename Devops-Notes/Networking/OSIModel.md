@@ -50,4 +50,58 @@ The TCP/IP model is more streamlined and widely used in real-world networking du
 | **Checksum** | Available | Not available |
 | **Header Size** | 20-60 bytes | Fixed 40 bytes[2][5] |
 
+![alt text](image-3.png)
+## **TCP vs UDP Traffic: Comparison Table**
 
+| **Feature**                  | **TCP (Transmission Control Protocol)** | **UDP (User Datagram Protocol)**            |
+|------------------------------|-----------------------------------------|---------------------------------------------|
+| **Connection Type**          | Connection-oriented                     | Connectionless                              |
+| **Reliability**              | Reliable, ensures delivery and order    | Unreliable, no guarantee of delivery or order |
+| **Error Checking**           | Extensive error checking and recovery   | Basic error checking, no recovery           |
+| **Acknowledgment**           | Acknowledgment segments present         | No acknowledgment segments                  |
+| **Data Sequencing**          | Ensures data packets arrive in order    | No inherent data sequencing                 |
+| **Speed**                    | Slower due to error checking and recovery | Faster due to minimal overhead              |
+| **Header Size**              | 20-60 bytes                             | 8 bytes                                     |
+| **Flow Control**             | Yes, manages data flow between sender and receiver | No flow control                             |
+| **Congestion Control**       | Yes, adjusts data flow based on network congestion | No congestion control                       |
+| **Use Cases**                | Web browsing, email, file transfers, SSH | Streaming media, online gaming, VoIP, DNS   |
+| **Packet Format**            | Segments                                | Datagrams                                   |
+| **Broadcasting**             | Not supported                           | Supported                                   |
+| **Handshake Protocol**       | Three-way handshake (SYN, SYN-ACK, ACK) | No handshake protocol                       |
+| **Retransmission**           | Retransmits lost packets                | Does not retransmit lost packets            |
+| **Overhead**                 | Higher due to connection management     | Lower due to lack of connection management  |
+| **Optimal Usage**            | Applications requiring reliability and data integrity | Applications requiring speed and efficiency |
+
+## **Scenarios Where UDP is Preferred Over TCP**
+
+UDP (User Datagram Protocol) is often chosen over TCP (Transmission Control Protocol) in scenarios where speed and efficiency are more critical than reliability. Here are the main scenarios where UDP is preferred:
+
+### **1. Real-Time Applications**
+
+- **Video Conferencing**: Applications like Skype, Google Meet, and Zoom use UDP because they require minimal latency and can tolerate some packet loss without significant degradation in quality[2][6].
+- **Online Gaming**: Real-time games prioritize low latency and fast data transmission to ensure a smooth gaming experience. UDP's lack of overhead makes it ideal for this purpose[5][7].
+- **Voice over IP (VoIP)**: VoIP applications like WhatsApp and Skype calls use UDP to minimize delays and provide real-time communication[2][6].
+
+### **2. Streaming Media**
+
+- **Live Streaming**: Services that stream live video or audio, such as live sports broadcasts or live news, use UDP to ensure that the stream is as close to real-time as possible[5][6].
+- **Multimedia Streaming**: Applications like IPTV and certain streaming services use UDP to deliver continuous streams of data without the delays caused by error correction and retransmission[6].
+
+### **3. Broadcast and Multicast Communications**
+
+- **Broadcasting**: UDP supports broadcasting, where data is sent to all devices on a network segment. This is useful for applications like network discovery protocols and certain types of network management[6].
+- **Multicasting**: UDP is used in multicast applications where data is sent to multiple specific recipients, such as in live video conferencing with multiple participants[6].
+
+### **4. Simple Query-Response Protocols**
+
+- **Domain Name System (DNS)**: DNS queries are typically sent over UDP because they are simple, single-packet requests and responses that need to be fast[6].
+- **Simple Network Management Protocol (SNMP)**: SNMP uses UDP for quick, lightweight communication to manage network devices[6].
+- **Dynamic Host Configuration Protocol (DHCP)**: DHCP uses UDP to quickly assign IP addresses to devices on a network[6].
+
+### **5. Situations Requiring Low Overhead**
+
+- **Lightweight Communication**: UDP is used in scenarios where the communication overhead needs to be minimized, such as in sensor networks or certain IoT applications[3][5].
+
+### **6. Applications Tolerant of Packet Loss**
+
+- **Real-Time Data Transfer**: Applications that can tolerate some level of packet loss without significant impact on performance, such as certain types of telemetry data or real-time analytics, may use UDP[3][5].

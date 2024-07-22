@@ -1,5 +1,4 @@
-High Disk Usage Issue
-
+#### High Disk Usage Issue
 - If root volume then check logs and clear some mount points
 - If EBS volume take a snapshot and increase the disk space for EC2 Instance.
 1. EC2 ASG is Going Down- `top` Command or `ps aux --sort=-%cpu | head -n 11`
@@ -309,4 +308,176 @@ The `/etc/shadow` file is not world-readable, unlike the `/etc/passwd` file, whi
     ```bash
     sudo passwd username
     ```
+- Check Locked accounts
+```sh
+cat /etc/shadow
+! means locked
+passwd -S username
+chage -l username
+```
+Access Control Lists (ACLs) in Linux provide a more flexible permission mechanism than the traditional UNIX file permissions. They allow you to grant specific permissions to individual users or groups for any file or directory, beyond the standard owner, group, and others model.
 
+## Key Concepts of ACLs
+
+### 1. **ACL Basics**
+- **ACL Entries**: Each ACL consists of a set of entries that specify the access permissions for a user or group.
+- **Types of ACLs**:
+  - **Access ACLs**: Define permissions for a specific file or directory.
+  - **Default ACLs**: Define default permissions for new files and directories created within a directory.
+
+### 2. **Viewing ACLs**
+To view the ACLs of a file or directory, use the `getfacl` command:
+
+```bash
+getfacl /path/to/file_or_directory
+```
+
+Example output:
+```bash
+# file: example.txt
+# owner: user
+# group: group
+user::rw-
+user:anotheruser:r--
+group::r--
+mask::r--
+other::---
+```
+
+### 3. **Setting ACLs**
+To set or modify ACLs, use the `setfacl` command. Here are some common operations:
+
+#### Adding Permissions
+- **For a User**:
+  ```bash
+  setfacl -m u:username:permissions /path/to/file_or_directory
+  ```
+  Example:
+  ```bash
+  setfacl -m u:john:rwx /path/to/file
+  ```
+
+- **For a Group**:
+  ```bash
+  setfacl -m g:groupname:permissions /path/to/file_or_directory
+  ```
+  Example:
+  ```bash
+  setfacl -m g:developers:rw /path/to/file
+  ```
+
+#### Setting Default ACLs
+Default ACLs are set on directories and inherited by new files and directories created within them.
+
+```bash
+setfacl -d -m u:username:permissions /path/to/directory
+```
+Example:
+```bash
+setfacl -d -m u:john:rwx /path/to/directory
+```
+
+#### Removing ACL Entries
+- **Remove a Specific Entry**:
+  ```bash
+  setfacl -x u:username /path/to/file_or_directory
+  ```
+  Example:
+  ```bash
+  setfacl -x u:john /path/to/file
+  ```
+
+- **Remove All ACL Entries**:
+  ```bash
+  setfacl -b /path/to/file_or_directory
+  ```
+
+### 4. **Checking for ACLs**
+The presence of ACLs on a file or directory can be detected by an extra `+` sign in the output of the `ls -l` command:
+
+```bash
+ls -l /path/to/file_or_directory
+```
+
+Example output:
+```bash
+-rw-rw-r--+ 1 user group 0 Jul 21 12:34 example.txt
+```
+
+### 5. **Examples**
+
+- **Grant Read and Write Permissions to a User**:
+  ```bash
+  setfacl -m u:alice:rw /path/to/file
+  ```
+
+- **Grant Read, Write, and Execute Permissions to a Group**:
+  ```bash
+  setfacl -m g:team:rwx /path/to/directory
+  ```
+
+- **Set Default ACL for a Directory**:
+  ```bash
+  setfacl -d -m u:bob:rwx /path/to/directory
+  ```
+
+- **Remove All ACLs from a File**:
+  ```bash
+  setfacl -b /path/to/file
+  ```
+
+### 6. **Advanced Usage**
+- **Recursive ACL Setting**:
+  ```bash
+  setfacl -R -m u:username:permissions /path/to/directory
+  ```
+
+- **Dry Run to Test ACL Changes**:
+  ```bash
+  setfacl --test -m u:username:permissions /path/to/file_or_directory
+  ```
+#### Find which kernel version a system is currently running
+```
+uname -a
+```
+#### Find system's current IP address
+```
+ifconfig
+ip addr show
+```
+#### Lock user
+```
+usermod -L user1
+```
+#### List open file
+```
+lsof
+```
+Find who opens this file at the moment
+```
+lsof -u user_name
+```
+#### Which process is listening on what port
+```
+lsof -i :port_name
+```
+#### Which process is listening to tcp protocol
+```
+lsof -i tcp
+```
+
+Linux Lifecycle & Processes
+- running
+- waiting or sleeping
+- stopped
+- zombie
+
+#### To list zombie processes
+```
+ps aux | grep 'Z'
+``` 
+##### Find the Parent Process ID (PPID)
+Once you have the PID of the zombie process, you can find its parent process ID (PPID) using the ps command with specific options:
+``` bash
+ps -o ppid= -p <zombie_pid>
+```
