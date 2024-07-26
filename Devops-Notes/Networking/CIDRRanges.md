@@ -1,10 +1,12 @@
-Classless Inter-Domain Routing (CIDR) is a method used for allocating IP addresses and routing IP packets. It was introduced to replace the older system of classful network design, which was inefficient and led to rapid exhaustion of IP addresses. CIDR allows for more flexible and efficient use of IP address space.
+Classless Inter-Domain Routing (CIDR) is a method used for allocating IP addresses and routing IP packets. It was introduced to replace the older system of classful network design, which was inefficient and led to rapid exhaustion of IP addresses. 
 
 ## **How CIDR Works**
 
 ### **CIDR Notation**
 
-CIDR notation is a compact representation of an IP address and its associated network mask. It consists of an IP address, followed by a slash ("/"), and a number that represents the number of bits in the network prefix. For example, `192.168.1.0/24` indicates that the first 24 bits are the network part of the address, and the remaining bits are for host addresses[1][2].
+CIDR notation is a compact representation of an IP address and its associated network mask. '
+- It consists of an IP address, followed by a slash ("/"), and a number that represents the number of bits in the network prefix. 
+- For example, `192.168.1.0/24` indicates that the first 24 bits are the network part of the address, and the remaining bits are for host addresses.
 
 ### **IP Address Structure**
 

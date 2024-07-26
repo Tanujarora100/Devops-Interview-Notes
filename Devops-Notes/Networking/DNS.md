@@ -4,16 +4,13 @@
 ### **Role and Function**
 - **Registration**: A domain name registrar is a company accredited to register and reserve domain names on behalf of users. They act as intermediaries between the end-users and the domain name registries, which manage the top-level domains (TLDs) like `.com`, `.net`.
 - **Leasing Domain Names**: Registrars lease domain names to users for a specified period, typically up to 10 years, with options for renewal.
-- **WHOIS Information**: Registrars collect and maintain WHOIS information, which includes details about the domain registrant, such as name, address, and contact information.
+- **WHOIS Information**: 
 
 ### **Example**
 - Companies like GoDaddy, Namecheap.
 
 ## **DNS Server**
 
-### **Role and Function**
-- **DNS Resolution**: DNS servers are responsible for translating human-readable domain names (e.g., www.example.com) into machine-readable IP addresses (e.g., 93.184.216.34). This process is known as DNS resolution[2][5].
-Understanding the different types of DNS servers is crucial for grasping how domain name resolution works. Here’s a detailed explanation of each type:
 
 ## **Types of DNS Servers**
 
@@ -61,7 +58,8 @@ Understanding the different types of DNS servers is crucial for grasping how dom
 
 **Function**:
 - **Role**: Contain the actual DNS records for domains and provide the final answer to DNS queries.
-- **Operation**: When a recursive resolver queries an authoritative name server, it responds with the IP address of the requested domain. These servers hold the DNS records like A (address), MX (mail exchange), and CNAME (canonical name) records.
+- **Operation**: When a recursive resolver queries an authoritative name server, it responds with the IP address of the requested domain. 
+- These servers hold the DNS records like A (address), MX (mail exchange), and CNAME (canonical name) records.
 - **Types**:
   - **Primary (Master) Server**: Holds the original zone records.
   - **Secondary (Slave) Server**: Holds copies of the zone records for redundancy and load distribution.
@@ -69,21 +67,6 @@ Understanding the different types of DNS servers is crucial for grasping how dom
 **Example**:
 - **Authoritative Servers**: Managed by domain registrars or hosting providers.
 
-## **Summary**
-
-| **DNS Server Type**       | **Role**                                                                 | **Example**                           |
-|---------------------------|--------------------------------------------------------------------------|---------------------------------------|
-| **Recursive Resolvers**   | First stop for DNS queries; performs lookups by querying other DNS servers | Google Public DNS (8.8.8.8), Cloudflare (1.1.1.1) |
-| **Root Name Servers**     | Direct queries to the appropriate TLD name servers                       | Managed by Verisign, ICANN, NASA      |
-| **TLD Name Servers**      | Manage DNS records for specific TLDs and direct queries to authoritative servers | Verisign for .com and .net            |
-| **Authoritative Servers** | Contain the actual DNS records and provide the final answer to queries   | Managed by domain registrars or hosting providers |
-
-These four types of DNS servers work together to resolve domain names into IP addresses, enabling users to access websites using human-readable names instead of numerical IP addresses.
-
-
-
-### **Example**
-- DNS servers can be managed by various entities, including ISPs, web hosting companies, and dedicated DNS service providers like Cloudflare, Google Public DNS, and OpenDNS[2][5][8].
 
 ## **Key Differences**
 
@@ -105,8 +88,9 @@ A **DNS zone file** is a text file that contains mappings between domain names a
 
 Directives are special instructions that affect the processing of the zone file. They start with a dollar sign (`$`) and include:
 
-- **$ORIGIN**: Specifies the base domain name for relative domain names in the zone file. For example, `$ORIGIN example.com.` means that any subsequent relative domain names will be appended to `example.com.`.
-- **$TTL**: Defines the default Time to Live (TTL) for records in the zone file. TTL specifies how long a DNS record should be cached by DNS resolvers.
+- **$ORIGIN**: Specifies the base domain name for relative domain names in the zone file. 
+- For example, `$ORIGIN example.com.` means that any subsequent relative domain names will be appended to `example.com.`.
+- **$TTL**: Defines the default Time to Live (TTL) for records in the zone file. TTL specifies how long a DNS record should be cached by DNS resolvers in their cache.
 - **$INCLUDE**: Includes another file within the current zone file, allowing for modular zone file management.
 - **$GENERATE**: A non-standard directive used by some DNS server software like BIND to generate multiple resource records with a single entry.
 

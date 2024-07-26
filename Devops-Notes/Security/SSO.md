@@ -1,6 +1,5 @@
 ## **How Single Sign-On (SSO) Works**
-
-Single Sign-On (SSO) is an authentication method that enables users to securely access multiple applications and websites using a single set of login credentials. 
+ 
 
 ### **Key Components**
 
@@ -44,7 +43,7 @@ Single Sign-On (SSO) is an authentication method that enables users to securely 
 
 ### **SSO Protocols**
 
-- **SAML (Security Assertion Markup Language):** An XML-based protocol used for exchanging authentication and authorization data between IdPs and SPs.
+- **SAML (Security Assertion Markup Language):** An XML-based protocol.
 - **OpenID Connect (OIDC):** An identity layer on top of OAuth 2.0, using JSON Web Tokens (JWT) to convey identity information.
 
 
@@ -57,7 +56,7 @@ Single Sign-On (SSO) is an authentication method that enables users to securely 
 ### **What is SAML?**
 
 SAML is an XML-based open standard used for exchanging authentication and authorization information between parties, specifically between an IdP and an SP. 
-Here is a comparison of SAML and OpenID Connect (OIDC) in tabular format:
+
 
 | Feature/Aspect              | SAML (Security Assertion Markup Language) | OpenID Connect (OIDC)                      |
 |-----------------------------|-------------------------------------------|-------------------------------------------|

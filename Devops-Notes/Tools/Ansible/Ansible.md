@@ -1,3 +1,7 @@
+### Ansible Architechture
+- Ansible Master or Control Node
+- Ansible Slave Nodes.
+
 ### Why Ansible Over Puppet and Chef?
 - Python based
 - Agentless
@@ -15,8 +19,6 @@
 
 ### How You Will Copy Files Recursively:
 
-
-#### Example with Permissions
 
 ```yaml
 - name: Copy directory with permissions
@@ -114,8 +116,6 @@ ansible-vault encrypt_string 'my_secret_password' --name 'db_password'
         msg: "The database password is {{ db_password }}"
 ```
 
-### What is Ansible Galaxy?**
-- Ansible Galaxy is a repository for sharing Ansible roles. 
 
 ### How do you handle errors in Ansible?**
 - **ignore_errors**: Allows the playbook to continue even if a task fails.
@@ -606,6 +606,51 @@ roles/
 
 To create a new role with the standard directory structure, use the `ansible-galaxy init` command:
 
+#### List all the hosts
 ```bash
-ansible-galaxy init webserver
+ansible all --list-hosts
 ```
+```bash
+ansible all -i /path/to/inventory/file --list-hosts
+```
+```bash
+ansible-inventory --list all | jq -r '.all.hosts | keys[]'
+```
+Here is a concise explanation of the main directories in an Ansible role and their purposes:
+
+## Role Directory Structure
+
+An Ansible role has a defined directory structure with several standard directories, At minimum, a role must include one of these directories, while others can be omitted if not used:
+
+**tasks/** - Contains the main list of tasks for the role in `main.yml`[1][2]
+
+**handlers/** - Handlers that are triggered by tasks and run at the end of a play
+
+**defaults/** - Default variables for the role with the lowest priority
+
+**vars/** - Other variables for the role
+
+**files/** - Files that can be deployed via the role[1][2]
+
+**templates/** - Templates that can be rendered and deployed by the role
+
+**meta/** - Defines role dependencies
+
+The `ansible-galaxy init <role_name>` command creates this standard directory structure skeleton for a new role[1][3].
+
+## Playbook Usage
+
+To use a role in a playbook, simply list it under the `roles` keyword[2]:
+
+```yaml
+- hosts: webservers
+  roles:
+     - common
+     - webserver
+     - postgres
+```
+
+
+## Role Dependencies
+
+Role dependencies allow automatically pulling in other roles when using a role. They are stored in the `meta/main.yml` file and have a lower precedence than variables from other sources.
