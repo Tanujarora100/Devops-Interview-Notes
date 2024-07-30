@@ -12,6 +12,9 @@
 ### Ansible Inventory Types:
 - Static Inventory: INI, YAML file.
 - Dynamic Inventory: YAML file, JSON File.
+- Inventory file can be anywhere on the machine you just need to pass the file path.
+- **etc/ansible/hosts** is acting as the default inventory file.
+- Recommended Approach to have a separate inventory file for each project.
 
 ### Ansible Modules
 - Core Modules
