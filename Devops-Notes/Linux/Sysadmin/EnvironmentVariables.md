@@ -6,7 +6,6 @@ printenv
 ```
 
 ### HISTSIZE
-Determines the maximum number of commands stored in the shell's command history. This feature is useful for recalling and executing previous commands. View its value with:
 
 ```bash
 echo $HISTSIZE

@@ -6,7 +6,7 @@ Linux systems primarily use two types of libraries:
    - **Characteristics**: 
      - Statically linked into programs during the compilation phase.
      - **Each executable contains its own copy of the library code**.
-   - **Usage**: Provides faster execution since all code is included in the executable, but increases the size of the executable.
+   - **Usage**: Provides faster execution since all code is included in the executable, **but increases the size of the executable.**
 
 2. **Dynamic (Shared) Libraries**:
    - **File Extension**: `.so` (shared object)
@@ -30,11 +30,9 @@ Libraries in Linux are stored in specific directories, and the system uses these
 
 - **System Startup Libraries**:
 ### Dynamic Loader
-
 The dynamic loader (`ld.so` or `ld-linux.so`) is responsible for loading shared libraries needed by a program at runtime.
 
 ### Checking Installed Libraries
-
 To check if a specific shared library is installed on your system, you can use the `ldconfig` command:
 
 ```bash

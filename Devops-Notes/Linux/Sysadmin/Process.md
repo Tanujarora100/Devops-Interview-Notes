@@ -2,16 +2,11 @@
 Processes in a system can be broadly categorized into two types:
 * **Shell Job**: A shell job is a process that is started from a user's command line interface, or shell. It is often interactive, requiring input from the user, and provides output directly to the user's console.
 
-* **Daemon**: In contrast, a daemon is a background process, usually initiated at system startup and runs with elevated privileges. It does not interact directly with the user interface but operates silently.
+* **Daemon**: In contrast, a daemon is a background process, usually initiated at system startup and runs with elevated privileges. **It does not interact directly with the user interface but operates silently.**
 ## Process Management Commands
 
 I. Basic Process Listing
 
-```bash
-ps -ef
-```
-
-This outputs a list of all currently running processes, showing the process ID (PID), terminal associated with the process (TTY), CPU time (TIME), and the executable name (CMD).
 ```
 ps -e --format uid,pid,ppid,%cpu,cmd
 ```

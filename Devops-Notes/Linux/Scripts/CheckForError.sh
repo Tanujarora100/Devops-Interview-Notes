@@ -6,8 +6,8 @@ LOG_LOCATION="/var/log/ssh_logs"
 ACCESSIBLE_SERVER= "/var/log/servers"
 for server in "${SERVERS[@]}"; do
     ssh -i $PEM_KEY $USER@$server << EOF
-    netstat -an | grep -iq ":22 .*LISTEN"
-    if [ $? -eq 0 ]; then
+    TOTAL_PORTS=netstat -an | grep -iq ":22 .*LISTEN" | wc -l 
+    if [ "$TOTAL_PORTS" -eq 0 ]; then
         echo "SSH is enabled for $server"
     fi
 EOF

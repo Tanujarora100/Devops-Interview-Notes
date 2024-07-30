@@ -2,7 +2,6 @@
 
 ### **Amazon VPC**
 
-Amazon Virtual Private Cloud (Amazon VPC) allows you to launch AWS resources in a logically isolated virtual network that you define. This virtual network closely resembles a traditional network that you would operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
 
 #### **Key Features**
 - **Subnets**: A subnet is a range of IP addresses in your VPC. 
@@ -32,7 +31,7 @@ A VPC endpoint enables you to privately connect your VPC to supported AWS servic
 - Rules have a number (1 - 32766) which defines the precedence
 - Rules with lower number have higher precedence
 - Last rule is has the precedence of **asterisk (*)** and denies all the requests. This rule is not editable
-- AWS recommends adding rules by increment of 100
+- **AWS recommends adding rules by increment of 100**
 
 ### **Security Groups**
    - Security groups are stateful. 
@@ -73,8 +72,8 @@ A NAT gateway is a managed service that allows instances in a private subnet to 
 - There are two types of NAT gateways: public and private.
 
 #### **Key Functions**
-- **Public NAT Gateway**: Allows instances in private subnets to connect to the internet using an Elastic IP address.
-- **Private NAT Gateway**: Allows instances in private subnets to connect to other VPCs or on-premises networks without using an Elastic IP address.
+- **Public NAT Gateway**: Allows instances in private subnets to **connect to the internet using an Elastic IP address**.
+- **Private NAT Gateway**: Allows instances in private subnets to connect to **other VPCs or on-premises networks without using an Elastic IP address**.
 
 ### **VPC Flow Logs**
 
@@ -110,8 +109,6 @@ VPC Flow Logs capture information about the IP traffic going to and from network
 - **Cost**: No additional cost.
 
 ### **CIDR Ranges in VPC**
-
-CIDR (Classless Inter-Domain Routing) notation is used to define IP address ranges in a VPC. 
 - A VPC must have an associated IPv4 CIDR block, and optionally, an IPv6 CIDR block.
 
 #### **IPv4 CIDR Blocks**
@@ -160,10 +157,6 @@ aws ec2 associate-vpc-cidr-block --vpc-id vpc-12345678 --cidr-block 10.1.0.0/16
 - It resides in a public subnet and requires an Elastic IP address.
 - Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to the internet gateway.
 
-**Key Characteristics**:
-- **Outbound Internet Access**: Instances in private subnets can access the internet for updates, patches, and other outbound connections.
-- **No Inbound Connections**: Prevents inbound connections from the internet, enhancing security.
-- **Elastic IP**: Requires an **Elastic IP address**, which is used for outbound traffic.
 
 **Use Cases**:
 - **Software Updates**: 
@@ -179,7 +172,7 @@ aws ec2 associate-vpc-cidr-block --vpc-id vpc-12345678 --cidr-block 10.1.0.0/16
 **Description**:
 - A Private NAT Gateway enables instances in private subnets to connect to **other VPCs or on-premises networks**.
 - It resides in a **private subnet** and does not require an Elastic IP address.
-- Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to a transit gateway..
+- Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to a transit gateway.
 
 **Key Characteristics**:
 - **No Internet Access**: Used for communication between VPCs or with on-premises networks.
@@ -237,3 +230,4 @@ An Elastic IP address is a static IPv4 address
 - **Charges**: 
   - AWS charges for Elastic IP addresses that are not associated with running instances. 
   - There is no charge for Elastic IP addresses associated with running instances.
+- No, you cannot attach the same Elastic IP address to multiple Amazon EC2 instances simultaneously. Each Elastic IP (EIP) can only be associated with one instance or network interface at a time. If you need multiple instances to share a single public IP address, you can use a Network Address Translation (NAT) gateway or a load balancer.

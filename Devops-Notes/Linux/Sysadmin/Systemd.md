@@ -29,27 +29,16 @@
 +--------------------------------------------------+
 ```
 
-## Daemons
-
-Daemons are specialized background processes designed to perform tasks or provide services autonomously. They are typically launched during the system's startup process but can also be initiated manually. Unlike interactive user programs, daemons operate independently of user control.
-
-Daemons are traditionally managed using `rc` (run commands) and `init` (initialization) scripts, commonly located in `/etc/rc.d` and `/etc/init.d` directories. On systems utilizing `init.d` scripts, you can list all services using `ls /etc/init.d`. Tools like `systemctl` (for SystemD-based systems), `service`, and `chkconfig` (for SysV-init systems) are used to manage these scripts.
-
 
 ## Daemons vs services
-
 The fundamental difference lies in their operational scope and interaction: daemons typically perform dedicated tasks or services autonomously, while services facilitate interactions with other system components.
 
 ## Managing Services
-
-
 #### Enabling Services
 
 ```bash
 systemctl enable httpd.service
 ```
-
-This command creates a symbolic link for the httpd.service unit file, ensuring it's activated on boot.
 
 #### Disabling Services
 
@@ -57,16 +46,6 @@ II. Using `systemctl` for SystemD-based systems:
 
 ```bash
 systemctl disable httpd.service
-```
-
-#### Starting Services
-
-This command triggers the immediate start of the httpd service.
-
-II. Using `systemctl` for SystemD-based systems:
-
-```bash
-systemctl start httpd.service
 ```
 
 This command tells systemd to start the httpd service right away.
@@ -104,13 +83,7 @@ systemctl list-dependencies [target/service] | grep [service-name]
 systemctl list-dependencies multi-user.target | grep httpd
 ```
 
-Interpretation of Results:
-
-- **Output Present**: If the httpd service is listed in the output, this indicates that it indeed has a dependency on the specified `multi-user.target`.
-- **No Output**: If there is no output, it implies that httpd does not depend on `multi-user.target`.
-
-Note that the syntax of the list-dependencies command and the target you specify may vary depending on the operating system and the version of systemctl being used.
-
+Interpretation of Results
 ## Creating a Custom Service with SystemD
 
 Creating a custom service in SystemD involves writing a service unit file. 
@@ -118,7 +91,6 @@ Creating a custom service in SystemD involves writing a service unit file.
  A service script is divided into several sections, each serving a specific purpose.
 
 ### Common Sections in a Service Script
-
 - `[Unit]`: This section provides a description of the service and defines its dependencies. 
 - Key directives in this section can include `Description`, which gives a brief description of the service, `Documentation`, providing links to the relevant documentation, and `After`, specifying the order of service startup relative to other units.
 

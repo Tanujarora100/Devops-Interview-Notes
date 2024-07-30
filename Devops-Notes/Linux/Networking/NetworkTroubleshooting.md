@@ -11,7 +11,6 @@ ip addr
 
 ### **Check Routing Table**
 - **Command**: `ip route`
-- **Purpose**: Shows the routing table, which is crucial for understanding how packets are routed.
 ```bash
 ip route
 ```

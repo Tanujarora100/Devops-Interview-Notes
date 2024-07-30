@@ -12,8 +12,7 @@
 
 ## Diving into the du command
 
-The `du` (disk usage) command is used to estimate the space used by given files or directories. The `-h` option can be used for human-readable output, while the `-s` option can be used to provide a summarized result for directories. For instance, executing `du -sh .` will display the total size of the current directory in a human-readable format.
-
+The `du` (disk usage) command is used to estimate the space used by given files or directories. The `-h` option can be used for human-readable output, while the `-s` option can be used to provide a summarized result for directories.
 
 ```bash
 du -x / | sort -nr | head -10
@@ -36,41 +35,14 @@ Here's an example of what the output might look like:
 
 In this command, `du -x /` estimates the size of each directory in the root filesystem. `sort -nr` sorts these estimates in numerical order and reverses the output to display the largest sizes first. Finally, `head -10` truncates the output to only the top 10 lines, thereby showing the 10 largest directories.
 
-## The ncdu Command
-
-For a more visual representation of disk usage, you might consider using `ncdu` (NCurses Disk Usage).
-
-
-```
---- / -----------------------------------------------------------------------
-    4.6 GiB [##########] /usr
-    2.1 GiB [####      ] /var
-  600.0 MiB [#         ] /lib
-  500.0 MiB [#         ] /opt
-  400.0 MiB [          ] /boot
-  300.0 MiB [          ] /sbin
-  200.0 MiB [          ] /bin
-  100.0 MiB [          ] /etc
-   50.0 MiB [          ] /tmp
-   20.0 MiB [          ] /home
-   10.0 MiB [          ] /root
-    5.0 MiB [          ] /run
-    1.0 MiB [          ] /srv
-    0.5 MiB [          ] /dev
-    0.1 MiB [          ] /mnt
-    0.0 MiB [          ] /proc
-    0.0 MiB [          ] /sys
- Total disk usage: 8.8 GiB  Apparent size: 8.8 GiB  Items: 123456
-```
-
 ## Cleaning Up Disk Space
-1. **Remove Unnecessary Packages and Dependencies**: Over time, your system may accumulate packages that are no longer needed. These can be safely removed to free up space. On a Debian-based system like Ubuntu, you can use `apt-get autoremove` to remove unnecessary packages.
+1. **Remove Unnecessary Packages and Dependencies**:  you can use `apt-get autoremove` to remove unnecessary packages.
 
 2. **Clear Package Manager Cache**: Clear cache using `yum clean`
 
-3. **Find and Remove Large Files**: You can use the `find` command to locate files over a certain size and then decide if they need to be kept. For example, `find / -type f -size +100M -delete` will find files larger than 100 MB.
+3. **Find and Remove Large Files**: You can use the `find` command to locate file.
 
-4. **Use a Disk Cleanup Utility**: Tools like `bleachbit` can be used to clean up.
+4. **Use a Disk Cleanup Utility**: Tools like `bleachbit` 
 
 
 
@@ -79,7 +51,6 @@ For a more visual representation of disk usage, you might consider using `ncdu` 
 ```bash
 #!/bin/bash
 
-# Script to monitor disk usage and report
 
 # Set the path for the log file
 DATE= $(date)

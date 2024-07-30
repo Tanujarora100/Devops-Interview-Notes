@@ -47,7 +47,7 @@
 `GitHub`:
  - GitHub is a web-based hosting service that provides a centralized platform for Git repositories.
 
-- It adds additional features on top of Git, such as a web interface, collaboration tools, issue tracking, pull requests, and code reviews.`
+- It adds additional features on top of Git, such as a web interface, collaboration tools, issue tracking, pull requests.
 
 
 ### How do you rename a branch in Git ?
@@ -59,14 +59,10 @@
 ```
 
 
-   git push -u origin <new-branch-name>
-Replace `<new-branch-name>` with the new name of the branch you just renamed.
-
 
 ### What is the purpose of the ‘git stash’ command ?
 
- - The purpose of the `git stash` command is to provide a way to save your work without committing it, so you can switch to a different branch, pull changes from a remote repository, or perform other operations that require a clean working directory.
-
+ - The purpose of the `git stash` command is to provide a way to save your work without committing it.
     — `git stash save`: Creates a new stash with the changes in your working directory.
     — `git stash list`: Lists all the stashes you have created.
     — `git stash apply`: Applies the most recent stash to your working directory.
@@ -387,11 +383,10 @@ Answer: The rerere feature records previous conflict resolutions, allowing Git t
 Explain Git's "worktree add" command.
 
 Answer: The git worktree add command creates a new linked working directory associated with the current repository. It enables you to work on multiple branches simultaneously.
-How do you amend the last commit message in Git?
+#### How do you amend the last commit message in Git?
 
 Answer: Use git commit --amend to modify the last commit message. This opens the default text editor for you to make changes.
-Describe the purpose of Git "revert" vs. "reset."
-
+#### Describe the purpose of Git "revert" vs. "reset."
 Answer: git revert creates a new commit that undoes changes from a specific commit. git reset is used to reset the current branch to a specified commit, potentially discarding changes.
 What is the Git "worktree move" command?
 
@@ -411,11 +406,9 @@ How does Git handle line endings, and what are autocrlf and core.autocrlf?
 Answer: Git handles line endings based on platform conventions. The core.autocrlf setting controls automatic conversion between Unix and Windows line endings. autocrlf is used for automatic line ending conversion.
 
 
-What is Git "filter-branch" used for?
-
+#### What is Git "filter-branch" used for?
 Answer: git filter-branch is used to rewrite Git repository history by applying filters. It can be used for tasks like renaming files, removing sensitive data, or restructuring the repository.
-Describe Git "force push" and its implications.
 
+#### Describe Git "force push" and its implications.
 Answer: A force push (git push --force) is used to overwrite remote branch history with local changes. It should be used with caution, as it can lead to loss of commits and disrupt collaboration.
-How do you squash multiple commits into a single commit during an interactive rebase?
 

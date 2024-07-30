@@ -1,4 +1,4 @@
-Encryption, while crucial for ensuring data confidentiality, does not inherently guarantee data integrity. Data integrity refers to the assurance that data has not been altered or tampered with during storage or transmission. To achieve both confidentiality and integrity, additional cryptographic techniques must be employed alongside encryption. Here’s a detailed explanation of how encryption can be used in conjunction with other methods to ensure data integrity:
+
 
 ## **Data Encryption and Integrity**
 
