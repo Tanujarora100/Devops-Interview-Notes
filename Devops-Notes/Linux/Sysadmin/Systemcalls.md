@@ -53,3 +53,34 @@
    - `exec()` is commonly used after `fork()` to replace the child process with a different program.
 
 In summary, `fork()` creates a new process while preserving the original process, while `exec()` replaces the current process with a new one. They are often used together to create and execute new processes in Linux.
+Kernel modules in Linux are pieces of code that can be dynamically loaded into and unloaded from the kernel at runtime, allowing for the extension of kernel functionality without the need for a system reboot. This modular approach enhances flexibility and efficiency in managing system resources and device drivers.
+
+## Kernel Modules
+
+- **Dynamic Loading**: Kernel modules can be loaded and unloaded as needed.
+- **File Format**: `.ko`
+
+## Common Commands for Managing Kernel Modules
+1. **Loading a Module**: 
+   - `modprobe <module_name>`
+2. **Unloading a Module**:
+   - `rmmod <module_name>`
+
+3. **Listing Loaded Modules**:
+   - `lsmod`
+
+4. **Viewing Module Information**:
+   - `modinfo <module_name>`
+
+5. **Checking Kernel Messages**:
+   - `dmesg`: This command displays kernel-related messages.
+
+
+
+## Advantages of Using Kernel Modules
+
+- **Modularity**: Kernel modules allow for a modular kernel design, which can be easier to maintain and debug.
+  
+- **Memory Efficiency**: Modules are loaded only when needed, which can save memory compared to having all drivers compiled into the kernel.
+
+- **Ease of Updates**: Updating a module does not require a full kernel rebuild, making it simpler to manage device drivers and other kernel extensions.
