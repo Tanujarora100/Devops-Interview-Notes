@@ -1,5 +1,5 @@
 #!/bin/bash
-DIRECTORY="/Users/tanujarora/Downloads/"  # Removed space after '='
+DIRECTORY="/Users/tanujarora/Downloads/" 
 
 # Check if the directory exists
 if [ ! -d "$DIRECTORY" ]; then 
