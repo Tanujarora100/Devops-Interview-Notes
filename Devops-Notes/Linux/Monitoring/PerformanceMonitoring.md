@@ -1,43 +1,55 @@
+## VIRTUAL MEMORY 
+- Memory management technique where the computer uses disk space as extension of RAM.
+## Key Concepts of Virtual Memory
+- **Illusion of Large Memory**: 
+- **Swapping Mechanism**: When the system runs low on RAM, (OS) temporarily transfers inactive data from RAM to a designated space on the hard drive known as the swap space. 
+- **This process, called swapping or paging, frees up RAM for active processes**.
+
+- **Memory Management Unit (MMU)**: Main hardware component which actually makes sure that the correct memory address is being used by the process when using the virutal memory management.
+
+## Benefits of Virtual Memory
+1. **Multitasking**:
+2. **Cost-Effectiveness**:
+
+## Limitations of Virtual Memory
+1. **Performance Overhead**: Accessing data in virtual memory is slower.
+2. **Thrashing**: Excessive swapping can lead to thrashing, where the system spends more time swapping pages than executing processes.
+4. **Complexity**: Managing virtual memory adds complexity to the operating system, requiring sophisticated algorithms for memory allocation and page replacement.
 
 ## Swap space
 
 Swap space is an area on your hard drive used as virtual memory when your system runs out of physical RAM. 
-- It allows your system to continue running even when it has exhausted all available RAM, but it can negatively impact performance, as accessing data from the hard drive is slower than accessing it from RAM.
-
 ```
 free -h
 ```
 
 ## Monitor RAM usage
 `free -h`
+## RESIDENT SET SIZE AND VIRTUAL SET SIZE
+The resident set size (RSS) and virtual set size (VSZ) are two important metrics for understanding memory usage
 
-I. Resident Set Size (RSS)
-- RSS indicates the current memory usage of a process.
-- It excludes swap memory but includes all stack and heap memory.
+## Resident Set Size (RSS)
+- Represents the total ram occupied by the process.
+- Does not include the swap space or any virtual memory or shared libraries.
+- RSS can be obtained using commands like `ps`, `top`, `pidstat`.
 
-II. Virtual Set Size (VSZ)
-- VSZ represents the total memory allocated to a **process at its initiation**.
-- It encompasses memory that might be swapped out, unused, or shared from libraries.
+## Virtual Set Size (VSZ) 
+- Represents the total virtual memory occupied by the process.
+- Includes RSS,SWAP SPACE , Allocated Space but still unused, shared libraries.
+- VSZ will always be greater than or equal to RSS.
 
-### Example: Calculating RSS and VSZ
+The key differences are:
 
-Consider a process with these details:
+- RSS only counts memory in RAM, while VSZ includes all allocated virtual memory.
+- VSZ includes memory from shared libraries even if not currently in use, while RSS only counts shared libraries if the pages are currently in memory.
 
-- Current usage: 450K (binary code), 800K (shared libraries), 120K (stack and heap).
-- Initial allocation: 600K (binary code), 2200K (shared libraries), 150K (stack and heap).
+Some important points to note:
 
-Calculations:
-
-I. **RSS:** Total physical memory usage.
-
-- RSS = Binary Code + Shared Libraries + Stack/Heap
-- RSS = 450K + 800K + 120K = 1370K
-
-II. **VSZ:** Total memory allocation at start.
-
-- VSZ = Initial Binary Code + Initial Shared Libraries + Initial Stack/Heap
-- VSZ = 600K + 2200K + 150K = 2950K
-
+- The sum of RSS values for all processes can exceed total RAM, as shared libraries are counted multiple times.
+- VSZ values can be misleading, as they include memory that is allocated but not used.
+- To get a more accurate picture of memory usage, tools like `smem`.
+![alt text](image-3.png)
+![alt text](image-2.png)
 ### Identifying Top Memory-Consuming Processes
 
 ```bash

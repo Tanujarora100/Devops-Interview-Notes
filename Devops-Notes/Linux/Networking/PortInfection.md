@@ -5,7 +5,7 @@
 
 
 #### Using `netstat`
-`netstat` is a network utility that can be used to identify open and listening ports, as well as the processes associated with them.
+
 
 1. **List Open Ports**:
    ```bash
@@ -40,6 +40,7 @@
    sudo kill -9 <PID>
    sudo systemctl stop <service_name>
    sudo systemctl disable <service_name>
+   sudo systemctl mask <service_name>
    ```
 
 4. **Secure the System**:
@@ -53,3 +54,4 @@
    sudo ufw deny 31337
    sudo nmap -sT -sU -p- localhost
    ```
+   ![alt text](image-4.png)

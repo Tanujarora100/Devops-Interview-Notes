@@ -8,16 +8,19 @@
 ```bash
 ip addr
 ```
+### Check the DNS and IP Address of a website
+```bash
+dig google.com
+```
+![alt text](image.png)
 
 ### **Check Routing Table**
-- **Command**: `ip route`
 ```bash
 ip route
 ```
 
 ### **Check Network Interfaces**
 - **Command**: `ip link`
-- **Purpose**: Lists all network interfaces and their statuses.
 ```bash
 ip link
 ```
@@ -25,9 +28,7 @@ ip link
 ## **2. Test Basic Connectivity**
 
 ### **Ping Command**
-- **Command**: `ping`
-- **Purpose**: Tests connectivity to another host.
-```bash
+```
 ping -c 4 8.8.8.8  # Pings Google's public DNS server
 ```
 
@@ -38,73 +39,47 @@ ping -c 4 8.8.8.8  # Pings Google's public DNS server
 traceroute google.com
 ```
 
-## **3. Check DNS Resolution**
-
-### **NSLookup Command**
-- **Command**: `nslookup`
-- **Purpose**: Queries DNS servers to resolve domain names.
-```bash
-nslookup google.com
-```
-
-### **Dig Command**
-- **Command**: `dig`
-- **Purpose**: Provides detailed DNS query information.
-```bash
-dig google.com
-```
-
 ## **4. Check Active Connections and Listening Ports**
 
 ### **SS Command**
 ```bash
-ss -tuln 
+ss -tulpn
 netstat -tulpn
 ```
+![alt text](image-1.png)
 
 ## **5. Analyze Network Traffic**
 ### **Tcpdump Command**
 - **Command**: `tcpdump`
 ```bash
 sudo tcpdump -i eth0 
-```
-### **Wireshark**
-- **Command**: `wireshark`.
-```bash
 sudo wireshark
 ```
 
 ## **6. Check Firewall Rules**
 
 ### **UFW (Uncomplicated Firewall)**
-- **Command**: `ufw status`
 ```bash
 sudo ufw status
 ```
 
 ### **Iptables**
-- **Command**: `iptables -L`
-- **Purpose**: Lists all current iptables rules.
-```bash
+```
 sudo iptables -L
 ```
-
-## **7. Verify Network Services**
+![alt text](image-2.png)
 
 ### **Systemctl**
 ```bash
-sudo systemctl status NetworkManager  # Example for NetworkManager service
+sudo systemctl status NetworkManager 
 ```
 
 ### **Curl Command**
-
-- **Purpose**: Tests HTTP connectivity and retrieves web content.
 ```bash
-curl -I http://google.com  # Fetches HTTP headers from Google
+curl -I http://google.com  
 ```
 
 ### **Wget Command**
-- **Purpose**: Downloads files from the web and checks connectivity.
 ```bash
 wget -q --spider http://google.com && echo "Online" || echo "Offline"
 ```
