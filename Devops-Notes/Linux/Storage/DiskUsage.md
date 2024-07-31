@@ -1,43 +1,20 @@
 ## Disk Usage Management
 
-
-
-## Understanding the df command
-
-| Filesystem | Size | Used | Available | Use% | Mounted on |
-| --- | --- | --- | --- | --- | --- |
-| /dev/sda1 | 2.00T | 1.00T | 1.00T | 50% | / |
-| /dev/sda2 | 2.00T | 1.00T | 1.00T | 50% | /boot |
-
-
+#### Check Mount Points
+```bash
+df -h 
+```
+![alt text](image.png)
 ## Diving into the du command
-
-The `du` (disk usage) command is used to estimate the space used by given files or directories. The `-h` option can be used for human-readable output, while the `-s` option can be used to provide a summarized result for directories.
 
 ```bash
 du -x / | sort -nr | head -10
 ```
-
-Here's an example of what the output might look like:
-
-```
-10485760    /usr
-5120000     /var
-2097152     /lib
-1024000     /opt
-524288      /boot
-256000      /home
-128000      /bin
-64000       /sbin
-32000       /etc
-16000       /tmp
-```
-
-In this command, `du -x /` estimates the size of each directory in the root filesystem. `sort -nr` sorts these estimates in numerical order and reverses the output to display the largest sizes first. Finally, `head -10` truncates the output to only the top 10 lines, thereby showing the 10 largest directories.
+![alt text](image-1.png)
 
 ## Cleaning Up Disk Space
-1. **Remove Unnecessary Packages and Dependencies**:  you can use `apt-get autoremove` to remove unnecessary packages.
-
+1. **Remove Unnecessary Packages and Dependencies**:  you can use `apt-get autoremove`
+![alt text](image-2.png)
 2. **Clear Package Manager Cache**: Clear cache using `yum clean`
 
 3. **Find and Remove Large Files**: You can use the `find` command to locate file.

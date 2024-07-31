@@ -43,4 +43,16 @@ For enhanced security, consider disabling password authentication on the SSH ser
 PasswordAuthentication no
 sudo systemctl restart sshd
 ```
+## Passpharse
+
+1. **Protection Against Key Theft**:
+   A passphrase encrypts the private key, making it useless to an attacker if they manage to obtain it. Without the passphrase, the attacker cannot use the private key for authentication.
+
+2. **Mitigating Risks from Accidental Exposure**:
+   If a private key is accidentally leaked—through backups, decommissioned hardware
+
+3. **Two-Factor Authentication**:
+   A passphrase effectively acts as a second factor of authentication.
+
+
 

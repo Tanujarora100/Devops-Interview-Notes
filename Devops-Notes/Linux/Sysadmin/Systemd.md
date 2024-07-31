@@ -1,5 +1,5 @@
 ## Services
-- Common examples of services include the `sshd` service, which initiates an SSH server, and the `httpd` service, responsible for web server functionalities using HTTP and/or HTTPS protocols.
+- Common examples of services include the `sshd` service, which initiates an SSH server, and the `httpd` service.
 
 
 ```
@@ -30,9 +30,6 @@
 ```
 
 
-## Daemons vs services
-The fundamental difference lies in their operational scope and interaction: daemons typically perform dedicated tasks or services autonomously, while services facilitate interactions with other system components.
-
 ## Managing Services
 #### Enabling Services
 
@@ -42,13 +39,9 @@ systemctl enable httpd.service
 
 #### Disabling Services
 
-II. Using `systemctl` for SystemD-based systems:
-
 ```bash
 systemctl disable httpd.service
 ```
-
-This command tells systemd to start the httpd service right away.
 
 #### Stopping Services
 
@@ -56,8 +49,6 @@ This command tells systemd to start the httpd service right away.
 systemctl stop httpd.service
 ```
 ### Checking the Status of a Service
-
-The status of a service shows its current state and if it is active or not. Some common service statuses include:
 
 | Status | Description |
 | --- | --- |

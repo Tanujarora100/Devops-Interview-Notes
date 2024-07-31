@@ -1,27 +1,10 @@
-Here are the key points on how to delete lines using the sed command in Linux:
-
-## Syntax
-
-The general syntax for deleting lines with sed is:
-
-```bash
-sed '[line_number]d' [file_name]
-```
-
-Replace `[line_number]` with the line number you want to delete and `[file_name]` with the path to the text file.
-
-## Examples
 
 ### Delete a specific line
-
-To delete the 5th line from the file `input.txt`:
-
 ```bash
 sed '5d' input.txt
 ```
 
 ### Delete a range of lines
-
 To delete lines 3 through 5 from `input.txt`:
 
 ```bash
@@ -36,11 +19,10 @@ To keep only the 5th line and delete all others:
 sed '1,4d;6,$d' input.txt
 ```
 
-This deletes lines 1-4 and 6 to the end of file.
-
 ### Delete last line
 
 To delete the last line of a file:
+- Use dollar d to delete the last line.
 
 ```bash
 sed '$d' input.txt
@@ -57,16 +39,6 @@ sed '/error/d' input.txt
 ```
 
 This uses a regular expression to match lines with "error".
-
-### Delete empty lines
-
-To remove all blank lines:
-
-```bash
-sed '/^$/d' input.txt
-```
-
-The `^$` matches empty lines.
 
 ## Important Notes
 
