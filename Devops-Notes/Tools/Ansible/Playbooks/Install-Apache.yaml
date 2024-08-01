@@ -1,0 +1,27 @@
+- name: Install Apache 
+  hosts: webservers 
+  become: yes 
+  gather_facts: true
+  tasks:
+   - name: Install Apache 2
+     apt:
+       name: apache2
+       state: present
+     notify: 
+     - Restart Apache
+   - name: Copy index.html file
+     copy:
+       src: /home/tanuj/index.html
+       dest: /var/www/html/index.html
+  handlers:
+   - name: Restart Apache
+     service:
+       name: apache2
+       state: restarted
+       enabled: yes
+     register: apache_result
+   - name: Check For Apache Status
+     delay: 5 
+     timeout: 300 
+     loop: 10
+     until: apache_result.state=='running'

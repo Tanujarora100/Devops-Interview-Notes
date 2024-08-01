@@ -1,5 +1,9 @@
 #### What is git and what are the most useful commands ?
 - Git is a distributed version control system
+#### How to rename the origin
+```bash
+git origin rename origin <new_name>
+```
 ### GIT VS SVN 
 
 #### GIT COMMANDS
@@ -28,37 +32,26 @@
 ### Explain the difference between ‘git pull’ and ‘git fetch’ ?
 
 - The `git pull` command combines two operations into one: fetching the latest changes from the remote repository and merging them into the current branch.
-
 `git fetch`:
-
-- The `git fetch` command retrieves the latest commits and updates the remote-tracking branches in your local repository. It doesn’t modify your current branch or merge the changes automatically.
-
+  - The `git fetch` command retrieves the latest commits and updates the remote-tracking branches in your local repository.
 
 ### What command is used in git to change your working branch ?
-
 - git checkout "other-branch"
 
 ### What is the difference between git and GitHub ?
-
 `Git`:
-
 - Git is a distributed version control system 
-
 `GitHub`:
  - GitHub is a web-based hosting service that provides a centralized platform for Git repositories.
-
-- It adds additional features on top of Git, such as a web interface, collaboration tools, issue tracking, pull requests.
+- It adds additional features on top of Git, such as a web interface, collaboration tools.
 
 
 ### How do you rename a branch in Git ?
-- Check the current branch: Before renaming the branch, ensure that you are not currently on the branch you want to rename. If you are on the branch, you can switch to a different branch using the `git checkout` command.
-- Rename the branch: To rename a branch, you can use the `git branch` command with the `-m` option followed by the current branch name and the new desired name.
+
 ```bash
 ➜  Tools git:(india) ✗ git branch -m nepal Australia
 ➜  Tools git:(india) ✗ git branch
 ```
-
-
 
 ### What is the purpose of the ‘git stash’ command ?
 
@@ -70,12 +63,10 @@
     — `git stash drop`: Removes a specific stash from the stash list.
     — `git stash branch`: Creates a new branch and applies a stash to that branch.
 
-
-
 ### How do you revert a commit that has already been pushed and made public?
 - Use `git revert <commit-hash>` to create a new commit that undoes the changes introduced by the specified commit. 
 
-### **3. How do you squash the last N commits into a single commit?**
+### **How do you squash the last N commits into a single commit?**
 - Use `git rebase -i' 
 
 ### Explain the Gitflow workflow and its components.**
@@ -85,13 +76,7 @@
   - **Release branches**: Created from `develop` when preparing for a new production release.
   - **Hotfix branches**: Created from `master` to quickly fix production issues and merged back into both `master` and `develop`.
 
-### **5. What is the purpose of `git stash` and how do you use it?**
-- **`git stash`**: Temporarily saves your uncommitted changes and reverts your working directory to the last committed state. 
-- This is useful when you need to switch branches or pull updates without committing incomplete work.
-  - **Usage**: `git stash`, `git stash pop` to apply the stash, and `git stash list`.
-
-### **6. How do you handle merge conflicts in Git?**
-  - **Steps to resolve**:
+### How do you handle merge conflicts in Git?**
     1. Open the conflicted files and manually resolve the conflicts.
     2. Use `git add <file>` to mark the conflicts as resolved.
     3. Commit the changes using `git commit`.
@@ -99,11 +84,9 @@
 ### **7. What is `git cherry-pick` and when would you use it?**
 - **`git cherry-pick`**: Applies the changes introduced by an existing commit to another branch. 
 - This is useful when you want to apply specific changes from one branch to another without merging the entire branch.
-  - **Usage**: `git cherry-pick <commit-hash>`[7].
+  - **Usage**: `git cherry-pick <commit-hash>`.
 
-
-
-### **10. How do you use `git bisect` to find a bug?**
+### How do you use `git bisect` to find a bug?**
 - **`git bisect`**: A binary search tool to find the commit that introduced a bug.
   - **Steps**:
     1. Start bisecting: `git bisect start`.
@@ -118,12 +101,13 @@
 - "Origin" is the default name Git gives to the remote repository from which you cloned your local repository.
 - It's not a property of the remote repository itself, but rather a name used in your local repository to refer to the remote. 
 - You could rename it or use different names for other remotes.
+- `git remote rename origin <new_name>`
 
 
 4. **What command do you use to delete a branch and change the branch in git?**
    - **Delete a branch locally**: `git branch -d branch_name`
    - **Delete a branch remotely**: `git push origin --delete branch_name`
-   - **Change branch**: `git checkout branch_name`[5].
+   - **Change branch**: `git checkout branch_name`.
 
 
 5. **How to resolve merge conflict?**
@@ -138,20 +122,13 @@
    - **VCS (Version Control System)**: A system specifically designed to manage changes to source code over time.
 
 
-9. **What are status codes 200, 404, 501, 502, etc.?**
-   - **200**: OK (The request has succeeded).
-   - **404**: Not Found (The server can not find the requested resource).
-   - **501**: Not Implemented (The server does not support the functionality required to fulfill the request).
-   - **502**: Bad Gateway (The server received an invalid response from the upstream server).
-
-
 10. **How to undo changes in the local repository?**
-    - **Undo changes in working directory**: `git checkout -- <file>`
     - **Undo changes in staging area**: `git reset HEAD <file>`
     - **Undo a commit**: `git revert <commit-hash>` or `git reset --hard <commit-hash>` (be cautious with `--hard` as it discards changes).
 
-
-13. **Is it possible to push the code from one local repo to another local repo?**
+**Is it possible to push the code from one local repo to another local repo?**
+- Just need to add the second repo as remote
+- `git remote add origin <repo>`
     - Yes, you can add the second local repository as a remote and push to it using `git remote add <name> <path-to-local-repo>` and `git push <name> <branch>`.
 
 
@@ -174,74 +151,38 @@
 - prepare and review changes before committing them
 - Used to select the changes you want to commit
 
-8. How do you add files to the staging area in Git?
-Answer: You can add files to the staging area using the command git add filename or git add . to add all modified files.
+#### How do you add files to the staging area in Git?
+- git add command
 
-9. What is a branch in Git?
-Answer: A branch in Git is a separate line of development that allows you to work on features or bug fixes without affecting the main codebase.
 
-10. How do you create a new branch in Git? 
-- Answer: You can create a new branch using the command git checkout -b branch_name.
+#### How do you create a new branch in Git? 
+- You can create a new branch using the command git checkout -b branch_name.
 
-11. How do you switch between branches in Git? - Answer: You can switch between branches using the command git checkout branch_name.
+#### How do you switch between branches in Git?  
+- Answer: You can switch between branches using the command git checkout branch_name.
 
-12. What is a merge in Git? 
-Answer: A merge in Git combines the changes from one branch into another branch. It is used to integrate feature branches back into the main branch.
 
-13. How do you merge branches in Git? 
-Answer: To merge branches in Git, you first switch to the target branch (git checkout target_branch) and then use the command git merge source_branch.
-
-14. What is a conflict in Git? 
-Answer: A conflict in Git occurs when two branches have made changes to the same part of a file and Git is unable to automatically resolve the differences.
-
-15. How do you resolve a merge conflict in Git?
- - Answer: To resolve a merge conflict, you need to manually edit the conflicting file(s), choose which changes to keep, and then commit the changes.
-
-16. What is a remote repository in Git? 
+#### What is a remote repository in Git? 
 Answer: A remote repository in Git is a version of a project hosted on a server that allows collaboration between multiple contributors.
 
-17. How do you clone a Git repository? 
-Answer: You can clone a Git repository using the command git clone repository_url.
 
-18. What is the difference between git pull and git fetch? 
-Answer: git pull fetches and merges changes from a remote repository to the current branch, while git fetch only downloads changes from the remote repository without merging them.
+#### What is a tag in Git? 
+- Answer: A tag in Git is a reference that points to a specific commit. It is used to mark specific points in history, such as release versions.
 
-19. What is a tag in Git? 
-Answer: A tag in Git is a reference that points to a specific commit. It is used to mark specific points in history, such as release versions.
+#### How do you create a tag in Git?  
+- Answer: You can create a tag in Git using the command git tag tag_name.
 
-20. How do you create a tag in Git?  
-Answer: You can create a tag in Git using the command git tag tag_name.
+#### How do you push a tag to a remote repository?
+ - Answer: You can push a tag to a remote repository using the command git push origin tag_name.
 
-21. How do you push a tag to a remote repository?
- Answer: You can push a tag to a remote repository using the command git push origin tag_name.
-
-22. What is a Git hook? 
-Answer: A Git hook is a script that Git executes before or after certain events, such as committing changes or merging branches.
-
-23. What is Git bisect? 
+#### What is Git bisect? 
 Answer: Git bisect is a command used for binary search of bugs. 
-It helps you find the commit that introduced a bug.
 
-24. What is Git rebase? 
-Answer: Git rebase is a command used to integrate changes from one branch into another by moving or combining commits.
+#### How do you undo the last Git commit? 
+- You can undo the last Git commit using the command git reset HEAD~1.
 
-25. What is the difference between a merge and a rebase in Git? 
-Answer: Merging creates a new commit that combines the changes from two branches, while rebasing moves or combines a sequence of commits to a new base commit.
-
-26. How do you undo the last Git commit? 
-Answer: You can undo the last Git commit using the command git reset HEAD~1.
-
-27. What is Git cherry-pick? 
-Answer: Git cherry-pick is a command used to apply a specific commit from one branch to another.
-
-28. What is Git stash? 
-Answer: Git stash is a command used to save changes that are not ready to be committed, allowing you to switch branches without losing your work.
-
-29. How do you list all the branches in a Git repository? 
-Answer: You can list all branches in a Git repository using the command git branch.
-
-30. What is the purpose of the .gitignore file? 
-Answer: The .gitignore file is used to specify which files and directories Git should ignore, meaning they will not be tracked or committed to the repository.
+### How do you list all the branches in a Git repository? 
+- Answer: You can list all branches in a Git repository using the command git branch.
 
 31. How do you remove a file from Git without deleting it?
  Answer: You can remove a file from Git without deleting it using the command git rm --cached filename.
@@ -365,29 +306,24 @@ Answer: A refspec in Git is a string that defines the mapping between remote and
 Describe Git worktrees and their advantages.
 
 Answer: Git worktrees allow you to work on multiple branches simultaneously without switching back and forth. They provide a clean and isolated environment for each branch.
-How do you handle confidential information, such as API keys, in a Git repository?
+#### How do you handle confidential information, such as API keys, in a Git repository?
+- Answer: Confidential information should be stored in environment variables or configuration files outside the repository. Use tools like .gitignore and git-crypt to avoid accidentally committing sensitive data.
+#### What is Git rebase -i used for, and how does it work?
+- Answer: git rebase -i opens an interactive rebase session, allowing you to modify, reorder, or squash commits.
 
-Answer: Confidential information should be stored in environment variables or configuration files outside the repository. Use tools like .gitignore and git-crypt to avoid accidentally committing sensitive data.
-What is Git rebase -i used for, and how does it work?
+#### Explain the purpose of Git sparse-checkout.
+- Answer: Git sparse-checkout is used to limit the working directory to specific directories or files, enabling users to check out only the necessary parts of a repository.
+#### How do you recover from a detached HEAD state in Git?
+- Answer: To recover from a detached HEAD state, create a new branch using git checkout -b new_branch_name or switch to an existing branch using git checkout branch_name.
 
-Answer: git rebase -i opens an interactive rebase session, allowing you to modify, reorder, or squash commits. It provides a text editor interface where you can choose actions for each commit.
-Explain the purpose of Git sparse-checkout.
-
-Answer: Git sparse-checkout is used to limit the working directory to specific directories or files, enabling users to check out only the necessary parts of a repository.
-How do you recover from a detached HEAD state in Git?
-
-Answer: To recover from a detached HEAD state, create a new branch using git checkout -b new_branch_name or switch to an existing branch using git checkout branch_name.
-What is the Git "rerere" (Reuse Recorded Resolution) feature?
-
-Answer: The rerere feature records previous conflict resolutions, allowing Git to automatically apply them to future conflicts. It stands for "Reuse Recorded Resolution."
-Explain Git's "worktree add" command.
-
-Answer: The git worktree add command creates a new linked working directory associated with the current repository. It enables you to work on multiple branches simultaneously.
+#### What is the Git "rerere" (Reuse Recorded Resolution) feature?
+- Answer: The rerere feature records previous conflict resolutions, allowing Git to automatically apply them to future conflicts. It stands for "Reuse Recorded Resolution."
+#### Explain Git's "worktree add" command.
+- Answer: The git worktree add command creates a new linked working directory associated with the current repository. It enables you to work on multiple branches simultaneously.
 #### How do you amend the last commit message in Git?
-
-Answer: Use git commit --amend to modify the last commit message. This opens the default text editor for you to make changes.
+- Answer: Use git commit --amend to modify the last commit message. This opens the default text editor for you to make changes.
 #### Describe the purpose of Git "revert" vs. "reset."
-Answer: git revert creates a new commit that undoes changes from a specific commit. git reset is used to reset the current branch to a specified commit, potentially discarding changes.
+- Answer: git revert creates a new commit that undoes changes from a specific commit. git reset is used to reset the current branch to a specified commit, potentially discarding changes.
 What is the Git "worktree move" command?
 
 Answer: The git worktree move command allows you to move or rename an existing linked working directory created with git worktree add.
@@ -410,5 +346,8 @@ Answer: Git handles line endings based on platform conventions. The core.autocrl
 Answer: git filter-branch is used to rewrite Git repository history by applying filters. It can be used for tasks like renaming files, removing sensitive data, or restructuring the repository.
 
 #### Describe Git "force push" and its implications.
-Answer: A force push (git push --force) is used to overwrite remote branch history with local changes. It should be used with caution, as it can lead to loss of commits and disrupt collaboration.
+Answer: A force push (git push --force) is used to overwrite remote branch history with local changes.
 
+#### GIT USERNAME FAILURE
+- Use git config --username
+- Use git config -- useremail

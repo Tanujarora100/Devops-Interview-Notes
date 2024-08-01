@@ -1,0 +1,44 @@
+- name: Install Mongo 
+  hosts: mongo_servers 
+  become: true 
+  tasks: 
+    block:
+    - name: Install Mongo
+      apt:
+        name: mongodb-org-server
+        state: present
+        update_cache: yes
+      notify:
+      - Restart Mongo 
+    - name: Install NODEJS 
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+    - name: Install Mongo Express
+      npm: 
+        name: mongo-exprewss 
+        global : yes 
+      notify: 
+       - Start Mongo Express
+       - Ensure Mongo Express is running
+
+  handlers:
+    - name: Restart Mongo
+      service:
+        name: mongod
+        state: restarted 
+        enabled: true
+    - name: Start Mongo Express
+      service:
+        name: mongo-express
+        state: started
+        async: 10 
+        poll: 10
+    - name: Ensure Mongo Express is running
+      wait_for: 
+        port: 8081 
+        delay: 15
+        timeout: 300
+
+  

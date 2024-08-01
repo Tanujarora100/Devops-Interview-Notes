@@ -1,0 +1,28 @@
+- name: Install Docker 
+  hosts: appservers 
+  become: yes 
+  gather_facts: true 
+  tasks:
+   - name: Docker Install on Ubuntu
+     ansible.builtin.apt:
+      name: docker.io
+      state: present
+     when: ansible_facts['os_family']=='Debian'
+     notify:
+      - Start Docker 
+
+   - name: Docker Install on CentOS
+     ansible.builtin.yum:
+      name: docker
+      state: present
+      enablerepo: extras
+      disable_gpg_check: true
+      when: ansible_facts['os_family']=='RedHat'
+      notify:
+       - Start Docker 
+  handlers:
+  - name: Start Docker 
+    service:
+      name: docker 
+      state: started
+      enabled: true 

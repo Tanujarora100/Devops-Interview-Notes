@@ -657,3 +657,435 @@ To use a role in a playbook, simply list it under the `roles` keyword[2]:
 ## Role Dependencies
 
 Role dependencies allow automatically pulling in other roles when using a role. They are stored in the `meta/main.yml` file and have a lower precedence than variables from other sources.
+Ansible tags are metadata that you can attach to tasks in an Ansible playbook. They allow you to selectively run or skip certain tasks at runtime, giving you more control over your playbook execution.
+
+## ANSIBLE TAGS
+
+### Adding Tags to Tasks
+- You can apply one or more tags to individual tasks in your playbook using the `tags` keyword.
+- The same tag can be applied to multiple tasks.
+
+### Running Tasks with Tags
+- When executing a playbook, you can use the `--tags` flag to only run tasks with the specified tags.
+- For example, `ansible-playbook playbook.yml --tags "packages,configuration"`.
+
+### Skipping Tasks with Tags 
+- For example, `ansible-playbook playbook.yml --skip-tags "packages"` 
+
+### Tag Inheritance
+- Adding tags to plays, imported tasks, or roles applies those tags to all the tasks they contain, known as tag inheritance.
+- Tags are inherited down the dependency chain, so tags on role declarations or static imports are applied to that role's tasks.
+
+### Special Tags
+- Ansible reserves some tag names for special behavior, such as `always`, `never`, `tagged`, `untagged` and `all`.
+- The `always` tag ensures a task always runs, while `never` prevents a task from running.
+## ANSIBLE BLOCKS
+Ansible blocks are a powerful feature that allows you to group tasks logically and manage error handling in a way similar to exception handling in programming languages.
+
+### What are Ansible Blocks?
+Blocks in Ansible enable the grouping of multiple tasks, allowing you to apply directives and handle errors more effectively. You can define a block using the `block` keyword, and it can include several tasks, along with optional `rescue` and `always` sections.
+
+### Key Features of Ansible Blocks
+
+1. **Logical Grouping**:
+   - Blocks allow you to group related tasks together, making your playbooks more organized and readable. For example, you can group installation, configuration, and service management tasks within a single block.
+
+2. **Inheritance of Directives**:
+   - Any directives applied at the block level (like `when`, `become`, etc.) are inherited by all tasks within the block. This means you can set conditions or privilege escalation for multiple tasks without repeating yourself.
+
+3. **Error Handling**:
+   - Blocks provide a mechanism to handle errors using the `rescue` section. If any task within the block fails, the tasks in the `rescue` section will execute.
+
+4. **Always Section**:
+   - The `always` section allows you to specify tasks that should run regardless of whether the tasks in the block or the rescue section succeed or fail. This is useful for cleanup tasks or notifications.
+
+### Example of Using Blocks
+
+Here’s a simple example that demonstrates how to use blocks in an Ansible playbook:
+
+```yaml
+tasks:
+  - name: Install and configure Apache
+    block:
+      - name: Install httpd and memcached
+        yum:
+          name:
+            - httpd
+            - memcached
+          state: present
+
+      - name: Apply the configuration template
+        template:
+          src: templates/src.j2
+          dest: /etc/foo.conf
+
+      - name: Start the Apache service
+        service:
+          name: httpd
+          state: started
+          enabled: true
+
+    rescue:
+      - name: Handle installation failure
+        debug:
+          msg: "Installation failed, performing cleanup..."
+
+    always:
+      - name: Notify completion
+        debug:
+          msg: "This task always runs."
+```
+
+### Error Handling with Blocks
+
+- If any task within the block fails, the `rescue` section will execute, allowing you to handle the error gracefully. 
+- The `always` section will run after the `rescue`, ensuring that certain tasks are executed regardless of previous outcomes.
+To encrypt a playbook or specific variables within a playbook using Ansible Vault, you can use the `ansible-vault encrypt` command. Here’s how to do it:
+
+## Encrypting a Playbook
+1. **Encrypting the Entire Playbook**:
+   ```bash
+   ansible-vault encrypt your_playbook.yml
+   ```
+
+2. **Encrypting a Specific String**:
+   If you want to encrypt just a specific variable within a playbook, you can use the `encrypt_string` command:
+
+   ```bash
+   ansible-vault encrypt_string --vault-id your_vault_id@path_to_password_file 'your_string' --name 'your_variable_name'
+   ```
+
+   For example, to encrypt a password string:
+
+   ```bash
+   ansible-vault encrypt_string --vault-id dev@a_password_file 'mypassword' --name 'db_password'
+   ```
+
+   ```yaml
+   db_password: !vault |
+     $ANSIBLE_VAULT;1.1;AES256;dev
+     30613233633461343837653833666333643061636561303338373661313838333565653635353162
+   ```
+
+### Running the Encrypted Playbook
+```bash
+ansible-playbook your_playbook.yml --ask-vault-pass
+```
+```bash
+ansible-playbook your_playbook.yml --vault-password-file path_to_password_file
+```
+## ANSIBLE VARS
+To supply variables while running an Ansible playbook, you can use the `--extra-vars` or `-e` option in the command line.
+
+### Passing Variables via Command Line
+
+1. **Single Variable**:
+   For example:
+   ```bash
+   ansible-playbook example.yml --extra-vars "fruit=apple"
+   ```
+
+2. **Multiple Variables**:
+```bash
+   ansible-playbook deploy-apache.yaml --extra-vars "apache_listen_port=8080 apache_listen_port_ssl=443"
+   ```
+
+3. **Using JSON Format**:
+   ```bash
+   ansible-playbook your_playbook.yml --extra-vars '{"car": "Tesla"}'
+   ```
+
+4. **Variables with Spaces**:
+   ```bash
+   ansible-playbook your_playbook.yml --extra-vars "my_var='value with spaces'"
+   ```
+
+5. **Using a Variable File**:
+    ```bash
+    ansible-playbook your_playbook.yml --extra-vars "@path_to_file.yml"
+    ```
+
+## ANSIBLE PLAYBOOK FAILURE
+1. **Run the original playbook**:
+   ```bash
+   ansible-playbook original_playbook.yml
+   ```
+   If the playbook fails on any tasks, Ansible will generate a `.retry` file containing the failed hosts.
+
+2. **Fix the error in the original playbook**.
+
+3. **Run the playbook again, but only for the failed hosts**:
+   ```bash
+   ansible-playbook original_playbook.yml --limit @original_playbook.retry
+   ```
+   The `--limit` option with `@` reads the failed hosts from the `.retry` file and runs the playbook only against those hosts.
+
+4. **If the playbook fails again, repeat steps 2 and 3 until all hosts are successfully provisioned**.
+
+
+```bash
+ansible-playbook original_playbook.yml --start-at-task="name_of_failed_task"
+```
+
+However, this approach has some limitations:
+
+- It doesn't work with tasks inside roles or includes.
+- It doesn't handle conditional tasks that depend on previous tasks' results.
+
+
+```yaml
+- block:
+    # Tasks that may fail
+  rescue:
+    # Tasks to execute if any block task fails
+```
+
+The `rescue` section will run if any task in the `block` fails, allowing you to perform cleanup or notification actions. However, this won't automatically rerun the failed tasks.
+
+In summary, using the `.retry` file with `--limit` is the simplest way.
+
+
+## HOW TO PRINT SOMETHING ON THE ANSIBLE MASTER WHEN AFTER EVERY TASKS
+`ansible debug module`
+### Using the `debug` Module
+
+1. **Basic Usage**:
+   You can add a `debug` task after each task to print a message. For example:
+
+   ```yaml
+   - name: Install a package
+     apt:
+       name: nginx
+       state: present
+
+   - name: Print message after installing nginx
+     debug:
+       msg: "Nginx has been installed successfully."
+   ```
+
+2. **Printing Variable Values**:
+   If you want to print the value of a variable after a task, you can do it like this:
+
+   ```yaml
+   - name: Create a user
+     user:
+       name: johndoe
+       state: present
+     register: user_creation
+
+   - name: Print user creation result
+     debug:
+       msg: "User creation status: {{ user_creation }}"
+   ```
+
+
+  ```yaml
+  ---
+  - name: Example Playbook
+    hosts: all
+    tasks:
+      - name: Install nginx
+        apt:
+          name: nginx
+          state: present
+
+      - name: Print message after installing nginx
+        debug:
+          msg: "Nginx has been installed successfully."
+
+      - name: Start nginx service
+        service:
+          name: nginx
+          state: started
+
+      - name: Print message after starting nginx
+        debug:
+          msg: "Nginx service has been started."
+  ```
+
+
+## SAMPLE INVENTORY FILE
+```ini
+# Define hosts
+host1 ansible_host=192.168.1.10 ansible_user=ubuntu
+host2 ansible_host=192.168.1.11 ansible_user=ubuntu
+host3 ansible_host=192.168.1.12 ansible_user=centos
+
+# Define groups
+[webservers]
+host1
+host2
+
+[databases]
+host3
+
+[centos]
+host3
+
+[ubuntu]
+host1
+host2
+
+# Define groups of groups
+[production:children]
+webservers
+databases
+
+[development:children]
+webservers
+
+[linux:children]
+centos
+ubuntu
+
+# Set variables for groups
+[webservers:vars]
+http_port=80
+https_port=443
+
+[databases:vars]
+db_port=5432
+
+# Set variables for individual hosts
+host1 ansible_port=2222
+
+```
+### ANSIBLE CONFIG FILE
+![alt text](image.png)
+## ANSIBLE HOST_VARS AND GROUP_VARS:
+
+### `group_vars`
+
+- **Definition**: `group_vars` allows you to define variables that apply to all hosts in a specific group. This is useful for setting configurations that are common across multiple hosts.
+
+- **Location**: You can define `group_vars` in a directory named `group_vars` within your Ansible project structure. Each group can have its own YAML file named after the group.
+
+- **Example Structure**:
+  ```
+  inventory/
+  ├── group_vars/
+  │   ├── webservers.yml
+  │   └── dbservers.yml
+  └── hosts
+  ```
+
+- **Example Content of `webservers.yml`**:
+  ```yaml
+  http_port: 80
+  max_clients: 200
+  server_name: example.com
+  ```
+
+- **Usage in Playbooks**: You can reference these variables in your playbooks like so:
+  ```yaml
+  - name: Configure web servers
+    hosts: webservers
+    tasks:
+      - name: Ensure Apache is running
+        ansible.builtin.service:
+          name: apache2
+          state: started
+      - name: Configure Apache
+        ansible.builtin.template:
+          src: /path/to/template.j2
+          dest: /etc/apache2/sites-available/{{ server_name }}.conf
+  ```
+
+## `host_vars`
+
+- **Definition**: `host_vars` allows you to define variables that apply to individual hosts. This is useful for settings that are unique to a specific machine.
+
+- **Location**: Similar to `group_vars`, you can define `host_vars` in a directory named `host_vars` within your Ansible project structure. Each host can have its own YAML file named after the host.
+
+- **Example Structure**:
+  ```
+  inventory/
+  ├── host_vars/
+  │   ├── host1.yml
+  │   └── host2.yml
+  └── hosts
+  ```
+
+- **Example Content of `host1.yml`**:
+  ```yaml
+  ansible_host: 192.168.1.10
+  ansible_user: ubuntu
+  db_password: secret_password
+  ```
+
+- **Usage in Playbooks**: You can reference these variables in your playbooks like so:
+  ```yaml
+  - name: Configure database
+    hosts: dbservers
+    tasks:
+      - name: Create database user
+        ansible.builtin.command: >
+          mysql -u root -p{{ db_password }} -e "CREATE USER 'myuser'@'localhost' IDENTIFIED BY 'mypassword';"
+  ```
+
+## Summary
+
+- **`group_vars`**: Used for defining variables that apply to all hosts within a specific group. Useful for common configurations across multiple hosts.
+
+- **`host_vars`**: Used for defining variables that apply to individual hosts. Useful for unique configurations specific to a single machine.
+To gather facts from all hosts in your inventory file using Ansible, you can utilize the `ansible` command with the `setup` module. This command will retrieve various system information and configuration details from each host. Here’s how to do it:
+
+### Command to Gather Facts
+
+You can run the following command in your terminal:
+
+```bash
+ansible all -i inventory_file -m ansible.builtin.setup
+```
+
+### Breakdown of the Command
+
+
+- **`-m ansible.builtin.setup`**: This tells Ansible to use the `setup` module, which is responsible for gathering facts about the remote hosts.
+
+### Example Output
+
+When you run this command, Ansible will connect to each host in the inventory and gather facts such as:
+
+- Hostname
+- Operating system
+- CPU architecture
+- Memory and disk information
+- Network interfaces
+- Installed packages
+
+
+### Additional Options
+
+- If you want to gather facts from a specific group of hosts, you can replace `all` with the group name, for example, `webservers` or `dbservers`.
+
+- To save the gathered facts to a file for later analysis, you can redirect the output to a file:
+
+```bash
+ansible all -i inventory_file -m ansible.builtin.setup > facts_output.json
+```
+
+
+### WHAT IS ANSIBLE DOC
+- To get information about modules
+```bash
+ansible doc -l | grep -i file
+
+```
+![alt text](image-1.png)
+### ANSIBLE GALAXY
+#### Create a role
+```bash
+ansible-galaxy init my_role
+```
+![alt text](image-2.png)
+#### Explanation of the Directory Structure
+- README.md: A markdown file where you can document your role.
+- tasks/: Contains the main list of tasks to be executed by the role. The main.yml file is where you define your tasks.
+- handlers/: Contains handlers, which are special tasks that run when notified by other tasks.
+- defaults/: This directory is for default variables that can be overridden by users of the role.
+- vars/: This directory is for variables that are specific to the role and should not be overridden.
+- files/: A place to store files that need to be transferred to the managed hosts.
+- templates/: Contains Jinja2 templates that can be used to dynamically generate configuration files.
+- meta/: Contains metadata about the role, such as dependencies on other roles.
+- tests/: A directory for testing the role, which includes an inventory file and a test playbook.
