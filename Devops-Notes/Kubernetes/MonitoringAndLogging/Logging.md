@@ -1,5 +1,4 @@
-- If we want to monitor node level metrics or pod level metrics
-- We need a solution to monitor the metrics to provide analytics
+
 - Kubernetes does not come with logging mechanisms, we have different solutions like Dynatrace and data dog.
 - Heapster is deprecated now
 
