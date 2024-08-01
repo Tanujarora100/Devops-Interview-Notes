@@ -6,8 +6,6 @@
 - We have a METRIC SERVER which retrieves the logs from the node and it is in memory solution.
 - It does not store the logs on the disk so we need to go for the open source ones.
 - **Kubernetes runs Kubelet on each node, kubelet contains sub component called as `C ADVISOR and then fetches the metrics` and exposes the data to the KUBE API SERVER.**
-
-
 ```bash
 k top pod
 # To show the information of the node

@@ -6,7 +6,7 @@
 - **Automatic Registration**: Automatically register new instances to a load balancer.
 
 ### **ASG Attributes**
-- **Launch Configuration**: Consists of:
+- **Launch Configuration**:
   - AMI + Instance Type
   - EC2 User Data
   - EBS Volumes

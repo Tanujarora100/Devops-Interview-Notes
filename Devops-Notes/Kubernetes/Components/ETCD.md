@@ -2,21 +2,22 @@
 # ETCD
 
 ## Overview
-ETCD is a distributed key-value store that stores the cluster state. It replicates data across all its instances, ensuring data availability even if one instance crashes. 
+ETCD is a distributed key-value store that stores the cluster state.
+- It replicates data across all its instances, ensuring data availability even if one instance crashes. 
 
 ### Key Features
 - **Document Format**: Stores information in a document format where changes to one document do not affect other similar documents.
-- **Cluster State Storage**: Every change made to a node is updated in the ETCD server
+- **Cluster State Storage**: Every change made to a node is updated in the ETCD server by the kube api server.
 
 ## Setup and Configuration
 
 ### Manual Setup
 - **Download and Run**: The ETCD binary needs to be downloaded manually and run as a service on the master node.
-- **Default Port**: listens on port 2379.
+- **Default Port**: listens on port `2379`.
 - **KubeAdmin Setup**: When setting up the cluster using KubeAdmin, ETCD is automatically deployed as a static pod on the master node in the `kube-system` namespace.
 
 ### ETCDCTL Utility
-- **Usage**: `etcdctl` is the default command-line utility that comes with the binary itself.
+- **Usage**: `etcdctl` is the default command-line.
 
 
 ### High Availability

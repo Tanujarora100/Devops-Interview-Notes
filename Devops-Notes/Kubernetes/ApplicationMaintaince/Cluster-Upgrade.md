@@ -72,7 +72,8 @@ Now, upgrade the cluster (control plane components of the cluster), except the `
 Now, we need to upgrade the `kubelet` service on all the worker nodes (one at a time). Start by draining the first node by running `k drain node-1` on the master node. 
 
 - Now move to the first node and upgrade the `kubeadm` tool - `apt-get upgrade -y kubeadm=1.12.0-00` and `kubelet` service - `apt-get upgrade -y kubelet=1.12.0-00`.
-- Upgrade the node config with the `kubelet` version - `kubeadm upgrade node` and restart the `kubelet` service - `systemctl restart kubelet`. The `kubelet` version of the first node has now been upgraded. Now, un-cordon the node - `k uncordon node-1`.
+- Upgrade the node config with the `kubelet` version - `kubeadm upgrade node` and restart the `kubelet` service - `systemctl restart kubelet`. 
+- The `kubelet` version of the first node has now been upgraded. Now, un-cordon the node - `k uncordon node-1`.
 - Repeat for the remaining nodes.
 
 <aside>

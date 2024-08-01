@@ -5,8 +5,7 @@
 
 ![alt text](image.png)
 
-⚠️ The data stored in the ConfigMap, when the container (pod) is created, is used to set the environment variables. **If the ConfigMap gets updated later, the pod will continue to use the old values.
-` We need to re-create the pods by performing a rollout (`k rollout restart deployment <deployment-name>`) **on the deployment to make the new pods use the new data`
+
 
 ```bash
 k create configmap webapp-config --from-literal APP_COLOR=blue --from-literal ORACLE_VERSION=12C

@@ -190,6 +190,19 @@ instance_type = local.instance_type
 - A lock file (.terraform.lock.hcl) is used to lock provider versions
 - ensuring consistency in provider versions.
 
+```hcl
+provider "registry.terraform.io/hashicorp/aws" {
+  version = "3.40.0"
+  constraints = "~> 3.0"
+  hashes = [
+    "h1:EOJImaEaVThWasdqnJjfYc6/P8N/MRAq1J7avx5ZbV4=",
+    "zh:0015b491cf9151235e57e35ea6b89381098e61bd923f56dffc86026d58748880",
+  ]
+}
+```
+
+
+
 #### What is a count parameter in Terraform?
 - The count parameter in Terraform is used to create multiple instances of a resource based on a
 specified number.
@@ -414,7 +427,8 @@ resource "aws_instance" "example" {
 #### Handling State Drift
 - State drift occurs when the real-world infrastructure diverges from the state file. 
 - Regularly reconciling state drift by using the **terraform refresh command** or importing resources 
-- Terraform provides commands like terraform state rm.
+-  `terraform refresh` command is deprecated now use `terraform apply -refresh-only` instead
+- Terraform provides commands like `terraform state rm`.
 
 #### Migrate Local Config to remote backend
 - Configure the backend
@@ -526,8 +540,6 @@ The `terraform taint` command is used to manually mark a resource as tainted, in
 
 
 ## **Steps to Ensure Secure and Compliant Terraform Configurations**
-
-
 - **Implement Least Privilege Access**:
 - **Store State Remotely and Securely**:
 - **Avoid Storing Secrets in State**: AWS Secrets Manager, HashiCorp Vault, or encrypted files[6].
@@ -540,7 +552,6 @@ The `terraform taint` command is used to manually mark a resource as tainted, in
 - The random provider aids in generating numeric or alphabetic characters to use as a prefix or suffix for a desired named identifier.
 
 ## **Null Resource**
-
 A **null resource** in Terraform is a resource that does not manage any real infrastructure but can be used to execute provisioners or other actions that are not tied to a specific resource. 
 - This can be useful for running scripts, commands, or other operations that need to be part of your Terraform workflow.
 
@@ -554,7 +565,6 @@ resource "null_resource" "example" {
 }
 ```
 ## **Dynamic Blocks**
-
 **Dynamic blocks** in Terraform allow you to programmatically generate nested blocks within a resource, data source, provider, or provisioner. 
 - This is particularly useful for reducing redundancy and managing complex configurations where multiple similar blocks are needed.
 
@@ -675,7 +685,7 @@ resource "null_resource" "example" {
 - **terraform.tfvars:** This file is used to provide specific values for those variables, which can vary between different environments (e.g., development, staging, production).
 
 ### **Flexibility and Reusability**
-- **Reusability:** By separating variable declarations and assignments, you can reuse the same `variables.tf` file across multiple environments while using different `terraform.tfvars` files to provide environment-specific values.
+
 - **Flexibility:** You can have multiple `.tfvars` files (e.g., `dev.tfvars`, `prod.tfvars`) and specify which one to use with the `-var-file` flag when running Terraform commands:
   ```sh
   terraform plan -var-file="prod.tfvars"
@@ -715,12 +725,9 @@ Answer: I created ec2 instances, s3 buckets, network security groups, applicatio
 #### Question: How can you make changes in the configuration of already created resources using Terraform?
 - To make changes in the configuration of already created resources, we can use the terraform import command.
 - Second is make changes in the configuration and run terraform apply again, terraform refresh is also there to check drifting.
-#### Question: What does Terraform do with the state file when it runs?
 
-- Terraform maintains a state file that maps the current status of the infrastructure with the configuration file. 
-- The state file is commonly stored either locally or in remote storage locations like Azure Storage or AWS S3.
 #### Question: In case the state file is lost, how do you resolve that issue?
-Answer: If the state file is lost, using the terraform import command can help. 
+- If the state file is lost, using the terraform import command can help. 
 ### Question: What are the major features of Terraform that you find noteworthy?
 - Multi Cloud
 - Easy to use
@@ -732,10 +739,9 @@ Answer: HCL stands for HashiCorp Configuration Language.
 #### What is the lifecycle block in Terraform?
 
 Answer: The lifecycle block is a nested block within a resource block, containing meta-arguments for resource behavior, such as create_before_destroy, prevent_destroy, and others.
-### Question: Have you heard about Bicep or ARM templates?
-Answer: Yes, I have heard about Bicep, and I have worked on ARM templates in the past.
+
 #### Question: Is it possible to destroy a single resource out of multiple resources using Terraform?
-Answer: Yes, it is possible. We can use the terraform destroy -target command followed by the resource type and name to destroy a specific resource.
+Answer: Yes, it is possible. We can use the terraform destroy -target command followed by the resource type
 
 ### Question: How do you preserve keys created using Terraform?
 - Keys created using Terraform can be preserved by storing them in the AWS CLI configuration folder under the credentials directory and instructing Terraform to use a specific profile during execution.
@@ -754,8 +760,8 @@ Answer: Yes, I have worked with Terraform modules.
 - Answer: Terraform workspace allows managing separate state files for each workspace, enabling different environment processing.
 
 #### Question: How do you provide variable values at runtime in Terraform?
-Answer: To provide variable values at runtime in Terraform, the default values in the variable file (variable.tf) can be removed, and the values can be provided when running the Terraform command.
-To provide variable values at runtime in Terraform, you can use several methods, including command-line flags, variable definition files (`.tfvars`), and environment variables.
+- To provide variable values at runtime in Terraform, the default values in the variable file (variable.tf) can be removed, and the values can be provided when running the Terraform command.
+- To provide variable values at runtime in Terraform, you can use several methods, including command-line flags, variable definition files (`.tfvars`), and environment variables.
 
 ### 1. Command-Line Flags
 You can pass variable values directly when running Terraform commands using the `-var` flag. This method is useful for quick overrides or when dealing with a small number of variables.
@@ -766,8 +772,7 @@ You can pass variable values directly when running Terraform commands using the 
 terraform apply -var="ami=ami-123456" -var="instance_type=t2.micro"
 ```
 ### 2. Variable Definition Files (`.tfvars`)
-
-For more complex configurations or when dealing with many variables, you can use variable definition files. These files typically have the `.tfvars` extension and contain key-value pairs for your variables.
+ These files typically have the `.tfvars` extension and contain key-value pairs for your variables.
 
 #### Example `variables.tf`
 
@@ -801,8 +806,7 @@ Terraform also supports setting variable values through environment variables. T
 export TF_VAR_ami="ami-123456"
 export TF_VAR_instance_type="t2.micro"
 ```
-
-When you run `terraform apply`, Terraform will use these environment variables to set the corresponding values.
+ environment variables to set the corresponding values.
 #### Question: Can you mention some drawbacks of Terraform based on your experience?
 - lack of error handling
 - restriction to (HCL)

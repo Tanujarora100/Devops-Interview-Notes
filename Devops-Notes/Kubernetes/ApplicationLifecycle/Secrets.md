@@ -1,9 +1,8 @@
-- Just like [ConfigMap](https://www.notion.so/ConfigMap-9f55290c5ef141298140a28d80222c19?pvs=21) but used to store secrets instead of parameters
+
 - Stores the data in `base64` encoded format
     
-    To encode a base64 string - `echo -n '<string>' | base64`
-    
-- Encryption at rest is not enabled by default. See [Encrypting Secret Data at Rest | Kubernetes](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/). Storing secrets in 3rd-party secrets store provided by cloud providers is another good option.
+    To encode a base64 string - `echo -n '<string>' | base64`    
+- Encryption at rest is not enabled by default. Storing secrets in 3rd-party secrets store provided by cloud providers is another good option.
 - Secrets are not encrypted they are just encoded and can be decoded back
     - Do not check in Secret Objects to SCM with the code.
     - We can just decode them and see the secret.

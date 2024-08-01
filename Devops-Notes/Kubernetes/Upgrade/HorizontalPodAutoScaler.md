@@ -73,3 +73,21 @@ spec:
         averageValue: 20
 ```
 
+```yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: my-app-hpa
+spec:
+ scaleTargetRef:
+  apiVersion: apps/v1
+  kind: Deployment
+  name: my-app 
+minReplicas: 2
+maxReplicas: 3
+metrics:
+ - type: Resource
+   metric: 
+    name: cpu
+    type: averageValue
+    value: 70

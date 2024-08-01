@@ -25,7 +25,7 @@ For Docker, you can use the command
 
 
 ### How can you ensure efficient artifact search and retrieval in Nexus?
-- Use Nexus  `search functionality `and organize artifacts with appropriate naming and versioning conventions.
+- Use Nexus `search functionality `and organize artifacts with appropriate naming and versioning conventions.
 
 ### Explain the difference between a hosted repository and a proxy repository in Nexus.
 

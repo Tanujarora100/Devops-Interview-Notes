@@ -8,7 +8,7 @@ The following can be backed up:
 
 ### Backing up Resource Configuration
 
-If all the k8s resources are created using config files (declarative approach), then the configuration directory can be backed up using a version control system like Git. 
+- use git to backup the configuration. 
 
 If all the resources are not created this way, we can generate resource configuration by running `kubectl get all --all-namespaces -o yaml > all.yaml`. 
 
@@ -18,7 +18,8 @@ Recommended to use **Velero,** a managed tool for backups.
 
 ETCD cluster can be backed up instead of generating the resource configuration for the cluster. **For this, backup the data directory of the ETCD cluster.** 
 
-In managed k8s engine, ETCD data directory is not accessible. In such cases, backup the resource configuration.
+In managed k8s engine, ETCD data directory is not accessible. 
+**In such cases, backup the resource configuration.**
 
 `etcdctl` is a command line client for [etcd](https://github.com/coreos/etcd).
 
@@ -29,7 +30,8 @@ In managed k8s engine, ETCD data directory is not accessible. In such cases, bac
 - –endpoints=[127.0.0.1:2379] This is the default as ETCD is running on master node and exposed on localhost **2379.**
 - –key                  identify secure client using this TLS key file
 
-etcd certificates are **used for encrypted communication between etcd member peers, as well as encrypted client traffic**. The following certificates are generated and used by etcd and other processes that communicate with etcd: Peer certificates: Used for communication between etcd members.
+etcd certificates are **used for encrypted communication between etcd member peers, as well as encrypted client traffic**. 
+- The following certificates are generated and used by etcd and other processes that communicate with etcd: Peer certificates: Used for communication between etcd members.
 
 ## Velero
 
@@ -39,10 +41,6 @@ etcd certificates are **used for encrypted communication between etcd member pe
 - **Works in CLI only**
 - **Runs a velero container in the cluster**
 - We can define a TTL for the backups stored in the storage location.
-- [Kubernetes Backup & Restore using Velero | ADITYA JOSHI | - YouTube](https://www.youtube.com/watch?v=_y0yGAbLknU)
-- [Kubernetes Cluster Migration | Migrating Data Across Clusters | ADITYA JOSHI | - YouTube](https://www.youtube.com/watch?v=QWIk1UdIh5c)
-- [Kubernetes Backups, Upgrades, Migrations - with Velero - YouTube](https://www.youtube.com/watch?v=zybLTQER0yY&t=923s)
-
 ---
 
 ### Take a snapshot -Backup Command

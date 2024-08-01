@@ -6,7 +6,7 @@ Static Pods are a special type of pod in Kubernetes that are `managed directly b
 
 - Managed by Kubelet
 - No API Server Involvement
-- **Mirror Pods**: For visibility, the kubelet creates a mirror pod on the Kubernetes API server for each static pod. 
+- **Mirror Pods**: For visibility, the **kubelet creates a mirror pod on the Kubernetes API server for each static pod**. 
     - These mirror pods make it visible in the kubectl get pods commands.
 - **Node-Specific**: Static pods are always bound to the node where their manifest files are located. 
     - `They do not get rescheduled to other nodes if the node fails`.
@@ -53,7 +53,7 @@ Static Pods are a special type of pod in Kubernetes that are `managed directly b
 
 ### **Managing Static Pods**
 
-- **Modifying Static Pods**: To modify a static pod, edit the corresponding manifest file. The kubelet will detect the changes and update the pod accordingly.
+- **Modifying Static Pods**: To modify a static pod, edit the corresponding manifest file.
 - **Deleting Static Pods**: To delete a static pod, remove the manifest file from the static pod directory. The kubelet will stop and remove the pod.
 
     ```bash

@@ -3,7 +3,8 @@
 
 ### CoreDNS and Kubernetes API
 
-CoreDNS is the DNS server used in most Kubernetes clusters. It interacts with the Kubernetes API to keep track of the current state of all Services and Pods in the cluster.
+CoreDNS is the DNS server used in most Kubernetes clusters. 
+- It interacts with the Kubernetes API to keep track of the current state of all Services and Pods in the cluster.
 
 1. **Pod Creation and Registration**:
    - When a Pod is created, it is assigned an IP address by the Kubernetes network plugin.

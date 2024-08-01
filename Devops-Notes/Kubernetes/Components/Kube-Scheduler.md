@@ -1,5 +1,6 @@
 - Kube Scheduler decides on which node the pod should be scheduled.
-    - It doesn’t create the pod on the required node. **That is the job of `kubelet` service.**
+    - It doesn’t create the pod on the required node. 
+    - **That is the job of `kubelet` service.**
     - It only decides which node the pod will go to.
 
 ### Scheduling Algorithm

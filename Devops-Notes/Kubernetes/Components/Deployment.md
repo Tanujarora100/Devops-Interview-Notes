@@ -11,7 +11,6 @@
      - Rolling out updates to applications.
      - Scaling applications up or down.
      - Rolling back to previous versions
-     - Pausing and resuming rollouts for applying multiple fixes[1].
 
 4. **What are the update strategies available for Deployments?**
      - **RollingUpdate**: 
@@ -22,7 +21,7 @@
 
 6. **How do you roll back a Deployment to a previous version?**
    -  `kubectl rollout undo deployment/<deployment-name>` command. 
-   You can also specify a particular revision to roll back to using the `--to-revision=<revision-number>` flag[5].
+   You can also specify a particular revision to roll back to using the `--to-revision=<revision-number>` flag.
 
 
 7. **What are the differences between a Deployment and a StatefulSet?**
@@ -36,7 +35,8 @@
      - Storing configuration files in version control
 
 10. **Can you explain the concept of Canary Deployments and how they are implemented in Kubernetes?**
-    - **Canary Deployment**: A deployment strategy where a new version of the application is released to a small subset of users before rolling it out to the entire infrastructure. This allows for testing in a production environment with minimal risk.
+    - **Canary Deployment**: A deployment strategy where a new version of the application is released to a small subset of users before rolling it out to the entire infrastructure. 
+    - This allows for testing in a production environment with minimal risk.
 
 ### **Stable Deployment**
 

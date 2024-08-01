@@ -154,7 +154,7 @@ spec:
 		path: /tmp/data
 ```
 
-`persistentVolumeReclaimPolicy` governs the behavior of PV when the associated PVC is deleted. Possible values:
+`persistentVolumeReclaimPolicy` governs the behavior of PV when the associated PVC is deleted. 
 
 - `Retain` - retain the PV until it is manually deleted but it `cannot be reused by other PVCs (default)`
 - `Delete` - `delete PV as well`

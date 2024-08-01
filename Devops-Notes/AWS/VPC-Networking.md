@@ -5,7 +5,7 @@
 
 #### **Key Features**
 - **Subnets**: A subnet is a range of IP addresses in your VPC. 
-  - Each subnet must reside in a single Availability Zone.
+  - Each **subnet must reside in a single Availability Zone**.
 - **IP Addressing**: You can assign both IPv4 and IPv6 addresses to your VPCs and subnets.
 - **Routing**: Route tables determine where network traffic from your subnet or gateway is directed.
 - **Gateways and Endpoints**: Gateways connect your VPC to another network, such as the internet or AWS services.
@@ -230,4 +230,5 @@ An Elastic IP address is a static IPv4 address
 - **Charges**: 
   - AWS charges for Elastic IP addresses that are not associated with running instances. 
   - There is no charge for Elastic IP addresses associated with running instances.
-- No, you cannot attach the same Elastic IP address to multiple Amazon EC2 instances simultaneously. Each Elastic IP (EIP) can only be associated with one instance or network interface at a time. If you need multiple instances to share a single public IP address, you can use a Network Address Translation (NAT) gateway or a load balancer.
+- No, you cannot attach the same Elastic IP address to multiple Amazon EC2 instances simultaneously. Each Elastic IP (EIP) can only be associated with one instance or network interface at a time. 
+- If you need multiple instances to share a single public IP address, you can use a Network Address Translation (NAT) gateway or a load balancer.

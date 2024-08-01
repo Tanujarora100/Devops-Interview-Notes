@@ -1,0 +1,6034 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-07-12T18:57:04Z"
+    generateName: coredns-7db6d8ff4d-
+    labels:
+      k8s-app: kube-dns
+      pod-template-hash: 7db6d8ff4d
+    name: coredns-7db6d8ff4d-6gbr7
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: coredns-7db6d8ff4d
+      uid: 89ac2fe8-a717-4233-a094-44c308234ef9
+    resourceVersion: "559600"
+    uid: 78910b96-dd84-4037-860b-6b7f8afd80df
+  spec:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: k8s-app
+                operator: In
+                values:
+                - kube-dns
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+    containers:
+    - args:
+      - -conf
+      - /etc/coredns/Corefile
+      image: registry.k8s.io/coredns/coredns:v1.11.1
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 5
+        httpGet:
+          path: /health
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 60
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: coredns
+      ports:
+      - containerPort: 53
+        name: dns
+        protocol: UDP
+      - containerPort: 53
+        name: dns-tcp
+        protocol: TCP
+      - containerPort: 9153
+        name: metrics
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /ready
+          port: 8181
+          scheme: HTTP
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          memory: 170Mi
+        requests:
+          cpu: 100m
+          memory: 70Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - NET_BIND_SERVICE
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/coredns
+        name: config-volume
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-k2kvm
+        readOnly: true
+    dnsPolicy: Default
+    enableServiceLinks: true
+    nodeName: minikube
+    nodeSelector:
+      kubernetes.io/os: linux
+    preemptionPolicy: PreemptLowerPriority
+    priority: 2000000000
+    priorityClassName: system-cluster-critical
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: coredns
+    serviceAccountName: coredns
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        items:
+        - key: Corefile
+          path: Corefile
+        name: coredns
+      name: config-volume
+    - name: kube-api-access-k2kvm
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-12T18:57:04Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-12T18:57:04Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://1426f46e7c714a3d67ee1dd30a683505ab7bfcbacfc79d4968d1a6fad12a2b76
+      image: registry.k8s.io/coredns/coredns:v1.11.1
+      imageID: docker-pullable://registry.k8s.io/coredns/coredns@sha256:1eeb4c7316bacb1d4c8ead65571cd92dd21e27359f0d4917f1a5822a73b75db1
+      lastState:
+        terminated:
+          containerID: docker://6064adee45b671aa5bb343eacfe747cd2bb87392b905457e55592742c30d8a3a
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T22:39:03Z"
+      name: coredns
+      ready: true
+      restartCount: 8
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:29Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 10.244.7.233
+    podIPs:
+    - ip: 10.244.7.233
+    qosClass: Burstable
+    startTime: "2024-07-12T18:57:04Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubeadm.kubernetes.io/etcd.advertise-client-urls: https://192.168.105.2:2379
+      kubernetes.io/config.hash: ee568ab87af0f05c290aa76406dee86f
+      kubernetes.io/config.mirror: ee568ab87af0f05c290aa76406dee86f
+      kubernetes.io/config.seen: "2024-07-12T18:56:50.431507355Z"
+      kubernetes.io/config.source: file
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    labels:
+      component: etcd
+      tier: control-plane
+    name: etcd-minikube
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: v1
+      controller: true
+      kind: Node
+      name: minikube
+      uid: 24d05577-6336-4392-bfa1-49e5fbf294ac
+    resourceVersion: "559657"
+    uid: bddf709c-8e6f-4021-a7a2-7eeca60cf065
+  spec:
+    containers:
+    - command:
+      - etcd
+      - --advertise-client-urls=https://192.168.105.2:2379
+      - --cert-file=/var/lib/minikube/certs/etcd/server.crt
+      - --client-cert-auth=true
+      - --data-dir=/var/lib/minikube/etcd
+      - --experimental-initial-corrupt-check=true
+      - --experimental-watch-progress-notify-interval=5s
+      - --initial-advertise-peer-urls=https://192.168.105.2:2380
+      - --initial-cluster=minikube=https://192.168.105.2:2380
+      - --key-file=/var/lib/minikube/certs/etcd/server.key
+      - --listen-client-urls=https://127.0.0.1:2379,https://192.168.105.2:2379
+      - --listen-metrics-urls=http://127.0.0.1:2381
+      - --listen-peer-urls=https://192.168.105.2:2380
+      - --name=minikube
+      - --peer-cert-file=/var/lib/minikube/certs/etcd/peer.crt
+      - --peer-client-cert-auth=true
+      - --peer-key-file=/var/lib/minikube/certs/etcd/peer.key
+      - --peer-trusted-ca-file=/var/lib/minikube/certs/etcd/ca.crt
+      - --proxy-refresh-interval=70000
+      - --snapshot-count=10000
+      - --trusted-ca-file=/var/lib/minikube/certs/etcd/ca.crt
+      image: registry.k8s.io/etcd:3.5.12-0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 8
+        httpGet:
+          host: 127.0.0.1
+          path: /health?exclude=NOSPACE&serializable=true
+          port: 2381
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      name: etcd
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+      startupProbe:
+        failureThreshold: 24
+        httpGet:
+          host: 127.0.0.1
+          path: /health?serializable=false
+          port: 2381
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/minikube/etcd
+        name: etcd-data
+      - mountPath: /var/lib/minikube/certs/etcd
+        name: etcd-certs
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 2000001000
+    priorityClassName: system-node-critical
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      operator: Exists
+    volumes:
+    - hostPath:
+        path: /var/lib/minikube/certs/etcd
+        type: DirectoryOrCreate
+      name: etcd-certs
+    - hostPath:
+        path: /var/lib/minikube/etcd
+        type: DirectoryOrCreate
+      name: etcd-data
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:17Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://797ac8cd11177a03b9238b4df2c45a5b08d8bcf3b6cdc7d9440f089566f4a8f3
+      image: registry.k8s.io/etcd:3.5.12-0
+      imageID: docker-pullable://registry.k8s.io/etcd@sha256:44a8e24dcbba3470ee1fee21d5e88d128c936e9b55d4bc51fbef8086f8ed123b
+      lastState:
+        terminated:
+          containerID: docker://29e344d40521f682dcb55a5be72a6afb77c6c2b29e439c975b3ab02f1ee3edea
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-16T20:20:15Z"
+      name: etcd
+      ready: true
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:16Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 192.168.105.2
+    podIPs:
+    - ip: 192.168.105.2
+    qosClass: Burstable
+    startTime: "2024-08-01T09:42:15Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubeadm.kubernetes.io/kube-apiserver.advertise-address.endpoint: 192.168.105.2:8443
+      kubernetes.io/config.hash: 29169f694c6bbd5e596a891d63327058
+      kubernetes.io/config.mirror: 29169f694c6bbd5e596a891d63327058
+      kubernetes.io/config.seen: "2024-07-12T18:56:50.431501356Z"
+      kubernetes.io/config.source: file
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    labels:
+      component: kube-apiserver
+      tier: control-plane
+    name: kube-apiserver-minikube
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: v1
+      controller: true
+      kind: Node
+      name: minikube
+      uid: 24d05577-6336-4392-bfa1-49e5fbf294ac
+    resourceVersion: "559615"
+    uid: 325cabe0-55cc-4f75-a8b5-6acf07f072b0
+  spec:
+    containers:
+    - command:
+      - kube-apiserver
+      - --advertise-address=192.168.105.2
+      - --allow-privileged=true
+      - --authorization-mode=Node,RBAC
+      - --client-ca-file=/var/lib/minikube/certs/ca.crt
+      - --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
+      - --enable-bootstrap-token-auth=true
+      - --etcd-cafile=/var/lib/minikube/certs/etcd/ca.crt
+      - --etcd-certfile=/var/lib/minikube/certs/apiserver-etcd-client.crt
+      - --etcd-keyfile=/var/lib/minikube/certs/apiserver-etcd-client.key
+      - --etcd-servers=https://127.0.0.1:2379
+      - --kubelet-client-certificate=/var/lib/minikube/certs/apiserver-kubelet-client.crt
+      - --kubelet-client-key=/var/lib/minikube/certs/apiserver-kubelet-client.key
+      - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+      - --proxy-client-cert-file=/var/lib/minikube/certs/front-proxy-client.crt
+      - --proxy-client-key-file=/var/lib/minikube/certs/front-proxy-client.key
+      - --requestheader-allowed-names=front-proxy-client
+      - --requestheader-client-ca-file=/var/lib/minikube/certs/front-proxy-ca.crt
+      - --requestheader-extra-headers-prefix=X-Remote-Extra-
+      - --requestheader-group-headers=X-Remote-Group
+      - --requestheader-username-headers=X-Remote-User
+      - --secure-port=8443
+      - --service-account-issuer=https://kubernetes.default.svc.cluster.local
+      - --service-account-key-file=/var/lib/minikube/certs/sa.pub
+      - --service-account-signing-key-file=/var/lib/minikube/certs/sa.key
+      - --service-cluster-ip-range=10.96.0.0/12
+      - --tls-cert-file=/var/lib/minikube/certs/apiserver.crt
+      - --tls-private-key-file=/var/lib/minikube/certs/apiserver.key
+      image: registry.k8s.io/kube-apiserver:v1.30.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 8
+        httpGet:
+          host: 192.168.105.2
+          path: /livez
+          port: 8443
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      name: kube-apiserver
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          host: 192.168.105.2
+          path: /readyz
+          port: 8443
+          scheme: HTTPS
+        periodSeconds: 1
+        successThreshold: 1
+        timeoutSeconds: 15
+      resources:
+        requests:
+          cpu: 250m
+      startupProbe:
+        failureThreshold: 24
+        httpGet:
+          host: 192.168.105.2
+          path: /livez
+          port: 8443
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/ssl/certs
+        name: ca-certs
+        readOnly: true
+      - mountPath: /var/lib/minikube/certs
+        name: k8s-certs
+        readOnly: true
+      - mountPath: /usr/share/ca-certificates
+        name: usr-share-ca-certificates
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 2000001000
+    priorityClassName: system-node-critical
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      operator: Exists
+    volumes:
+    - hostPath:
+        path: /etc/ssl/certs
+        type: DirectoryOrCreate
+      name: ca-certs
+    - hostPath:
+        path: /var/lib/minikube/certs
+        type: DirectoryOrCreate
+      name: k8s-certs
+    - hostPath:
+        path: /usr/share/ca-certificates
+        type: DirectoryOrCreate
+      name: usr-share-ca-certificates
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:16Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:31Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:31Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://51f77a3c0aba35698cc7e73eac2c7c21136ed0e0c83cfeab2fa93b9c292df03b
+      image: registry.k8s.io/kube-apiserver:v1.30.0
+      imageID: docker-pullable://registry.k8s.io/kube-apiserver@sha256:6b8e197b2d39c321189a475ac755a77896e34b56729425590fbc99f3a96468a3
+      lastState:
+        terminated:
+          containerID: docker://ffd7ef94d7d66b2074ba9b37946f2c9e9f4313a9ee7db375b57ec4ff058f0bd0
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T15:10:22Z"
+      name: kube-apiserver
+      ready: true
+      restartCount: 6
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:15Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 192.168.105.2
+    podIPs:
+    - ip: 192.168.105.2
+    qosClass: Burstable
+    startTime: "2024-08-01T09:42:15Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/config.hash: b2f93c4e2ec4e1950aa41a71fd8273b0
+      kubernetes.io/config.mirror: b2f93c4e2ec4e1950aa41a71fd8273b0
+      kubernetes.io/config.seen: "2024-07-12T18:56:50.431505563Z"
+      kubernetes.io/config.source: file
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    labels:
+      component: kube-controller-manager
+      tier: control-plane
+    name: kube-controller-manager-minikube
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: v1
+      controller: true
+      kind: Node
+      name: minikube
+      uid: 24d05577-6336-4392-bfa1-49e5fbf294ac
+    resourceVersion: "559715"
+    uid: 902462a5-184f-48d0-81cd-857d2654f17b
+  spec:
+    containers:
+    - command:
+      - kube-controller-manager
+      - --allocate-node-cidrs=true
+      - --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf
+      - --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf
+      - --bind-address=127.0.0.1
+      - --client-ca-file=/var/lib/minikube/certs/ca.crt
+      - --cluster-cidr=10.244.0.0/16
+      - --cluster-name=mk
+      - --cluster-signing-cert-file=/var/lib/minikube/certs/ca.crt
+      - --cluster-signing-key-file=/var/lib/minikube/certs/ca.key
+      - --controllers=*,bootstrapsigner,tokencleaner
+      - --kubeconfig=/etc/kubernetes/controller-manager.conf
+      - --leader-elect=false
+      - --requestheader-client-ca-file=/var/lib/minikube/certs/front-proxy-ca.crt
+      - --root-ca-file=/var/lib/minikube/certs/ca.crt
+      - --service-account-private-key-file=/var/lib/minikube/certs/sa.key
+      - --service-cluster-ip-range=10.96.0.0/12
+      - --use-service-account-credentials=true
+      image: registry.k8s.io/kube-controller-manager:v1.30.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 8
+        httpGet:
+          host: 127.0.0.1
+          path: /healthz
+          port: 10257
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      name: kube-controller-manager
+      resources:
+        requests:
+          cpu: 200m
+      startupProbe:
+        failureThreshold: 24
+        httpGet:
+          host: 127.0.0.1
+          path: /healthz
+          port: 10257
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/ssl/certs
+        name: ca-certs
+        readOnly: true
+      - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
+        name: flexvolume-dir
+      - mountPath: /var/lib/minikube/certs
+        name: k8s-certs
+        readOnly: true
+      - mountPath: /etc/kubernetes/controller-manager.conf
+        name: kubeconfig
+        readOnly: true
+      - mountPath: /usr/share/ca-certificates
+        name: usr-share-ca-certificates
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 2000001000
+    priorityClassName: system-node-critical
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      operator: Exists
+    volumes:
+    - hostPath:
+        path: /etc/ssl/certs
+        type: DirectoryOrCreate
+      name: ca-certs
+    - hostPath:
+        path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
+        type: DirectoryOrCreate
+      name: flexvolume-dir
+    - hostPath:
+        path: /var/lib/minikube/certs
+        type: DirectoryOrCreate
+      name: k8s-certs
+    - hostPath:
+        path: /etc/kubernetes/controller-manager.conf
+        type: FileOrCreate
+      name: kubeconfig
+    - hostPath:
+        path: /usr/share/ca-certificates
+        type: DirectoryOrCreate
+      name: usr-share-ca-certificates
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:17Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:34Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:34Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://ee64cc1bedcb8eaaa3a01e0c9fdaf5159a355654256b4a35e9a2b89c62f1ba87
+      image: registry.k8s.io/kube-controller-manager:v1.30.0
+      imageID: docker-pullable://registry.k8s.io/kube-controller-manager@sha256:5f52f00f17d5784b5ca004dffca59710fa1a9eec8d54cebdf9433a1d134150fe
+      lastState:
+        terminated:
+          containerID: docker://fc9999bbf59ab434d80f8fe541847d19a4b968c8fb73ec662d57c6ea62901a97
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-16T20:20:14Z"
+      name: kube-controller-manager
+      ready: true
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:16Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 192.168.105.2
+    podIPs:
+    - ip: 192.168.105.2
+    qosClass: Burstable
+    startTime: "2024-08-01T09:42:15Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-07-12T18:57:04Z"
+    generateName: kube-proxy-
+    labels:
+      controller-revision-hash: 79cf874c65
+      k8s-app: kube-proxy
+      pod-template-generation: "1"
+    name: kube-proxy-v254q
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DaemonSet
+      name: kube-proxy
+      uid: f7fc83a8-bd7b-44d7-9c22-31164ee85848
+    resourceVersion: "559479"
+    uid: 32925839-78fa-432d-b65a-9fa9ab220fc5
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchFields:
+            - key: metadata.name
+              operator: In
+              values:
+              - minikube
+    containers:
+    - command:
+      - /usr/local/bin/kube-proxy
+      - --config=/var/lib/kube-proxy/config.conf
+      - --hostname-override=$(NODE_NAME)
+      env:
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      image: registry.k8s.io/kube-proxy:v1.30.0
+      imagePullPolicy: IfNotPresent
+      name: kube-proxy
+      resources: {}
+      securityContext:
+        privileged: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/kube-proxy
+        name: kube-proxy
+      - mountPath: /run/xtables.lock
+        name: xtables-lock
+      - mountPath: /lib/modules
+        name: lib-modules
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-nn5qw
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: minikube
+    nodeSelector:
+      kubernetes.io/os: linux
+    preemptionPolicy: PreemptLowerPriority
+    priority: 2000001000
+    priorityClassName: system-node-critical
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kube-proxy
+    serviceAccountName: kube-proxy
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/disk-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/pid-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/unschedulable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/network-unavailable
+      operator: Exists
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: kube-proxy
+      name: kube-proxy
+    - hostPath:
+        path: /run/xtables.lock
+        type: FileOrCreate
+      name: xtables-lock
+    - hostPath:
+        path: /lib/modules
+        type: ""
+      name: lib-modules
+    - name: kube-api-access-nn5qw
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:21Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-12T18:57:04Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:21Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:21Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-12T18:57:04Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://4a49169664346ce382f81bd05df5e986bd91a12721360029e993bc8ab3c8703b
+      image: registry.k8s.io/kube-proxy:v1.30.0
+      imageID: docker-pullable://registry.k8s.io/kube-proxy@sha256:ec532ff47eaf39822387e51ec73f1f2502eb74658c6303319db88d2c380d0210
+      lastState:
+        terminated:
+          containerID: docker://38040181ee84cc1da6b42624484955ea9485453af4644f81dfcfb8c686a5916b
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-16T20:20:19Z"
+      name: kube-proxy
+      ready: true
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:20Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 192.168.105.2
+    podIPs:
+    - ip: 192.168.105.2
+    qosClass: BestEffort
+    startTime: "2024-07-12T18:57:04Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/config.hash: f9c8e1d0d74b1727abdb4b4a31d3a7c1
+      kubernetes.io/config.mirror: f9c8e1d0d74b1727abdb4b4a31d3a7c1
+      kubernetes.io/config.seen: "2024-07-12T18:56:50.431506605Z"
+      kubernetes.io/config.source: file
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    labels:
+      component: kube-scheduler
+      tier: control-plane
+    name: kube-scheduler-minikube
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: v1
+      controller: true
+      kind: Node
+      name: minikube
+      uid: 24d05577-6336-4392-bfa1-49e5fbf294ac
+    resourceVersion: "559723"
+    uid: dd6fb0fe-57dc-4815-aa80-e896b1359d4d
+  spec:
+    containers:
+    - command:
+      - kube-scheduler
+      - --authentication-kubeconfig=/etc/kubernetes/scheduler.conf
+      - --authorization-kubeconfig=/etc/kubernetes/scheduler.conf
+      - --bind-address=127.0.0.1
+      - --kubeconfig=/etc/kubernetes/scheduler.conf
+      - --leader-elect=false
+      image: registry.k8s.io/kube-scheduler:v1.30.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 8
+        httpGet:
+          host: 127.0.0.1
+          path: /healthz
+          port: 10259
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      name: kube-scheduler
+      resources:
+        requests:
+          cpu: 100m
+      startupProbe:
+        failureThreshold: 24
+        httpGet:
+          host: 127.0.0.1
+          path: /healthz
+          port: 10259
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 15
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/kubernetes/scheduler.conf
+        name: kubeconfig
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 2000001000
+    priorityClassName: system-node-critical
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      operator: Exists
+    volumes:
+    - hostPath:
+        path: /etc/kubernetes/scheduler.conf
+        type: FileOrCreate
+      name: kubeconfig
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:16Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:34Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:34Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:15Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://79034c74011682605c39ed95bec481530ca99afd3930585119fdc4c9969417c9
+      image: registry.k8s.io/kube-scheduler:v1.30.0
+      imageID: docker-pullable://registry.k8s.io/kube-scheduler@sha256:2353c3a1803229970fcb571cffc9b2f120372350e01c7381b4b650c4a02b9d67
+      lastState:
+        terminated:
+          containerID: docker://57ee46ff638ae14ab40d38fbcfde651ff1d42bb9bc66a31a7af9b3f05d8e7bdb
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-21T09:21:44Z"
+      name: kube-scheduler
+      ready: true
+      restartCount: 4
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:15Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 192.168.105.2
+    podIPs:
+    - ip: 192.168.105.2
+    qosClass: Burstable
+    startTime: "2024-08-01T09:42:15Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"labels":{"addonmanager.kubernetes.io/mode":"Reconcile","integration-test":"storage-provisioner"},"name":"storage-provisioner","namespace":"kube-system"},"spec":{"containers":[{"command":["/storage-provisioner"],"image":"gcr.io/k8s-minikube/storage-provisioner:v5","imagePullPolicy":"IfNotPresent","name":"storage-provisioner","volumeMounts":[{"mountPath":"/tmp","name":"tmp"}]}],"hostNetwork":true,"serviceAccountName":"storage-provisioner","volumes":[{"hostPath":{"path":"/tmp","type":"Directory"},"name":"tmp"}]}}
+    creationTimestamp: "2024-07-12T18:56:51Z"
+    labels:
+      addonmanager.kubernetes.io/mode: Reconcile
+      integration-test: storage-provisioner
+    name: storage-provisioner
+    namespace: kube-system
+    resourceVersion: "559815"
+    uid: a504231d-9389-48b9-beee-f4d63653a88a
+  spec:
+    containers:
+    - command:
+      - /storage-provisioner
+      image: gcr.io/k8s-minikube/storage-provisioner:v5
+      imagePullPolicy: IfNotPresent
+      name: storage-provisioner
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-4j5bn
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: storage-provisioner
+    serviceAccountName: storage-provisioner
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - hostPath:
+        path: /tmp
+        type: Directory
+      name: tmp
+    - name: kube-api-access-4j5bn
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:21Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-12T18:57:03Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:37Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:37Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-12T18:57:03Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://53eb2bf54b9c09d7e81f3c7071ec3b6fac1bb4d58aa016f29c18d54ffe39b851
+      image: gcr.io/k8s-minikube/storage-provisioner:v5
+      imageID: docker-pullable://gcr.io/k8s-minikube/storage-provisioner@sha256:18eb69d1418e854ad5a19e399310e52808a8321e4c441c1dddad8977a0d7a944
+      lastState:
+        terminated:
+          containerID: docker://2f47422a49461fb0c9422cc44d8fad3b5e336c90a05bb3245506b36d89a54c6f
+          exitCode: 1
+          finishedAt: "2024-08-01T09:42:20Z"
+          reason: Error
+          startedAt: "2024-08-01T09:42:20Z"
+      name: storage-provisioner
+      ready: true
+      restartCount: 166
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:37Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 192.168.105.2
+    podIPs:
+    - ip: 192.168.105.2
+    qosClass: BestEffort
+    startTime: "2024-07-12T18:57:03Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-07-16T20:13:07Z"
+    generateName: kyverno-admission-controller-776987899-
+    labels:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: "776987899"
+    name: kyverno-admission-controller-776987899-b6zqb
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: kyverno-admission-controller-776987899
+      uid: cf66da92-dc9e-433b-a1ec-8749643c652c
+    resourceVersion: "559746"
+    uid: 9ba89368-c2a4-4d87-8df4-4c407fecb790
+  spec:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - admission-controller
+            topologyKey: kubernetes.io/hostname
+          weight: 1
+    containers:
+    - args:
+      - --caSecretName=kyverno-svc.kyverno.svc.kyverno-tls-ca
+      - --tlsSecretName=kyverno-svc.kyverno.svc.kyverno-tls-pair
+      - --backgroundServiceAccountName=system:serviceaccount:kyverno:kyverno-background-controller
+      - --servicePort=443
+      - --webhookServerPort=9443
+      - --disableMetrics=false
+      - --otelConfig=prometheus
+      - --metricsPort=8000
+      - --admissionReports=true
+      - --maxAdmissionReports=1000
+      - --autoUpdateWebhooks=true
+      - --enableConfigMapCaching=true
+      - --enableDeferredLoading=true
+      - --dumpPayload=false
+      - --forceFailurePolicyIgnore=false
+      - --generateValidatingAdmissionPolicy=false
+      - --maxAPICallResponseLength=2000000
+      - --loggingFormat=text
+      - --v=2
+      - --omitEvents=PolicyApplied,PolicySkipped
+      - --enablePolicyException=true
+      - --protectManagedResources=false
+      - --allowInsecureRegistry=false
+      - --registryCredentialHelpers=default,google,amazon,azure,github
+      env:
+      - name: INIT_CONFIG
+        value: kyverno
+      - name: METRICS_CONFIG
+        value: kyverno-metrics
+      - name: KYVERNO_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: KYVERNO_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: KYVERNO_SERVICEACCOUNT_NAME
+        value: kyverno-admission-controller
+      - name: KYVERNO_SVC
+        value: kyverno-svc
+      - name: TUF_ROOT
+        value: /.sigstore
+      - name: KYVERNO_DEPLOYMENT
+        value: kyverno-admission-controller
+      image: ghcr.io/kyverno/kyverno:v1.12.5
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 2
+        httpGet:
+          path: /health/liveness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 15
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: kyverno
+      ports:
+      - containerPort: 9443
+        name: https
+        protocol: TCP
+      - containerPort: 8000
+        name: metrics-port
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 6
+        httpGet:
+          path: /health/readiness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources:
+        limits:
+          memory: 384Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      startupProbe:
+        failureThreshold: 20
+        httpGet:
+          path: /health/liveness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 2
+        periodSeconds: 6
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /.sigstore
+        name: sigstore
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-swqbs
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    initContainers:
+    - args:
+      - --loggingFormat=text
+      - --v=2
+      env:
+      - name: KYVERNO_SERVICEACCOUNT_NAME
+        value: kyverno-admission-controller
+      - name: INIT_CONFIG
+        value: kyverno
+      - name: METRICS_CONFIG
+        value: kyverno-metrics
+      - name: KYVERNO_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: KYVERNO_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: KYVERNO_DEPLOYMENT
+        value: kyverno-admission-controller
+      - name: KYVERNO_SVC
+        value: kyverno-svc
+      image: ghcr.io/kyverno/kyvernopre:v1.12.5
+      imagePullPolicy: IfNotPresent
+      name: kyverno-pre
+      resources:
+        limits:
+          cpu: 100m
+          memory: 256Mi
+        requests:
+          cpu: 10m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-swqbs
+        readOnly: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-admission-controller
+    serviceAccountName: kyverno-admission-controller
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: sigstore
+    - name: kube-api-access-swqbs
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:23Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://b0edefbc875fac6d49d17378819e9faa88268262d3539f6c239d151702751ab8
+      image: ghcr.io/kyverno/kyverno:v1.12.5
+      imageID: docker-pullable://ghcr.io/kyverno/kyverno@sha256:a61c7022abcfa53e2c9c402e03c674c06ada59d19c3790d0640c903f7af5e900
+      lastState:
+        terminated:
+          containerID: docker://22d3a9bb3f9bb73a55b7298b61e6cfa0247f7d2e150d4fc2493b7acfd7cc4f4f
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T22:39:12Z"
+      name: kyverno
+      ready: true
+      restartCount: 96
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:31Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    initContainerStatuses:
+    - containerID: docker://41ed82c786190c1a3470212761193eb2160ec9286eb9fb14248ed654b7c19c0b
+      image: ghcr.io/kyverno/kyvernopre:v1.12.5
+      imageID: docker-pullable://ghcr.io/kyverno/kyvernopre@sha256:63f7eaf5aa8ace03b0ac7d2c4a3f3b80ad43fb2e895a9360152dde26318294b7
+      lastState: {}
+      name: kyverno-pre
+      ready: true
+      restartCount: 2
+      started: false
+      state:
+        terminated:
+          containerID: docker://41ed82c786190c1a3470212761193eb2160ec9286eb9fb14248ed654b7c19c0b
+          exitCode: 0
+          finishedAt: "2024-08-01T09:42:30Z"
+          reason: Completed
+          startedAt: "2024-08-01T09:42:29Z"
+    phase: Running
+    podIP: 10.244.7.235
+    podIPs:
+    - ip: 10.244.7.235
+    qosClass: Burstable
+    startTime: "2024-07-16T20:13:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-07-16T20:13:07Z"
+    generateName: kyverno-background-controller-86b9f95c96-
+    labels:
+      app.kubernetes.io/component: background-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: 86b9f95c96
+    name: kyverno-background-controller-86b9f95c96-5qndg
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: kyverno-background-controller-86b9f95c96
+      uid: 344e6a20-718b-4d0d-9e1e-f68827171d06
+    resourceVersion: "559601"
+    uid: fd21011f-844f-4bce-93b8-527fa545cad3
+  spec:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - background-controller
+            topologyKey: kubernetes.io/hostname
+          weight: 1
+    containers:
+    - args:
+      - --disableMetrics=false
+      - --otelConfig=prometheus
+      - --metricsPort=8000
+      - --enableConfigMapCaching=true
+      - --enableDeferredLoading=true
+      - --maxAPICallResponseLength=2000000
+      - --loggingFormat=text
+      - --v=2
+      - --omitEvents=PolicyApplied,PolicySkipped
+      - --enablePolicyException=true
+      env:
+      - name: KYVERNO_SERVICEACCOUNT_NAME
+        value: kyverno-background-controller
+      - name: KYVERNO_DEPLOYMENT
+        value: kyverno-background-controller
+      - name: INIT_CONFIG
+        value: kyverno
+      - name: METRICS_CONFIG
+        value: kyverno-metrics
+      - name: KYVERNO_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: KYVERNO_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      image: ghcr.io/kyverno/background-controller:v1.12.5
+      imagePullPolicy: IfNotPresent
+      name: controller
+      ports:
+      - containerPort: 9443
+        name: https
+        protocol: TCP
+      - containerPort: 8000
+        name: metrics
+        protocol: TCP
+      resources:
+        limits:
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-pr8v8
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-background-controller
+    serviceAccountName: kyverno-background-controller
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-pr8v8
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://26fcb8de777598a5753d79e7ef46b55c196306b0d5bebfcdceccb7595f6574c3
+      image: ghcr.io/kyverno/background-controller:v1.12.5
+      imageID: docker-pullable://ghcr.io/kyverno/background-controller@sha256:06ed5db6cd33395d7c638c4a321ea4a7ba9e09d8a5d60e73f85d36c2800ee73b
+      lastState:
+        terminated:
+          containerID: docker://a07a46a5e1caea6516512db26ed6646262b0fca612c9b7b8cb0b5a19c9afb2f8
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T23:10:27Z"
+      name: controller
+      ready: true
+      restartCount: 112
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:29Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 10.244.7.234
+    podIPs:
+    - ip: 10.244.7.234
+    qosClass: Burstable
+    startTime: "2024-07-16T20:13:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generateName: kyverno-cleanup-admission-reports-28708420-
+    labels:
+      batch.kubernetes.io/controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+      batch.kubernetes.io/job-name: kyverno-cleanup-admission-reports-28708420
+      controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+      job-name: kyverno-cleanup-admission-reports-28708420
+    name: kyverno-cleanup-admission-reports-28708420-8jbrc
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Job
+      name: kyverno-cleanup-admission-reports-28708420
+      uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+    resourceVersion: "559754"
+    uid: b7424ced-8f1c-4db9-bdd1-ec973ae66e90
+  spec:
+    containers:
+    - command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        COUNT=$(kubectl get admissionreports.kyverno.io -A | wc -l)
+        if [ "$COUNT" -gt 10000 ]; then
+          echo "too many reports found ($COUNT), cleaning up..."
+          kubectl delete admissionreports.kyverno.io -A -l='!audit.kyverno.io/report.aggregate'
+        else
+          echo "($COUNT) reports found, no clean up needed"
+        fi
+      image: bitnami/kubectl:1.28.5
+      imagePullPolicy: IfNotPresent
+      name: cleanup
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-47bzj
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: OnFailure
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-cleanup-jobs
+    serviceAccountName: kyverno-cleanup-jobs
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-47bzj
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:35Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://118a7266d09857d2366cd80c736dfbe4665ff8ea56a3b02d622bf5488367671b
+      image: bitnami/kubectl:1.28.5
+      imageID: docker-pullable://bitnami/kubectl@sha256:cfd03da61658004f1615e5401ba8bde3cc4ba3f87afff0ed8875c5d1b0b09e4a
+      lastState: {}
+      name: cleanup
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://118a7266d09857d2366cd80c736dfbe4665ff8ea56a3b02d622bf5488367671b
+          exitCode: 0
+          finishedAt: "2024-08-01T09:42:34Z"
+          reason: Completed
+          startedAt: "2024-08-01T09:42:33Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Succeeded
+    podIP: 10.244.7.237
+    podIPs:
+    - ip: 10.244.7.237
+    qosClass: BestEffort
+    startTime: "2024-08-01T09:42:32Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generateName: kyverno-cleanup-cluster-admission-reports-28708420-
+    labels:
+      batch.kubernetes.io/controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+      batch.kubernetes.io/job-name: kyverno-cleanup-cluster-admission-reports-28708420
+      controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+      job-name: kyverno-cleanup-cluster-admission-reports-28708420
+    name: kyverno-cleanup-cluster-admission-reports-28708420-p4wrr
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Job
+      name: kyverno-cleanup-cluster-admission-reports-28708420
+      uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+    resourceVersion: "559786"
+    uid: 53e0b688-f015-4580-a3d1-c7a5457eb107
+  spec:
+    containers:
+    - command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        COUNT=$(kubectl get clusteradmissionreports.kyverno.io -A | wc -l)
+        if [ "$COUNT" -gt 10000 ]; then
+          echo "too many reports found ($COUNT), cleaning up..."
+          kubectl delete clusteradmissionreports.kyverno.io -A -l='!audit.kyverno.io/report.aggregate'
+        else
+          echo "($COUNT) reports found, no clean up needed"
+        fi
+      image: bitnami/kubectl:1.28.5
+      imagePullPolicy: IfNotPresent
+      name: cleanup
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-f68zr
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: OnFailure
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-cleanup-jobs
+    serviceAccountName: kyverno-cleanup-jobs
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-f68zr
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://c9dc26915ef9df40d609ed4ce36e4a3154c3cced6739cc2aad6e11602cf35190
+      image: bitnami/kubectl:1.28.5
+      imageID: docker-pullable://bitnami/kubectl@sha256:cfd03da61658004f1615e5401ba8bde3cc4ba3f87afff0ed8875c5d1b0b09e4a
+      lastState: {}
+      name: cleanup
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://c9dc26915ef9df40d609ed4ce36e4a3154c3cced6739cc2aad6e11602cf35190
+          exitCode: 0
+          finishedAt: "2024-08-01T09:42:34Z"
+          reason: Completed
+          startedAt: "2024-08-01T09:42:33Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Succeeded
+    podIP: 10.244.7.239
+    podIPs:
+    - ip: 10.244.7.239
+    qosClass: BestEffort
+    startTime: "2024-08-01T09:42:32Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generateName: kyverno-cleanup-cluster-ephemeral-reports-28708420-
+    labels:
+      batch.kubernetes.io/controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+      batch.kubernetes.io/job-name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+      controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+      job-name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+    name: kyverno-cleanup-cluster-ephemeral-reports-28708420-n6w85
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Job
+      name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+      uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+    resourceVersion: "559765"
+    uid: 84de407f-5b16-420b-aa9d-cb35a7ad0da9
+  spec:
+    containers:
+    - command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        COUNT=$(kubectl get clusterephemeralreports.reports.kyverno.io -A | wc -l)
+        if [ "$COUNT" -gt 10000 ]; then
+          echo "too many clusterephemeralreports found ($COUNT), cleaning up..."
+          kubectl delete clusterephemeralreports.reports.kyverno.io -A --all
+        else
+          echo "($COUNT) reports found, no clean up needed"
+        fi
+      image: bitnami/kubectl:1.28.5
+      imagePullPolicy: IfNotPresent
+      name: cleanup
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-jdp6w
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: OnFailure
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-cleanup-jobs
+    serviceAccountName: kyverno-cleanup-jobs
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-jdp6w
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:35Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://172fb86f36a1ad6af278c4378b470a1200eca5f0d1db774ce8dc7f8bf13eb1c4
+      image: bitnami/kubectl:1.28.5
+      imageID: docker-pullable://bitnami/kubectl@sha256:cfd03da61658004f1615e5401ba8bde3cc4ba3f87afff0ed8875c5d1b0b09e4a
+      lastState: {}
+      name: cleanup
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://172fb86f36a1ad6af278c4378b470a1200eca5f0d1db774ce8dc7f8bf13eb1c4
+          exitCode: 0
+          finishedAt: "2024-08-01T09:42:34Z"
+          reason: Completed
+          startedAt: "2024-08-01T09:42:34Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Succeeded
+    podIP: 10.244.7.240
+    podIPs:
+    - ip: 10.244.7.240
+    qosClass: BestEffort
+    startTime: "2024-08-01T09:42:32Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-07-16T20:13:07Z"
+    generateName: kyverno-cleanup-controller-7bbfc97569-
+    labels:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: 7bbfc97569
+    name: kyverno-cleanup-controller-7bbfc97569-j56hw
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: kyverno-cleanup-controller-7bbfc97569
+      uid: 33199a85-751f-4363-a325-df32cd22cc66
+    resourceVersion: "559724"
+    uid: 50a0cd3c-11a4-4007-bc9e-546780fae0b9
+  spec:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - cleanup-controller
+            topologyKey: kubernetes.io/hostname
+          weight: 1
+    containers:
+    - args:
+      - --caSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-ca
+      - --tlsSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-pair
+      - --servicePort=443
+      - --cleanupServerPort=9443
+      - --webhookServerPort=9443
+      - --disableMetrics=false
+      - --otelConfig=prometheus
+      - --metricsPort=8000
+      - --enableDeferredLoading=true
+      - --dumpPayload=false
+      - --maxAPICallResponseLength=2000000
+      - --loggingFormat=text
+      - --v=2
+      - --protectManagedResources=false
+      - --ttlReconciliationInterval=1m
+      env:
+      - name: KYVERNO_DEPLOYMENT
+        value: kyverno-cleanup-controller
+      - name: INIT_CONFIG
+        value: kyverno
+      - name: METRICS_CONFIG
+        value: kyverno-metrics
+      - name: KYVERNO_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: KYVERNO_SERVICEACCOUNT_NAME
+        value: kyverno-cleanup-controller
+      - name: KYVERNO_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: KYVERNO_SVC
+        value: kyverno-cleanup-controller
+      image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 2
+        httpGet:
+          path: /health/liveness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 15
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: controller
+      ports:
+      - containerPort: 9443
+        name: https
+        protocol: TCP
+      - containerPort: 8000
+        name: metrics
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 6
+        httpGet:
+          path: /health/readiness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources:
+        limits:
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      startupProbe:
+        failureThreshold: 20
+        httpGet:
+          path: /health/liveness
+          port: 9443
+          scheme: HTTPS
+        initialDelaySeconds: 2
+        periodSeconds: 6
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-zb99l
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-cleanup-controller
+    serviceAccountName: kyverno-cleanup-controller
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-zb99l
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:29Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:34Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:34Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://2b2b4a52e52dda14aca5fad5bb1dd7f115ebd3b0eab3446a2f267fb8c306ce96
+      image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+      imageID: docker-pullable://ghcr.io/kyverno/cleanup-controller@sha256:b914032ef9adfd1c498715dfb6c150508344a4b175ddd9d489e9a57fd0f26a06
+      lastState:
+        terminated:
+          containerID: docker://f4e10a1b459dd69ace7cecf7292d2cb32ffcb44dc4c0fe1050922a92c0321c8a
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T22:39:12Z"
+      name: controller
+      ready: true
+      restartCount: 101
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:29Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 10.244.7.232
+    podIPs:
+    - ip: 10.244.7.232
+    qosClass: Burstable
+    startTime: "2024-07-16T20:13:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generateName: kyverno-cleanup-ephemeral-reports-28708420-
+    labels:
+      batch.kubernetes.io/controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+      batch.kubernetes.io/job-name: kyverno-cleanup-ephemeral-reports-28708420
+      controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+      job-name: kyverno-cleanup-ephemeral-reports-28708420
+    name: kyverno-cleanup-ephemeral-reports-28708420-pg74g
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Job
+      name: kyverno-cleanup-ephemeral-reports-28708420
+      uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+    resourceVersion: "559787"
+    uid: f2de18fd-4e4b-44e1-af66-7c3592d4885f
+  spec:
+    containers:
+    - command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        COUNT=$(kubectl get ephemeralreports.reports.kyverno.io -A | wc -l)
+        if [ "$COUNT" -gt 10000 ]; then
+          echo "too many ephemeralreports found ($COUNT), cleaning up..."
+          kubectl delete ephemeralreports.reports.kyverno.io -A --all
+        else
+          echo "($COUNT) reports found, no clean up needed"
+        fi
+      image: bitnami/kubectl:1.28.5
+      imagePullPolicy: IfNotPresent
+      name: cleanup
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-kth6d
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: OnFailure
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-cleanup-jobs
+    serviceAccountName: kyverno-cleanup-jobs
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-kth6d
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://e14e288378a0adb4203b680a967c69f0a40c425ee35fff4c45f55735679325c3
+      image: bitnami/kubectl:1.28.5
+      imageID: docker-pullable://bitnami/kubectl@sha256:cfd03da61658004f1615e5401ba8bde3cc4ba3f87afff0ed8875c5d1b0b09e4a
+      lastState: {}
+      name: cleanup
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://e14e288378a0adb4203b680a967c69f0a40c425ee35fff4c45f55735679325c3
+          exitCode: 0
+          finishedAt: "2024-08-01T09:42:34Z"
+          reason: Completed
+          startedAt: "2024-08-01T09:42:34Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Succeeded
+    podIP: 10.244.7.241
+    podIPs:
+    - ip: 10.244.7.241
+    qosClass: BestEffort
+    startTime: "2024-08-01T09:42:32Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generateName: kyverno-cleanup-update-requests-28708420-
+    labels:
+      batch.kubernetes.io/controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+      batch.kubernetes.io/job-name: kyverno-cleanup-update-requests-28708420
+      controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+      job-name: kyverno-cleanup-update-requests-28708420
+    name: kyverno-cleanup-update-requests-28708420-j9dl8
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Job
+      name: kyverno-cleanup-update-requests-28708420
+      uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+    resourceVersion: "559776"
+    uid: 5ba9c1a6-2196-4fa5-a433-33ca6f91d99a
+  spec:
+    containers:
+    - command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        COUNT=$(kubectl get updaterequests.kyverno.io -A | wc -l)
+        if [ "$COUNT" -gt 10000 ]; then
+          echo "too many updaterequests found ($COUNT), cleaning up..."
+          kubectl delete updaterequests.kyverno.io --all -n kyverno
+        else
+          echo "($COUNT) reports found, no clean up needed"
+        fi
+      image: bitnami/kubectl:1.28.5
+      imagePullPolicy: IfNotPresent
+      name: cleanup
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ls587
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: OnFailure
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-cleanup-jobs
+    serviceAccountName: kyverno-cleanup-jobs
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-ls587
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:32Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://5110b782edd5857d3357a011708993cfdf0fffb98a774183c6a2899616f848ed
+      image: bitnami/kubectl:1.28.5
+      imageID: docker-pullable://bitnami/kubectl@sha256:cfd03da61658004f1615e5401ba8bde3cc4ba3f87afff0ed8875c5d1b0b09e4a
+      lastState: {}
+      name: cleanup
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://5110b782edd5857d3357a011708993cfdf0fffb98a774183c6a2899616f848ed
+          exitCode: 0
+          finishedAt: "2024-08-01T09:42:34Z"
+          reason: Completed
+          startedAt: "2024-08-01T09:42:33Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Succeeded
+    podIP: 10.244.7.238
+    podIPs:
+    - ip: 10.244.7.238
+    qosClass: BestEffort
+    startTime: "2024-08-01T09:42:32Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-07-16T20:13:07Z"
+    generateName: kyverno-reports-controller-665ccb5b65-
+    labels:
+      app.kubernetes.io/component: reports-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: 665ccb5b65
+    name: kyverno-reports-controller-665ccb5b65-gdqjk
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: kyverno-reports-controller-665ccb5b65
+      uid: 73ee5ecd-c7d3-499c-adb7-1b06792f6415
+    resourceVersion: "559597"
+    uid: adca560f-06fa-4863-999d-f3a1510e3ded
+  spec:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - reports-controller
+            topologyKey: kubernetes.io/hostname
+          weight: 1
+    containers:
+    - args:
+      - --disableMetrics=false
+      - --otelConfig=prometheus
+      - --metricsPort=8000
+      - --admissionReports=true
+      - --aggregateReports=true
+      - --policyReports=true
+      - --validatingAdmissionPolicyReports=false
+      - --backgroundScan=true
+      - --backgroundScanWorkers=2
+      - --backgroundScanInterval=1h
+      - --skipResourceFilters=true
+      - --enableConfigMapCaching=true
+      - --enableDeferredLoading=true
+      - --maxAPICallResponseLength=2000000
+      - --loggingFormat=text
+      - --v=2
+      - --omitEvents=PolicyApplied,PolicySkipped
+      - --enablePolicyException=true
+      - --reportsChunkSize=0
+      - --allowInsecureRegistry=false
+      - --registryCredentialHelpers=default,google,amazon,azure,github
+      env:
+      - name: KYVERNO_SERVICEACCOUNT_NAME
+        value: kyverno-reports-controller
+      - name: KYVERNO_DEPLOYMENT
+        value: kyverno-reports-controller
+      - name: INIT_CONFIG
+        value: kyverno
+      - name: METRICS_CONFIG
+        value: kyverno-metrics
+      - name: KYVERNO_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: KYVERNO_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: TUF_ROOT
+        value: /.sigstore
+      image: ghcr.io/kyverno/reports-controller:v1.12.5
+      imagePullPolicy: IfNotPresent
+      name: controller
+      ports:
+      - containerPort: 9443
+        name: https
+        protocol: TCP
+      - containerPort: 8000
+        name: metrics
+        protocol: TCP
+      resources:
+        limits:
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /.sigstore
+        name: sigstore
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-9mqlx
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: kyverno-reports-controller
+    serviceAccountName: kyverno-reports-controller
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: sigstore
+    - name: kube-api-access-9mqlx
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-16T20:13:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://249014e236e1baa8707705a52aa7fee9fd3ad7d32085116a31363c3fbd3ef6e5
+      image: ghcr.io/kyverno/reports-controller:v1.12.5
+      imageID: docker-pullable://ghcr.io/kyverno/reports-controller@sha256:c62e3347611cb3af0757a299d222759fe2c5b50932558626a0b35e70bf26da97
+      lastState:
+        terminated:
+          containerID: docker://25a50e7e827f9a7f39c1d3def422958bb8f05a036516229c0df70e422b249050
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T22:38:59Z"
+      name: controller
+      ready: true
+      restartCount: 125
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:28Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 10.244.7.231
+    podIPs:
+    - ip: 10.244.7.231
+    qosClass: Burstable
+    startTime: "2024-07-16T20:13:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"name":"nginx","namespace":"my-app"},"spec":{"containers":[{"image":"nginx:1.14.2","name":"nginx","ports":[{"containerPort":80}]}]}}
+    creationTimestamp: "2024-07-13T06:30:17Z"
+    name: nginx
+    namespace: my-app
+    resourceVersion: "559599"
+    uid: 59fad899-4dd8-4576-898a-a572c3b9d165
+  spec:
+    containers:
+    - image: nginx:1.14.2
+      imagePullPolicy: IfNotPresent
+      name: nginx
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-x5cw4
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-x5cw4
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-13T06:30:17Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-08-01T09:42:30Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-07-13T06:30:17Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://c4af8bb42f46f3a6deb9299d726565cffa8fba38b225cd52033e8ec7980f0d4a
+      image: nginx:1.14.2
+      imageID: docker-pullable://nginx@sha256:f7988fb6c02e0ce69257d9bd9cf37ae20a60f1df7563c3a2a6abe24160306b8d
+      lastState:
+        terminated:
+          containerID: docker://e99de3342106ccee53c6774b5e075b10d052ec530d2a9ded9d9d095e2a114385
+          exitCode: 255
+          finishedAt: "2024-08-01T09:42:09Z"
+          reason: Error
+          startedAt: "2024-07-26T22:39:10Z"
+      name: nginx
+      ready: true
+      restartCount: 68
+      started: true
+      state:
+        running:
+          startedAt: "2024-08-01T09:42:29Z"
+    hostIP: 192.168.105.2
+    hostIPs:
+    - ip: 192.168.105.2
+    phase: Running
+    podIP: 10.244.7.236
+    podIPs:
+    - ip: 10.244.7.236
+    qosClass: BestEffort
+    startTime: "2024-07-13T06:30:17Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2024-07-12T18:56:49Z"
+    labels:
+      component: apiserver
+      provider: kubernetes
+    name: kubernetes
+    namespace: default
+    resourceVersion: "234"
+    uid: 1e519fad-d7f6-4f76-8258-026e45ee0a80
+  spec:
+    clusterIP: 10.96.0.1
+    clusterIPs:
+    - 10.96.0.1
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"creationTimestamp":null,"labels":{"app":"nginx-service"},"name":"nginx-service","namespace":"default"},"spec":{"ports":[{"name":"80-80","nodePort":30080,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"nginx-service"},"type":"NodePort"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2024-07-13T07:13:50Z"
+    labels:
+      app: nginx-service
+    name: nginx-service
+    namespace: default
+    resourceVersion: "15505"
+    uid: 426f74b0-0a98-454d-993e-260111e4d2ac
+  spec:
+    clusterIP: 10.106.21.158
+    clusterIPs:
+    - 10.106.21.158
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 80-80
+      nodePort: 30080
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: nginx-service
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/port: "9153"
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    labels:
+      k8s-app: kube-dns
+      kubernetes.io/cluster-service: "true"
+      kubernetes.io/name: CoreDNS
+    name: kube-dns
+    namespace: kube-system
+    resourceVersion: "276"
+    uid: 8348d14a-c03e-4899-bb51-7b51128e29df
+  spec:
+    clusterIP: 10.96.0.10
+    clusterIPs:
+    - 10.96.0.10
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: dns
+      port: 53
+      protocol: UDP
+      targetPort: 53
+    - name: dns-tcp
+      port: 53
+      protocol: TCP
+      targetPort: 53
+    - name: metrics
+      port: 9153
+      protocol: TCP
+      targetPort: 9153
+    selector:
+      k8s-app: kube-dns
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    labels:
+      app.kubernetes.io/component: background-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-background-controller-metrics
+    namespace: kyverno
+    resourceVersion: "96185"
+    uid: 8156d591-7c72-480b-bbf6-b18c02c0418b
+  spec:
+    clusterIP: 10.101.61.3
+    clusterIPs:
+    - 10.101.61.3
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics-port
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app.kubernetes.io/component: background-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/part-of: kyverno
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    labels:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-controller
+    namespace: kyverno
+    resourceVersion: "96162"
+    uid: 49bd7154-b83e-49f9-a58e-6563b363981c
+  spec:
+    clusterIP: 10.110.153.250
+    clusterIPs:
+    - 10.110.153.250
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+    selector:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/part-of: kyverno
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    labels:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-controller-metrics
+    namespace: kyverno
+    resourceVersion: "96167"
+    uid: 519e9238-d000-42cf-8fb4-acae93a95ddd
+  spec:
+    clusterIP: 10.101.110.219
+    clusterIPs:
+    - 10.101.110.219
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics-port
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/part-of: kyverno
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    labels:
+      app.kubernetes.io/component: reports-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-reports-controller-metrics
+    namespace: kyverno
+    resourceVersion: "96156"
+    uid: 69dc017e-3c9c-4a3d-8df3-a36669554702
+  spec:
+    clusterIP: 10.98.71.75
+    clusterIPs:
+    - 10.98.71.75
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics-port
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app.kubernetes.io/component: reports-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/part-of: kyverno
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    labels:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-svc
+    namespace: kyverno
+    resourceVersion: "96176"
+    uid: 48a6c683-6345-4258-8726-22c505fd58c4
+  spec:
+    clusterIP: 10.100.74.101
+    clusterIPs:
+    - 10.100.74.101
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+    selector:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/part-of: kyverno
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    labels:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-svc-metrics
+    namespace: kyverno
+    resourceVersion: "96181"
+    uid: 88273382-20fd-460e-b477-0f9559b9a6a1
+  spec:
+    clusterIP: 10.101.70.202
+    clusterIPs:
+    - 10.101.70.202
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics-port
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/part-of: kyverno
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      deprecated.daemonset.template.generation: "1"
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    generation: 1
+    labels:
+      k8s-app: kube-proxy
+    name: kube-proxy
+    namespace: kube-system
+    resourceVersion: "559477"
+    uid: f7fc83a8-bd7b-44d7-9c22-31164ee85848
+  spec:
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        k8s-app: kube-proxy
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          k8s-app: kube-proxy
+      spec:
+        containers:
+        - command:
+          - /usr/local/bin/kube-proxy
+          - --config=/var/lib/kube-proxy/config.conf
+          - --hostname-override=$(NODE_NAME)
+          env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          image: registry.k8s.io/kube-proxy:v1.30.0
+          imagePullPolicy: IfNotPresent
+          name: kube-proxy
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/kube-proxy
+            name: kube-proxy
+          - mountPath: /run/xtables.lock
+            name: xtables-lock
+          - mountPath: /lib/modules
+            name: lib-modules
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        hostNetwork: true
+        nodeSelector:
+          kubernetes.io/os: linux
+        priorityClassName: system-node-critical
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kube-proxy
+        serviceAccountName: kube-proxy
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - operator: Exists
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: kube-proxy
+          name: kube-proxy
+        - hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate
+          name: xtables-lock
+        - hostPath:
+            path: /lib/modules
+            type: ""
+          name: lib-modules
+    updateStrategy:
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+      type: RollingUpdate
+  status:
+    currentNumberScheduled: 1
+    desiredNumberScheduled: 1
+    numberAvailable: 1
+    numberMisscheduled: 0
+    numberReady: 1
+    observedGeneration: 1
+    updatedNumberScheduled: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2024-07-12T18:56:50Z"
+    generation: 5
+    labels:
+      k8s-app: kube-dns
+    name: coredns
+    namespace: kube-system
+    resourceVersion: "559658"
+    uid: 89580279-d3e1-4b14-86b7-fa6f75fd2b6e
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        k8s-app: kube-dns
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          k8s-app: kube-dns
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: k8s-app
+                    operator: In
+                    values:
+                    - kube-dns
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        containers:
+        - args:
+          - -conf
+          - /etc/coredns/Corefile
+          image: registry.k8s.io/coredns/coredns:v1.11.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: coredns
+          ports:
+          - containerPort: 53
+            name: dns
+            protocol: UDP
+          - containerPort: 53
+            name: dns-tcp
+            protocol: TCP
+          - containerPort: 9153
+            name: metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: 8181
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 170Mi
+            requests:
+              cpu: 100m
+              memory: 70Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/coredns
+            name: config-volume
+            readOnly: true
+        dnsPolicy: Default
+        nodeSelector:
+          kubernetes.io/os: linux
+        priorityClassName: system-cluster-critical
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: coredns
+        serviceAccountName: coredns
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+        volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: Corefile
+              path: Corefile
+            name: coredns
+          name: config-volume
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-07-12T18:57:04Z"
+      lastUpdateTime: "2024-07-12T18:57:04Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2024-07-12T18:57:04Z"
+      lastUpdateTime: "2024-07-12T18:57:14Z"
+      message: ReplicaSet "coredns-7db6d8ff4d" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 5
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-admission-controller
+    namespace: kyverno
+    resourceVersion: "559752"
+    uid: 299c897c-592f-47ad-9bc2-af640217f9c6
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: admission-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 40%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: admission-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - admission-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --caSecretName=kyverno-svc.kyverno.svc.kyverno-tls-ca
+          - --tlsSecretName=kyverno-svc.kyverno.svc.kyverno-tls-pair
+          - --backgroundServiceAccountName=system:serviceaccount:kyverno:kyverno-background-controller
+          - --servicePort=443
+          - --webhookServerPort=9443
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --admissionReports=true
+          - --maxAdmissionReports=1000
+          - --autoUpdateWebhooks=true
+          - --enableConfigMapCaching=true
+          - --enableDeferredLoading=true
+          - --dumpPayload=false
+          - --forceFailurePolicyIgnore=false
+          - --generateValidatingAdmissionPolicy=false
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --omitEvents=PolicyApplied,PolicySkipped
+          - --enablePolicyException=true
+          - --protectManagedResources=false
+          - --allowInsecureRegistry=false
+          - --registryCredentialHelpers=default,google,amazon,azure,github
+          env:
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-admission-controller
+          - name: KYVERNO_SVC
+            value: kyverno-svc
+          - name: TUF_ROOT
+            value: /.sigstore
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-admission-controller
+          image: ghcr.io/kyverno/kyverno:v1.12.5
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: kyverno
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics-port
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /health/readiness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 384Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 2
+            periodSeconds: 6
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /.sigstore
+            name: sigstore
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - args:
+          - --loggingFormat=text
+          - --v=2
+          env:
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-admission-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-admission-controller
+          - name: KYVERNO_SVC
+            value: kyverno-svc
+          image: ghcr.io/kyverno/kyvernopre:v1.12.5
+          imagePullPolicy: IfNotPresent
+          name: kyverno-pre
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-admission-controller
+        serviceAccountName: kyverno-admission-controller
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: sigstore
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-07-16T20:13:06Z"
+      lastUpdateTime: "2024-07-16T20:13:44Z"
+      message: ReplicaSet "kyverno-admission-controller-776987899" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-08-01T09:42:36Z"
+      lastUpdateTime: "2024-08-01T09:42:36Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: background-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-background-controller
+    namespace: kyverno
+    resourceVersion: "555720"
+    uid: 666ce3e2-3313-4bc7-a9e9-4a05f9ac42f0
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: background-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 40%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: background-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - background-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --enableConfigMapCaching=true
+          - --enableDeferredLoading=true
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --omitEvents=PolicyApplied,PolicySkipped
+          - --enablePolicyException=true
+          env:
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-background-controller
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-background-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          image: ghcr.io/kyverno/background-controller:v1.12.5
+          imagePullPolicy: IfNotPresent
+          name: controller
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics
+            protocol: TCP
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-background-controller
+        serviceAccountName: kyverno-background-controller
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-07-16T20:13:06Z"
+      lastUpdateTime: "2024-07-16T20:13:33Z"
+      message: ReplicaSet "kyverno-background-controller-86b9f95c96" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-07-26T23:19:16Z"
+      lastUpdateTime: "2024-07-26T23:19:16Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-controller
+    namespace: kyverno
+    resourceVersion: "559731"
+    uid: f93a9dbb-5f3f-4b17-906b-654429130a36
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: cleanup-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 40%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: cleanup-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - cleanup-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --caSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-ca
+          - --tlsSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-pair
+          - --servicePort=443
+          - --cleanupServerPort=9443
+          - --webhookServerPort=9443
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --enableDeferredLoading=true
+          - --dumpPayload=false
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --protectManagedResources=false
+          - --ttlReconciliationInterval=1m
+          env:
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-cleanup-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-cleanup-controller
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: KYVERNO_SVC
+            value: kyverno-cleanup-controller
+          image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: controller
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /health/readiness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 2
+            periodSeconds: 6
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-controller
+        serviceAccountName: kyverno-cleanup-controller
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-07-16T20:13:06Z"
+      lastUpdateTime: "2024-07-16T20:13:32Z"
+      message: ReplicaSet "kyverno-cleanup-controller-7bbfc97569" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-08-01T09:42:34Z"
+      lastUpdateTime: "2024-08-01T09:42:34Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: reports-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-reports-controller
+    namespace: kyverno
+    resourceVersion: "555323"
+    uid: e05d6ecb-6754-4087-94a3-c6dfcc30f7b6
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: reports-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 40%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: reports-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - reports-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --admissionReports=true
+          - --aggregateReports=true
+          - --policyReports=true
+          - --validatingAdmissionPolicyReports=false
+          - --backgroundScan=true
+          - --backgroundScanWorkers=2
+          - --backgroundScanInterval=1h
+          - --skipResourceFilters=true
+          - --enableConfigMapCaching=true
+          - --enableDeferredLoading=true
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --omitEvents=PolicyApplied,PolicySkipped
+          - --enablePolicyException=true
+          - --reportsChunkSize=0
+          - --allowInsecureRegistry=false
+          - --registryCredentialHelpers=default,google,amazon,azure,github
+          env:
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-reports-controller
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-reports-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: TUF_ROOT
+            value: /.sigstore
+          image: ghcr.io/kyverno/reports-controller:v1.12.5
+          imagePullPolicy: IfNotPresent
+          name: controller
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics
+            protocol: TCP
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /.sigstore
+            name: sigstore
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-reports-controller
+        serviceAccountName: kyverno-reports-controller
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: sigstore
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-07-16T20:13:06Z"
+      lastUpdateTime: "2024-07-16T20:13:17Z"
+      message: ReplicaSet "kyverno-reports-controller-665ccb5b65" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-07-26T22:09:18Z"
+      lastUpdateTime: "2024-07-26T22:09:18Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2024-07-12T18:57:04Z"
+    generation: 1
+    labels:
+      k8s-app: kube-dns
+      pod-template-hash: 7db6d8ff4d
+    name: coredns-7db6d8ff4d
+    namespace: kube-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: coredns
+      uid: 89580279-d3e1-4b14-86b7-fa6f75fd2b6e
+    resourceVersion: "555522"
+    uid: 89ac2fe8-a717-4233-a094-44c308234ef9
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        k8s-app: kube-dns
+        pod-template-hash: 7db6d8ff4d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          k8s-app: kube-dns
+          pod-template-hash: 7db6d8ff4d
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: k8s-app
+                    operator: In
+                    values:
+                    - kube-dns
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        containers:
+        - args:
+          - -conf
+          - /etc/coredns/Corefile
+          image: registry.k8s.io/coredns/coredns:v1.11.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: coredns
+          ports:
+          - containerPort: 53
+            name: dns
+            protocol: UDP
+          - containerPort: 53
+            name: dns-tcp
+            protocol: TCP
+          - containerPort: 9153
+            name: metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: 8181
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 170Mi
+            requests:
+              cpu: 100m
+              memory: 70Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/coredns
+            name: config-volume
+            readOnly: true
+        dnsPolicy: Default
+        nodeSelector:
+          kubernetes.io/os: linux
+        priorityClassName: system-cluster-critical
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: coredns
+        serviceAccountName: coredns
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+        volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: Corefile
+              path: Corefile
+            name: coredns
+          name: config-volume
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: admission-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: "776987899"
+    name: kyverno-admission-controller-776987899
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: kyverno-admission-controller
+      uid: 299c897c-592f-47ad-9bc2-af640217f9c6
+    resourceVersion: "559749"
+    uid: cf66da92-dc9e-433b-a1ec-8749643c652c
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: admission-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+        pod-template-hash: "776987899"
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: admission-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+          pod-template-hash: "776987899"
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - admission-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --caSecretName=kyverno-svc.kyverno.svc.kyverno-tls-ca
+          - --tlsSecretName=kyverno-svc.kyverno.svc.kyverno-tls-pair
+          - --backgroundServiceAccountName=system:serviceaccount:kyverno:kyverno-background-controller
+          - --servicePort=443
+          - --webhookServerPort=9443
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --admissionReports=true
+          - --maxAdmissionReports=1000
+          - --autoUpdateWebhooks=true
+          - --enableConfigMapCaching=true
+          - --enableDeferredLoading=true
+          - --dumpPayload=false
+          - --forceFailurePolicyIgnore=false
+          - --generateValidatingAdmissionPolicy=false
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --omitEvents=PolicyApplied,PolicySkipped
+          - --enablePolicyException=true
+          - --protectManagedResources=false
+          - --allowInsecureRegistry=false
+          - --registryCredentialHelpers=default,google,amazon,azure,github
+          env:
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-admission-controller
+          - name: KYVERNO_SVC
+            value: kyverno-svc
+          - name: TUF_ROOT
+            value: /.sigstore
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-admission-controller
+          image: ghcr.io/kyverno/kyverno:v1.12.5
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: kyverno
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics-port
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /health/readiness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 384Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 2
+            periodSeconds: 6
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /.sigstore
+            name: sigstore
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - args:
+          - --loggingFormat=text
+          - --v=2
+          env:
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-admission-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-admission-controller
+          - name: KYVERNO_SVC
+            value: kyverno-svc
+          image: ghcr.io/kyverno/kyvernopre:v1.12.5
+          imagePullPolicy: IfNotPresent
+          name: kyverno-pre
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-admission-controller
+        serviceAccountName: kyverno-admission-controller
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: sigstore
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: background-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: 86b9f95c96
+    name: kyverno-background-controller-86b9f95c96
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: kyverno-background-controller
+      uid: 666ce3e2-3313-4bc7-a9e9-4a05f9ac42f0
+    resourceVersion: "555715"
+    uid: 344e6a20-718b-4d0d-9e1e-f68827171d06
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: background-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+        pod-template-hash: 86b9f95c96
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: background-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+          pod-template-hash: 86b9f95c96
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - background-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --enableConfigMapCaching=true
+          - --enableDeferredLoading=true
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --omitEvents=PolicyApplied,PolicySkipped
+          - --enablePolicyException=true
+          env:
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-background-controller
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-background-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          image: ghcr.io/kyverno/background-controller:v1.12.5
+          imagePullPolicy: IfNotPresent
+          name: controller
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics
+            protocol: TCP
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-background-controller
+        serviceAccountName: kyverno-background-controller
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: 7bbfc97569
+    name: kyverno-cleanup-controller-7bbfc97569
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: kyverno-cleanup-controller
+      uid: f93a9dbb-5f3f-4b17-906b-654429130a36
+    resourceVersion: "559728"
+    uid: 33199a85-751f-4363-a325-df32cd22cc66
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: cleanup-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+        pod-template-hash: 7bbfc97569
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: cleanup-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+          pod-template-hash: 7bbfc97569
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - cleanup-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --caSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-ca
+          - --tlsSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-pair
+          - --servicePort=443
+          - --cleanupServerPort=9443
+          - --webhookServerPort=9443
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --enableDeferredLoading=true
+          - --dumpPayload=false
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --protectManagedResources=false
+          - --ttlReconciliationInterval=1m
+          env:
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-cleanup-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-cleanup-controller
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: KYVERNO_SVC
+            value: kyverno-cleanup-controller
+          image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: controller
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /health/readiness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /health/liveness
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 2
+            periodSeconds: 6
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-controller
+        serviceAccountName: kyverno-cleanup-controller
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: reports-controller
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+      pod-template-hash: 665ccb5b65
+    name: kyverno-reports-controller-665ccb5b65
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: kyverno-reports-controller
+      uid: e05d6ecb-6754-4087-94a3-c6dfcc30f7b6
+    resourceVersion: "555321"
+    uid: 73ee5ecd-c7d3-499c-adb7-1b06792f6415
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: reports-controller
+        app.kubernetes.io/instance: kyverno
+        app.kubernetes.io/part-of: kyverno
+        pod-template-hash: 665ccb5b65
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: reports-controller
+          app.kubernetes.io/instance: kyverno
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/part-of: kyverno
+          app.kubernetes.io/version: 3.2.6
+          helm.sh/chart: kyverno-3.2.6
+          pod-template-hash: 665ccb5b65
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                    - reports-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - args:
+          - --disableMetrics=false
+          - --otelConfig=prometheus
+          - --metricsPort=8000
+          - --admissionReports=true
+          - --aggregateReports=true
+          - --policyReports=true
+          - --validatingAdmissionPolicyReports=false
+          - --backgroundScan=true
+          - --backgroundScanWorkers=2
+          - --backgroundScanInterval=1h
+          - --skipResourceFilters=true
+          - --enableConfigMapCaching=true
+          - --enableDeferredLoading=true
+          - --maxAPICallResponseLength=2000000
+          - --loggingFormat=text
+          - --v=2
+          - --omitEvents=PolicyApplied,PolicySkipped
+          - --enablePolicyException=true
+          - --reportsChunkSize=0
+          - --allowInsecureRegistry=false
+          - --registryCredentialHelpers=default,google,amazon,azure,github
+          env:
+          - name: KYVERNO_SERVICEACCOUNT_NAME
+            value: kyverno-reports-controller
+          - name: KYVERNO_DEPLOYMENT
+            value: kyverno-reports-controller
+          - name: INIT_CONFIG
+            value: kyverno
+          - name: METRICS_CONFIG
+            value: kyverno-metrics
+          - name: KYVERNO_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: KYVERNO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: TUF_ROOT
+            value: /.sigstore
+          image: ghcr.io/kyverno/reports-controller:v1.12.5
+          imagePullPolicy: IfNotPresent
+          name: controller
+          ports:
+          - containerPort: 9443
+            name: https
+            protocol: TCP
+          - containerPort: 8000
+            name: metrics
+            protocol: TCP
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /.sigstore
+            name: sigstore
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-reports-controller
+        serviceAccountName: kyverno-reports-controller
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: sigstore
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-admission-reports
+    namespace: kyverno
+    resourceVersion: "559762"
+    uid: d99f0fc5-ce3f-436e-85b2-7dd73f606789
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        backoffLimit: 3
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - command:
+              - /bin/bash
+              - -c
+              - |
+                set -euo pipefail
+                COUNT=$(kubectl get admissionreports.kyverno.io -A | wc -l)
+                if [ "$COUNT" -gt 10000 ]; then
+                  echo "too many reports found ($COUNT), cleaning up..."
+                  kubectl delete admissionreports.kyverno.io -A -l='!audit.kyverno.io/report.aggregate'
+                else
+                  echo "($COUNT) reports found, no clean up needed"
+                fi
+              image: bitnami/kubectl:1.28.5
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            serviceAccount: kyverno-cleanup-jobs
+            serviceAccountName: kyverno-cleanup-jobs
+            terminationGracePeriodSeconds: 30
+    schedule: '*/10 * * * *'
+    successfulJobsHistoryLimit: 1
+    suspend: false
+  status:
+    lastScheduleTime: "2024-08-01T09:40:00Z"
+    lastSuccessfulTime: "2024-08-01T09:42:36Z"
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-cluster-admission-reports
+    namespace: kyverno
+    resourceVersion: "559802"
+    uid: c2a57add-de7b-49ee-a979-8056aa5724a1
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        backoffLimit: 3
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - command:
+              - /bin/bash
+              - -c
+              - |
+                set -euo pipefail
+                COUNT=$(kubectl get clusteradmissionreports.kyverno.io -A | wc -l)
+                if [ "$COUNT" -gt 10000 ]; then
+                  echo "too many reports found ($COUNT), cleaning up..."
+                  kubectl delete clusteradmissionreports.kyverno.io -A -l='!audit.kyverno.io/report.aggregate'
+                else
+                  echo "($COUNT) reports found, no clean up needed"
+                fi
+              image: bitnami/kubectl:1.28.5
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            serviceAccount: kyverno-cleanup-jobs
+            serviceAccountName: kyverno-cleanup-jobs
+            terminationGracePeriodSeconds: 30
+    schedule: '*/10 * * * *'
+    successfulJobsHistoryLimit: 1
+    suspend: false
+  status:
+    lastScheduleTime: "2024-08-01T09:40:00Z"
+    lastSuccessfulTime: "2024-08-01T09:42:37Z"
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-cluster-ephemeral-reports
+    namespace: kyverno
+    resourceVersion: "559777"
+    uid: 77e5e5e6-a81d-4cb5-a9cf-ded9e1f3626c
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        backoffLimit: 3
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - command:
+              - /bin/bash
+              - -c
+              - |
+                set -euo pipefail
+                COUNT=$(kubectl get clusterephemeralreports.reports.kyverno.io -A | wc -l)
+                if [ "$COUNT" -gt 10000 ]; then
+                  echo "too many clusterephemeralreports found ($COUNT), cleaning up..."
+                  kubectl delete clusterephemeralreports.reports.kyverno.io -A --all
+                else
+                  echo "($COUNT) reports found, no clean up needed"
+                fi
+              image: bitnami/kubectl:1.28.5
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            serviceAccount: kyverno-cleanup-jobs
+            serviceAccountName: kyverno-cleanup-jobs
+            terminationGracePeriodSeconds: 30
+    schedule: '*/10 * * * *'
+    successfulJobsHistoryLimit: 1
+    suspend: false
+  status:
+    lastScheduleTime: "2024-08-01T09:40:00Z"
+    lastSuccessfulTime: "2024-08-01T09:42:36Z"
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-ephemeral-reports
+    namespace: kyverno
+    resourceVersion: "559807"
+    uid: e06d87df-5e28-44a7-ab44-99d4715f3ae5
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        backoffLimit: 3
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - command:
+              - /bin/bash
+              - -c
+              - |
+                set -euo pipefail
+                COUNT=$(kubectl get ephemeralreports.reports.kyverno.io -A | wc -l)
+                if [ "$COUNT" -gt 10000 ]; then
+                  echo "too many ephemeralreports found ($COUNT), cleaning up..."
+                  kubectl delete ephemeralreports.reports.kyverno.io -A --all
+                else
+                  echo "($COUNT) reports found, no clean up needed"
+                fi
+              image: bitnami/kubectl:1.28.5
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            serviceAccount: kyverno-cleanup-jobs
+            serviceAccountName: kyverno-cleanup-jobs
+            terminationGracePeriodSeconds: 30
+    schedule: '*/10 * * * *'
+    successfulJobsHistoryLimit: 1
+    suspend: false
+  status:
+    lastScheduleTime: "2024-08-01T09:40:00Z"
+    lastSuccessfulTime: "2024-08-01T09:42:37Z"
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: kyverno
+      meta.helm.sh/release-namespace: kyverno
+    creationTimestamp: "2024-07-16T20:13:06Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: cleanup
+      app.kubernetes.io/instance: kyverno
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: kyverno
+      app.kubernetes.io/version: 3.2.6
+      helm.sh/chart: kyverno-3.2.6
+    name: kyverno-cleanup-update-requests
+    namespace: kyverno
+    resourceVersion: "559795"
+    uid: 41e269eb-47cc-437b-b090-7c7fb22e256d
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        backoffLimit: 3
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - command:
+              - /bin/bash
+              - -c
+              - |
+                set -euo pipefail
+                COUNT=$(kubectl get updaterequests.kyverno.io -A | wc -l)
+                if [ "$COUNT" -gt 10000 ]; then
+                  echo "too many updaterequests found ($COUNT), cleaning up..."
+                  kubectl delete updaterequests.kyverno.io --all -n kyverno
+                else
+                  echo "($COUNT) reports found, no clean up needed"
+                fi
+              image: bitnami/kubectl:1.28.5
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              resources: {}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            serviceAccount: kyverno-cleanup-jobs
+            serviceAccountName: kyverno-cleanup-jobs
+            terminationGracePeriodSeconds: 30
+    schedule: '*/10 * * * *'
+    successfulJobsHistoryLimit: 1
+    suspend: false
+  status:
+    lastScheduleTime: "2024-08-01T09:40:00Z"
+    lastSuccessfulTime: "2024-08-01T09:42:37Z"
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-08-01T09:40:00Z"
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+      batch.kubernetes.io/job-name: kyverno-cleanup-admission-reports-28708420
+      controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+      job-name: kyverno-cleanup-admission-reports-28708420
+    name: kyverno-cleanup-admission-reports-28708420
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-admission-reports
+      uid: d99f0fc5-ce3f-436e-85b2-7dd73f606789
+    resourceVersion: "559755"
+    uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+          batch.kubernetes.io/job-name: kyverno-cleanup-admission-reports-28708420
+          controller-uid: b07fbfcb-a5bc-4ea9-a551-c2af9477de4a
+          job-name: kyverno-cleanup-admission-reports-28708420
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get admissionreports.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many reports found ($COUNT), cleaning up..."
+              kubectl delete admissionreports.kyverno.io -A -l='!audit.kyverno.io/report.aggregate'
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2024-08-01T09:42:36Z"
+    conditions:
+    - lastProbeTime: "2024-08-01T09:42:36Z"
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2024-08-01T09:42:32Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-08-01T09:40:00Z"
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+      batch.kubernetes.io/job-name: kyverno-cleanup-cluster-admission-reports-28708420
+      controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+      job-name: kyverno-cleanup-cluster-admission-reports-28708420
+    name: kyverno-cleanup-cluster-admission-reports-28708420
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-cluster-admission-reports
+      uid: c2a57add-de7b-49ee-a979-8056aa5724a1
+    resourceVersion: "559790"
+    uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+          batch.kubernetes.io/job-name: kyverno-cleanup-cluster-admission-reports-28708420
+          controller-uid: 514c7f2a-d732-42fe-9316-a5ee62cf6202
+          job-name: kyverno-cleanup-cluster-admission-reports-28708420
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get clusteradmissionreports.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many reports found ($COUNT), cleaning up..."
+              kubectl delete clusteradmissionreports.kyverno.io -A -l='!audit.kyverno.io/report.aggregate'
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2024-08-01T09:42:37Z"
+    conditions:
+    - lastProbeTime: "2024-08-01T09:42:37Z"
+      lastTransitionTime: "2024-08-01T09:42:37Z"
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2024-08-01T09:42:32Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-07-24T11:40:00Z"
+    creationTimestamp: "2024-07-24T11:40:00Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 6c11b978-1888-402e-8da4-b6035d7f6fe3
+      batch.kubernetes.io/job-name: kyverno-cleanup-cluster-ephemeral-reports-28697020
+      controller-uid: 6c11b978-1888-402e-8da4-b6035d7f6fe3
+      job-name: kyverno-cleanup-cluster-ephemeral-reports-28697020
+    name: kyverno-cleanup-cluster-ephemeral-reports-28697020
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-cluster-ephemeral-reports
+      uid: 77e5e5e6-a81d-4cb5-a9cf-ded9e1f3626c
+    resourceVersion: "472506"
+    uid: 6c11b978-1888-402e-8da4-b6035d7f6fe3
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 6c11b978-1888-402e-8da4-b6035d7f6fe3
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 6c11b978-1888-402e-8da4-b6035d7f6fe3
+          batch.kubernetes.io/job-name: kyverno-cleanup-cluster-ephemeral-reports-28697020
+          controller-uid: 6c11b978-1888-402e-8da4-b6035d7f6fe3
+          job-name: kyverno-cleanup-cluster-ephemeral-reports-28697020
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get clusterephemeralreports.reports.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many clusterephemeralreports found ($COUNT), cleaning up..."
+              kubectl delete clusterephemeralreports.reports.kyverno.io -A --all
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    conditions:
+    - lastProbeTime: "2024-07-24T17:22:13Z"
+      lastTransitionTime: "2024-07-24T17:22:13Z"
+      message: Job has reached the specified backoff limit
+      reason: BackoffLimitExceeded
+      status: "True"
+      type: Failed
+    failed: 1
+    ready: 1
+    startTime: "2024-07-24T11:40:00Z"
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-08-01T09:40:00Z"
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+      batch.kubernetes.io/job-name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+      controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+      job-name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+    name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-cluster-ephemeral-reports
+      uid: 77e5e5e6-a81d-4cb5-a9cf-ded9e1f3626c
+    resourceVersion: "559766"
+    uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+          batch.kubernetes.io/job-name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+          controller-uid: 7ecb73fd-8f27-4dd0-b189-0b3f18ae0c00
+          job-name: kyverno-cleanup-cluster-ephemeral-reports-28708420
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get clusterephemeralreports.reports.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many clusterephemeralreports found ($COUNT), cleaning up..."
+              kubectl delete clusterephemeralreports.reports.kyverno.io -A --all
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2024-08-01T09:42:36Z"
+    conditions:
+    - lastProbeTime: "2024-08-01T09:42:36Z"
+      lastTransitionTime: "2024-08-01T09:42:36Z"
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2024-08-01T09:42:32Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-08-01T09:40:00Z"
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+      batch.kubernetes.io/job-name: kyverno-cleanup-ephemeral-reports-28708420
+      controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+      job-name: kyverno-cleanup-ephemeral-reports-28708420
+    name: kyverno-cleanup-ephemeral-reports-28708420
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-ephemeral-reports
+      uid: e06d87df-5e28-44a7-ab44-99d4715f3ae5
+    resourceVersion: "559792"
+    uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+          batch.kubernetes.io/job-name: kyverno-cleanup-ephemeral-reports-28708420
+          controller-uid: e9ff5a95-dcad-4e7b-8e03-ab683e108e7d
+          job-name: kyverno-cleanup-ephemeral-reports-28708420
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get ephemeralreports.reports.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many ephemeralreports found ($COUNT), cleaning up..."
+              kubectl delete ephemeralreports.reports.kyverno.io -A --all
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2024-08-01T09:42:37Z"
+    conditions:
+    - lastProbeTime: "2024-08-01T09:42:37Z"
+      lastTransitionTime: "2024-08-01T09:42:37Z"
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2024-08-01T09:42:32Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-07-24T11:40:00Z"
+    creationTimestamp: "2024-07-24T11:40:00Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 7d4c64ea-d1ed-4709-b1bf-ea8eb5eda9dd
+      batch.kubernetes.io/job-name: kyverno-cleanup-update-requests-28697020
+      controller-uid: 7d4c64ea-d1ed-4709-b1bf-ea8eb5eda9dd
+      job-name: kyverno-cleanup-update-requests-28697020
+    name: kyverno-cleanup-update-requests-28697020
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-update-requests
+      uid: 41e269eb-47cc-437b-b090-7c7fb22e256d
+    resourceVersion: "472570"
+    uid: 7d4c64ea-d1ed-4709-b1bf-ea8eb5eda9dd
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 7d4c64ea-d1ed-4709-b1bf-ea8eb5eda9dd
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 7d4c64ea-d1ed-4709-b1bf-ea8eb5eda9dd
+          batch.kubernetes.io/job-name: kyverno-cleanup-update-requests-28697020
+          controller-uid: 7d4c64ea-d1ed-4709-b1bf-ea8eb5eda9dd
+          job-name: kyverno-cleanup-update-requests-28697020
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get updaterequests.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many updaterequests found ($COUNT), cleaning up..."
+              kubectl delete updaterequests.kyverno.io --all -n kyverno
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    conditions:
+    - lastProbeTime: "2024-07-24T17:22:18Z"
+      lastTransitionTime: "2024-07-24T17:22:18Z"
+      message: Job has reached the specified backoff limit
+      reason: BackoffLimitExceeded
+      status: "True"
+      type: Failed
+    failed: 1
+    ready: 0
+    startTime: "2024-07-24T11:40:00Z"
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2024-08-01T09:40:00Z"
+    creationTimestamp: "2024-08-01T09:42:32Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+      batch.kubernetes.io/job-name: kyverno-cleanup-update-requests-28708420
+      controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+      job-name: kyverno-cleanup-update-requests-28708420
+    name: kyverno-cleanup-update-requests-28708420
+    namespace: kyverno
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: kyverno-cleanup-update-requests
+      uid: 41e269eb-47cc-437b-b090-7c7fb22e256d
+    resourceVersion: "559778"
+    uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+          batch.kubernetes.io/job-name: kyverno-cleanup-update-requests-28708420
+          controller-uid: 12533143-c2d1-47cd-ad11-741b839f93f5
+          job-name: kyverno-cleanup-update-requests-28708420
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            COUNT=$(kubectl get updaterequests.kyverno.io -A | wc -l)
+            if [ "$COUNT" -gt 10000 ]; then
+              echo "too many updaterequests found ($COUNT), cleaning up..."
+              kubectl delete updaterequests.kyverno.io --all -n kyverno
+            else
+              echo "($COUNT) reports found, no clean up needed"
+            fi
+          image: bitnami/kubectl:1.28.5
+          imagePullPolicy: IfNotPresent
+          name: cleanup
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kyverno-cleanup-jobs
+        serviceAccountName: kyverno-cleanup-jobs
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2024-08-01T09:42:37Z"
+    conditions:
+    - lastProbeTime: "2024-08-01T09:42:37Z"
+      lastTransitionTime: "2024-08-01T09:42:37Z"
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2024-08-01T09:42:32Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+kind: List
+metadata:
+  resourceVersion: ""

@@ -8,7 +8,7 @@
 **Functionality:**
 - When an eviction is requested via the Eviction API, an **`Eviction`** object is created, which triggers the graceful termination of the specified pod.
 - The API performs admission checks to ensure that the eviction does not violate any Pod Disruption Budgets (PDBs) 
-**How It Works:**
+### **How It Works:**
 1. **Request Eviction:** An eviction request is made by creating an `Eviction` object.
     ```yaml
     apiVersion: policy/v1
@@ -83,26 +83,20 @@ Suppose you have a deployment with 5 replicas and a PDB that specifies `minAvail
 
 #### **Forcing a Drain Operation**
 - Temporary delete the PDB is solution to this problem.
-
-
-
 ## **Types of Evictions**
-
 ### **1. Node-Pressure Eviction**
 - Kubelet => High Resource Utilization
-
 ### **2. API-Initiated Eviction**
 - Drain Operation=> API Server
-
 ## **Internal Working of Eviction API**
-
 ### **1. Node-Pressure Eviction**
 
 #### **Monitoring and Thresholds**
 - The kubelet continuously monitors the resource usage on the node.
 
 #### **Eviction Process**
-- **Pod Selection**: The kubelet selects Pods for eviction based on their Quality of Service (QoS) class. Best-effort Pods are evicted first, followed by Burstable, and Guaranteed Pods are evicted last.
+- **Pod Selection**: The kubelet selects Pods for eviction based on their Quality of Service (QoS) class. 
+- Best-effort Pods are evicted first, followed by Burstable, and Guaranteed Pods are evicted last.
 - **Pod Status Update**: The kubelet updates the Pod status to `Failed` with the reason `Evicted`.
 
 ### **2. API-Initiated Eviction**

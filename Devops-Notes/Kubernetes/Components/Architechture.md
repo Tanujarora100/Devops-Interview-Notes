@@ -19,17 +19,7 @@ The control plane is responsible for managing the overall state of the cluster. 
 - **Kubelet**: An agent that runs on each node and **ensures containers are running in a pod**. It communicates with the control plane.
 - **Kube-Proxy**: Maintains network rules on nodes, allowing network communication to pods from inside or outside the cluster.
 - **Container Runtime**: Software responsible for running containers. 
-- Docker is a common runtime, but Kubernetes supports any runtime that adheres to the Container Runtime Interface (CRI).
-
-### Pods
-Pods are the smallest deployable units in Kubernetes and can contain one or more containers. 
-- They share storage, network, and a specification for how to run the containers.
-
-### Services
-Services provide a stable IP address and DNS name to a set of pods, enabling load balancing and service discovery.
-
-### Deployments
-Deployments manage the desired state of pods and replica sets, ensuring that the specified number of pod replicas are running at any given time.
+    - Docker is a common runtime, but Kubernetes supports any runtime that adheres to the Container Runtime Interface (CRI).
 
 
 ## Security

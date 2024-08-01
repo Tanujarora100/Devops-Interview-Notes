@@ -11,11 +11,9 @@ kubectl describe pod <pod-name>
 ```
 #### Common Causes and Resolutions
 - **Lack of Resources**: The node may lack the necessary resources (CPU, memory) to run the Pod.
-  - **Solution**: Scale up the cluster or allocate more resources to the Pod.
 - **Application Errors**: The application inside the container might be crashing due to bugs or misconfigurations.
   - **Solution**: Check the application logs using `kubectl logs <pod-name>` and fix any issues.
 - **Volume Mounting Errors**: Problems with mounting storage volumes.
-  - **Solution**: Verify the volume configuration
 
 ### 2. **ImagePullBackOff**
 
