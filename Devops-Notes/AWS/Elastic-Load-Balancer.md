@@ -5,7 +5,17 @@
 - Only one network interface
 - IP4 Address 
 - 5 Elastic IP per region 
+## ELB AND SUBNETS:
+### Subnet Requirements for ELBs
+1. **Public Subnets for Application Load Balancers (ALBs)**:
+   - ALBs must be associated with at least **two public subnets** across different Availability Zones. 
+2. **Routing Traffic**:
+   - The ALB routes incoming traffic from the internet to EC2 instances located in **private subnets**. 
+   - The public subnets are used for the ALB itself, while the private subnets house the backend instances that handle the requests.
 
+3. **Classic Load Balancers**:
+   - Classic Load Balancers can operate with a single subnet but are generally recommended to be placed in multiple subnets for redundancy and availability. 
+   - They do not enforce the same two-subnet rule as ALBs.
 
 ### **Subnets**
 
@@ -400,3 +410,40 @@ spec:
     - type: forward
       targetGroupARN: arn:aws:elasticloadbalancing:region:account-id:targetgroup/my-targets/73e2d6bc24d8a067
 ```
+## ALB VS CLB
+- **CLB** operates at both Layer 4 (TCP) and Layer 7 (HTTP)
+- **ALB** operates at Layer 7 (HTTP) only.
+- **CLB** supports TCP, SSL/TLS, HTTP, HTTPS
+- **ALB** supports HTTP, HTTPS, WebSocket.
+- ALB can do host and path based routing also.
+- ALB Can support Lambda functions also but not CLB.
+You are correct that there are significant differences in SSL certificate support between the Classic Load Balancer (CLB) and the Application Load Balancer (ALB).
+- The CLB supports only **one SSL certificate** per listener. 
+  - This means that if you need to serve multiple domains or applications with different SSL certificates, you would typically have to use a wildcard certificate or a multi-domain (SAN) certificate, which can introduce security risks.
+  - The ALB supports **multiple SSL certificates** on a single listener using **Server Name Indication (SNI)**. 
+  - This feature allows the ALB to serve multiple secure applications, each with its own SSL certificate, behind the same load balancer. 
+  - The ALB automatically selects the appropriate certificate based on the hostname provided by the client during the SSL handshake. You can associate up to **25 certificates** with an ALB listener.
+
+## SERVER NAME INDICATION
+
+Server Name Indication (SNI) is an extension to the TLS protocol that allows a client to specify the `hostname it is trying to connect to at the start of the TLS handshake.` This enables the server to present the appropriate SSL/TLS certificate based on the requested hostname, even if multiple domains are served from the same IP address.
+
+1. **Client Hello**: When a client initiates a TLS connection, it sends a "Client Hello" message that includes the SNI extension, specifying the hostname it wants to connect to.
+
+2. **Server Hello**: The server receives the Client Hello message and checks the SNI extension to determine which SSL/TLS certificate to use for the connection. 
+  - If a matching certificate is found, the server sends a "Server Hello" message with the selected certificate.
+
+3. **Certificate Verification**: The client verifies the server's certificate against the hostname it was trying to connect to. 
+- If the certificate is valid and trusted, the TLS handshake continues.
+
+4. **Encrypted Communication**: Once the TLS handshake is complete, the client and server can communicate securely using the established encrypted connection.
+
+SNI allows servers to host multiple SSL/TLS certificates for different domains on the same IP address, eliminating the need for a unique IP address for each domain. This is particularly useful for hosting companies, CDNs, and cloud-based services that serve content for multiple domains.
+
+### Security Risks and SNI
+
+1. **Lack of Encryption**: The SNI field is sent in plain text during the TLS handshake, which means that anyone monitoring the network can see the hostname being requested. 
+
+2. **Potential for Man-in-the-Middle (MITM) Attacks**: Due to the plaintext nature of the SNI field, attackers could perform MITM attacks, where they intercept and alter communications between the client and server.
+
+3. **Compatibility Issues**: Not all browsers and servers support SNI, particularly older systems. 

@@ -4,6 +4,7 @@
     - Binding object bind kardeta hai pod ko node ke saath.
 - By setting the node name field before creating a pod
 - We cannot change the **node name of the pod if it is already created.**
+
 ### How do you schedule an already running pod on a different node without destroying it ?
 - Second way is to schedule an already running pod is to create a binding object and then send that binding object as a **POST Request to the running pod to schedule it.**
     - For this we need to convert the YAML file to a json object and send it using curl
@@ -20,8 +21,6 @@ curl -X POST \
 
 ```
 
-
-In Kubernetes, scheduling refers to making sure that Pods are matched to Nodes so that Kubelet can run them.
 
 - **Scheduler**
     - Control plane component that handles scheduling

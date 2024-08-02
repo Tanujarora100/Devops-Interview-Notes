@@ -1,8 +1,14 @@
 ## **Amazon Virtual Private Cloud (VPC) and Related Components**
 
 ### **Amazon VPC**
+### HOW TO IDENTIFY PUBLIC AND PRIVATE SUBNETS:
+1. **Public Subnet**: 
+   - A subnet is classified as public if its route table has a route that directs traffic to an **Internet Gateway** (IGW). 
+   - Specifically, you will see a route entry for `0.0.0.0/0` pointing to `igw-xxxxxxxxxxxxxxxxx` in the route table.
 
-
+2. **Private Subnet**: 
+   - Conversely, a subnet is considered private if its route table does not have a route to an Internet Gateway. 
+   - Instead, it may route to a **NAT Gateway** or simply have no route for `0.0.0.0/0`, meaning it cannot directly access the internet.
 #### **Key Features**
 - **Subnets**: A subnet is a range of IP addresses in your VPC. 
   - Each **subnet must reside in a single Availability Zone**.

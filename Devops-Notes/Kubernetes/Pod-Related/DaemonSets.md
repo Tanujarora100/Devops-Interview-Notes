@@ -43,7 +43,8 @@
 ### **Handling of DaemonSets by `kubectl drain`**
 
 1. **Default Behavior:**
-   - By default, `kubectl drain` does not evict DaemonSet-managed pods. This is because DaemonSet pods are designed to run on every node in the cluster, and the DaemonSet controller will immediately recreate any missing DaemonSet pods on the node being drained.
+   - By default, `kubectl drain` does not evict DaemonSet-managed pods. 
+   - This is because DaemonSet pods are designed to run on every node in the cluster, and the DaemonSet controller will immediately recreate any missing DaemonSet pods on the node being drained.
 
 2. **Using `--ignore-daemonsets` Flag:**
    - To successfully drain a node that has DaemonSet-managed pods, you must use the `--ignore-daemonsets` flag. 

@@ -102,8 +102,6 @@ Suppose you have a deployment with 5 replicas and a PDB that specifies `minAvail
 ### **2. API-Initiated Eviction**
 
 #### **Eviction Request**
-
-
 #### **Validation**
 - The API server validates the eviction request against any existing Pod Disruption Budgets (PDBs). PDBs ensure that a minimum number of Pods remain available during voluntary disruptions.
 - If the eviction request violates a PDB, the request is denied with 429.

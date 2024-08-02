@@ -650,7 +650,7 @@ docker run -v /HOST/PATH:/CONTAINER/PATH:ro nginx
 ----
 ## Docker Build Arguments
 
-Docker build arguments (`ARG`) provide a flexible way to pass variables to the Docker build process. These arguments can be used to customize the build process without hardcoding values into the Dockerfile.
+Docker build arguments (`ARG`) provide a flexible way to pass variables to the Docker build process.
 #### **Key Features of Build Arguments**
 
 1. **Definition and Usage**:
@@ -870,11 +870,10 @@ Dockershim was a component in Kubernetes that allowed the use of Docker Engine a
 
 The `scratch` image is the most minimal base image in Docker, containing zero bytes. It serves as the starting point for building other images. When you create a Docker image from `scratch`, you are essentially starting with an empty filesystem. 
 - This is useful for creating lightweight images, especially when you have a statically compiled binary that includes all necessary dependencies. 
-- For example, the `hello-world` image is built from `scratch` and contains a statically compiled executable that doesn't require additional libraries[2].
 
 ### **Alpine Images**
 
-Docker Alpine is a Dockerized version of Alpine Linux, known for its minimalism and security. The Alpine image is extremely lightweight, typically under 3 MB, and uses less than 100 MB of RAM. It includes BusyBox for basic Linux commands and uses `musl libc` instead of the heavier `glibc`. Alpine's lightweight nature makes it a popular choice for creating small, efficient container images. It also includes a package manager (`apk`) for installing additional software[3].
+Docker Alpine is a Dockerized version of Alpine Linux, known for its minimalism and security. The Alpine image is extremely lightweight, typically under 3 MB, and uses less than 100 MB of RAM. It includes BusyBox for basic Linux commands and uses `musl libc` instead of the heavier `glibc`.
 
 ### **Docker Best Practices**
 
@@ -904,10 +903,7 @@ docker-compose -p project1 up -d
 docker-compose -p project2 up -d
 ```
 
-Each project will have its own set of containers, networks, and volumes, preventing conflicts between instances[1][4].
-
 ## **Using Multiple Compose Files**
-
 You can also run multiple Docker Compose files simultaneously by specifying them with the `-f` option. This method is useful when you want to combine configurations from different files:
 
 ```sh
@@ -995,3 +991,63 @@ A reverse proxy in Docker serves several important functions, enhancing the mana
 
 ### EXEC COMMAND
 - You can only execute commands in running conainers and not stopped containers.
+In Docker, `ARG` and `ENV` are both used to define variables in a Dockerfile, but they serve different purposes and have different scopes. Here’s a detailed comparison:
+
+## ARG (Build-time Variables)
+
+- **Scope**: `ARG` variables are only available during the image build process. They cannot be accessed in the running container.
+  
+- **Usage**: Typically used to pass build-time variables that can influence how the image is built. For example, you might use `ARG` to specify a version of a software dependency that should be installed.
+
+- **Default Values**: You can set default values for `ARG` variables in the Dockerfile, but they can also be overridden during the build process using the `--build-arg` flag:
+  
+  ```dockerfile
+  ARG VERSION=1.0
+  RUN echo "Building version $VERSION"
+  ```
+
+- **Example**: If you build your image with:
+  
+  ```bash
+  docker build --build-arg VERSION=2.0 .
+  ```
+
+  The output will reflect the overridden version.
+
+## ENV (Environment Variables)
+
+- **Scope**: `ENV` variables are available both during the build process and in the running container. This means they can be accessed by the application running inside the container.
+
+- **Usage**: Used to define environment variables that the application can use at runtime. This is useful for configuration values that may change between different environments (e.g., development, testing, production).
+
+- **Default Values**: You can set default values for `ENV` variables in the Dockerfile, and these can be overridden when running the container using the `-e` flag:
+  
+  ```dockerfile
+  ENV NODE_ENV=production
+  ```
+
+- **Example**: When you run your container with:
+  
+  ```bash
+  docker run -e NODE_ENV=development your-image
+  ```
+
+  The application inside the container will see `NODE_ENV` as `development`.
+
+## Key Differences
+
+1. **Lifetime**: 
+   - `ARG` is only available during the build phase.
+   - `ENV` is available during both the build phase and runtime.
+
+2. **Accessibility**:
+   - `ARG` cannot be accessed from the running container.
+   - `ENV` can be accessed from the running container.
+
+3. **Overriding**:
+   - `ARG` values can be overridden at build time with `--build-arg`.
+   - `ENV` values can be overridden at runtime with `-e`.
+
+4. **Use Cases**:
+   - Use `ARG` for build-time configurations (like version numbers).
+   - Use `ENV` for runtime configurations (like environment settings).

@@ -37,7 +37,6 @@ spec:
 ## Real-Time Use Cases of Init Containers in Kubernetes
 
 ### 2. **Configuration and Secret Management**
-Init containers can fetch configuration files or secrets from secure storage services like AWS Secrets Manager, HashiCorp Vault, or a similar service, and make them available to the main application.
 
 **Example**:
 ```yaml
@@ -55,7 +54,6 @@ spec:
     image: busybox
     command: ['sh', '-c', 'use-secrets-script.sh']
 ```
-Here, the init container runs a script to fetch secrets before the main application container starts[4].
 
 ### 3. **Database Migrations**
 

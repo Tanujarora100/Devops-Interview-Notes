@@ -1,4 +1,4 @@
-**It is used to ensure the pods are scheduled on the right nodes.** It allows us to use complex logic to decide which node the pod should be scheduled on. It uses the concept of labelling nodes as seen in Node Selector.
+**It is used to ensure the pods are scheduled on the right nodes.** 
 
 ## Node Affinity Types
 

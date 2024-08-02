@@ -1,26 +1,22 @@
 ## Admission Controllers in Kubernetes
 
-Admission controllers are a critical component of Kubernetes, designed to intercept and process requests to the Kubernetes API server before they are persisted. They play a vital role in enforcing policies, security rules, resource limits, and other configurations within a Kubernetes cluster. Below is a detailed overview of admission controllers, their types, and some scenario-based questions to illustrate their use.
-
-### **Overview of Admission Controllers**
-
 **Definition:**
 - An admission controller is a piece of code that intercepts requests to the Kubernetes API server after the request has been authenticated and authorized but before it is persisted in etcd.
 
 **Types:**
 - **Mutating Admission Controllers:** These can modify the objects in the request (e.g., adding default values, modifying resource requests).
-- **Validating Admission Controllers:** These validate the objects in the request and can accept or reject the request based on custom rules[2][3].
+- **Validating Admission Controllers:** These validate the objects in the request and can accept or reject the request based on custom rules
 
 **Phases:**
 1. **Mutating Phase:** Mutating admission controllers are executed first, allowing them to modify the request object.
-2. **Validating Phase:** Validating admission controllers are executed next, ensuring the request complies with specific policies and rules[1][3].
+2. **Validating Phase:** Validating admission controllers are executed next, ensuring the request complies with specific policies and rules.
 
 **Examples of Built-in Admission Controllers:**
 - **NamespaceLifecycle:** Ensures proper handling of namespace lifecycle events.
 - **LimitRanger:** Enforces default resource requests and limits for pods and containers.
 - **ResourceQuota:** Enforces resource quotas per namespace.
 - **PodSecurityPolicy:** (Deprecated) Enforces security policies at the pod level.
-- **MutatingAdmissionWebhook and ValidatingAdmissionWebhook:** Enable custom logic via webhooks[1][2][3].
+- **MutatingAdmissionWebhook and ValidatingAdmissionWebhook:** Enable custom logic via webhooks.
 
 ### **Scenario-Based Questions on Admission Controllers**
 
@@ -58,7 +54,7 @@ Admission controllers are a critical component of Kubernetes, designed to interc
      kubectl apply -f limitrange.yaml
      ```
 4. **Result:**
-   - The `LimitRanger` admission controller will automatically enforce the defined resource requests and limits for all pods in the namespace[2][3].
+   - The `LimitRanger` admission controller will automatically enforce the defined resource requests and limits for all pods in the namespace.
 
 ### **Scenario 2: Preventing Privileged Containers**
 
@@ -334,7 +330,8 @@ webhooks:
 
 **Functionality:**
 - **Validation:** Validating admission controllers inspect the request objects and either accept or reject them based on predefined criteria. 
-- **Order of Execution:** All validating admission controllers are executed after the mutating controllers have completed their modifications. The order of execution is also important to ensure that all necessary validations are performed.
+- **Order of Execution:** All validating admission controllers are executed after the mutating controllers have completed their modifications. 
+  - The order of execution is also important to ensure that all necessary validations are performed.
 
 **Example Use Cases:**
 - **Enforcing Security Policies:** Ensuring that no privileged containers are deployed in the cluster.
@@ -362,7 +359,8 @@ webhooks:
 
 ### **Interaction Between Phases**
 
-- **Sequential Execution:** The mutating phase always precedes the validating phase. This ensures that any modifications made by mutating controllers are validated by the validating controllers.
+- **Sequential Execution:** The mutating phase always precedes the validating phase. 
+  - This ensures that any modifications made by mutating controllers are validated by the validating controllers.
 - **Rejection Handling:** If any controller in either phase rejects the request, the entire request is rejected, and an error is returned to the end-user. This ensures that only requests that fully comply with all policies and rules are allowed to proceed.
 
 ## Writing a Validating Admission Controller in Kubernetes

@@ -41,7 +41,8 @@
 
 ### **4. A/B Testing**
 
-**Description:** A/B testing involves deploying two different versions of the application simultaneously to different user groups. Performance and user feedback are measured to determine which version performs better.
+**Description:** A/B testing involves deploying two different versions of the application simultaneously to different user groups. 
+- Performance and user feedback are measured to determine which version performs better.
 
 **Advantages:**
 - Data-driven decision-making.
