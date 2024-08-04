@@ -39,11 +39,16 @@ The **Descheduler** is a component in Kubernetes that focuses on optimizing the 
 
 ## Eviction API
 
-The **Eviction API**, on the other hand, is specifically designed for initiating the termination of pods under certain conditions, typically due to resource constraints or administrative actions.
+The **Eviction API**, on the other hand, is specifically 
+- Resource Constraints
+- Administrative Issue
 
-- **Graceful Termination**: When a pod is evicted via the Eviction API, it is done in a controlled manner, allowing for a grace period defined by the `terminationGracePeriodSeconds` setting. This ensures that the application inside the pod can shut down properly.
+- **Graceful Termination**: When a pod is evicted via the Eviction API
+- it is done in a controlled manner, allowing for a grace period defined by the `terminationGracePeriodSeconds` setting. 
+- This ensures that the application inside the pod can shut down properly.
 - **PodDisruptionBudgets**: The Eviction API respects PodDisruptionBudgets, which are policies that limit the number of concurrent disruptions to a set of pods, ensuring high availability during evictions.
-- **Node Pressure**: Evictions can also occur due to node pressure, where the kubelet automatically evicts pods when a node runs low on resources. This type of eviction may not respect PodDisruptionBudgets, as it is a reactive measure to maintain node stability.
+- **Node Pressure**: Evictions can also occur due to node pressure, where the kubelet automatically evicts pods when a node runs low on resources. 
+- This type of eviction may not respect PodDisruptionBudgets, as it is a reactive measure to maintain node stability.
 
 ## Summary of Differences
 
