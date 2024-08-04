@@ -1,0 +1,7 @@
+kubectl auth can-i list pods --as=system:serviceaccount:dev:admin-sa -n dev
+k create rolebinding admin-role-binding --role=admin-list-role --serviceaccount=dev:admin-sa --namespace=dev
+kubectl create role admin-list-role \
+  --namespace=dev \
+  --verb=list,watch,create,update,delete \
+  --resource=pods,deployments,services,statefulsets,daemonsets,persistentvolumes,persistentvolumeclaims \
+  --dry-run=client -o yaml > /Users/tanujarora/ManifestFiles/admin_role_new.yaml

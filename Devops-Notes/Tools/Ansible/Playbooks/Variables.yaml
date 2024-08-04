@@ -1,0 +1,34 @@
+- name: Install Required Packages 
+  hosts: appservers 
+  become: yes 
+  gather_facts: true 
+  vars:
+   packages:
+    - docker.io
+    - nginx 
+    - bat 
+    - python3-pip
+    - docker-compose
+    - python-pip
+    - python-dev
+    - libffi-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - python3-dev
+    - libpq-dev
+    - postgresql-client
+    - python-psycopg2
+    - git
+  tasks: 
+    - name: Update Packages 
+      apt: 
+        update_cache: yes
+        upgrade: yes
+      when: ansible_facts['os_family']==''Debian'
+    
+    - name: Install Packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+      when: ansible_facts['os_family']=='Debian'

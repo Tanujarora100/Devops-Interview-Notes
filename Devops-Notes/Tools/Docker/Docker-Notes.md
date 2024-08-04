@@ -868,12 +868,13 @@ Dockershim was a component in Kubernetes that allowed the use of Docker Engine a
 
 ### **Scratch Images**
 
-The `scratch` image is the most minimal base image in Docker, containing zero bytes. It serves as the starting point for building other images. When you create a Docker image from `scratch`, you are essentially starting with an empty filesystem. 
-- This is useful for creating lightweight images, especially when you have a statically compiled binary that includes all necessary dependencies. 
+The `scratch` image is the most minimal base image in Docker, containing zero bytes. 
+- It serves as the starting point for building other images. When you create a Docker image from `scratch`, you are essentially starting with an empty filesystem. 
+- This is useful for creating lightweight images.
 
 ### **Alpine Images**
-
-Docker Alpine is a Dockerized version of Alpine Linux, known for its minimalism and security. The Alpine image is extremely lightweight, typically under 3 MB, and uses less than 100 MB of RAM. It includes BusyBox for basic Linux commands and uses `musl libc` instead of the heavier `glibc`.
+Docker Alpine is a Dockerized version of Alpine Linux
+- The Alpine image is extremely lightweight, typically under 3 MB, and uses less than 100 MB of RAM. It includes BusyBox for basic Linux commands and uses `musl libc` instead of the heavier `glibc`.
 
 ### **Docker Best Practices**
 
@@ -1032,8 +1033,6 @@ In Docker, `ARG` and `ENV` are both used to define variables in a Dockerfile, bu
   docker run -e NODE_ENV=development your-image
   ```
 
-  The application inside the container will see `NODE_ENV` as `development`.
-
 ## Key Differences
 
 1. **Lifetime**: 
@@ -1051,3 +1050,39 @@ In Docker, `ARG` and `ENV` are both used to define variables in a Dockerfile, bu
 4. **Use Cases**:
    - Use `ARG` for build-time configurations (like version numbers).
    - Use `ENV` for runtime configurations (like environment settings).
+In Docker, layers are created during the image building process based on the instructions specified in a Dockerfile. Each instruction typically results in a new layer being added to the image. Here are the key instructions that create layers in Docker:
+
+### Instructions That Create Layers
+
+1. **RUN**: Executes a command in the shell, modifying the filesystem. Each `RUN` command creates a new layer.
+   
+   Example:
+   ```dockerfile
+   RUN apt-get update && apt-get install -y curl
+   ```
+
+2. **COPY**: Copies files and directories from the host filesystem into the image. This instruction also creates a new layer.
+
+   Example:
+   ```dockerfile
+   COPY . /app
+   ```
+
+3. **ADD**: Similar to `COPY`, but also supports remote URLs and automatic unpacking of compressed files. It creates a new layer as well.
+
+   Example:
+   ```dockerfile
+   ADD myapp.tar.gz /app
+   ```
+
+### Instructions That Do Not Create Layers
+
+Some instructions do not create layers that affect the image size:
+
+- **LABEL**: Adds metadata to the image but does not modify the filesystem in a way that creates a new layer.
+  
+- **ENTRYPOINT** and **CMD**: These define how the container should run but do not create layers that increase the image size.
+
+### Layer Caching
+
+Docker uses a caching mechanism for layers. If a layer has not changed since the last build, Docker will reuse the cached layer, which speeds up the build process. This is why the order of instructions in a Dockerfile is important; optimizing the order can help take advantage of the cache effectively.
