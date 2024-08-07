@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS mydb;
+    USE mydb;
+    CREATE TABLE messages (id INT AUTO_INCREMENT PRIMARY KEY, message TEXT);
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: my-sql-config
+  namespace: two-tier
+data:
+  MY_SQL_USER: root
+  MY_SQL_DB_NAME: mydb
+  MY_SQL_DEFAULT_PASSWORD: admin
+  MY_SQL_DEFAULT_USER: admin
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  namespace: two-tier
+type: Opaque
+data:
+  MY_SQL_ROOT_PASSWORD: cm9vdHBhc3N3b3Jk
+

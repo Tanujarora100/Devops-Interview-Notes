@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: two-tier-app
+  namespace: two-tier
+  labels:
+    app: two-tier-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: two-tier-app
+  template:
+    metadata:
+      labels:
+        app: two-tier-app
+    spec:
+      containers:
+      - name: two-tier-app
+        image: tanujarora27/two-tier-app
+        env:
+        - name: MYSQL_HOST
+          value: mysql-svc
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: my-sql-config
+              key: MY_SQL_DEFAULT_PASSWORD
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_DB
+          value: "mydb"
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "256M"
+            memory: "1G"
+          requests:
+            cpu: "128M"
+            memory: "512M"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: two-tier-svc
+  namespace: two-tier
+spec:
+  selector:
+    app: two-tier-app
+  type: LoadBalancer
+  sessionAffinity: None
+  ports:
+  - name: two-tier-app-svc
+    protocol: TCP
+    port: 80
+    targetPort: 5000

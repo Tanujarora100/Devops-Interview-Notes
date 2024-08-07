@@ -1,7 +1,5 @@
 import os 
 service_status= f'systemctl nginx status'
-
-# Check if Nginx service is running
 command_result=os.system(service_status)
 if command_result==0:
     print("Nginx service is running.")
