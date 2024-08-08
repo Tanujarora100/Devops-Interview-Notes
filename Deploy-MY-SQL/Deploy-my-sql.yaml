@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: two-tier
+spec:
+  serviceName: "mysql"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-sql-credentials
+              key: MY_SQL_PASSWORD
+        - name: MYSQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: my-sql-credentials
+              key: MY_SQL_USER
+        - name: MY_SQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: my-sql-credentials
+              key: MY_SQL_DATABASE_NAME
+      - name: backup
+        image: busybox
+        args:
+        - /bin/sh
+        - -c
+        - |
+          mkdir -p /backup
+        - "while true; do mysqldump -h localhost -u root -p $MY_SQL_PASSWORD --all-databases > /backup/db-backup-$(date +%F-%H-%M-%S).sql;\n sleep 3600;\ndone \n"
+      env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+          name: my-sql-credentials
+          key: MY_SQL_PASSWORD
+      volumeMounts:
+      - name: mysql-persistent-storage
+        mountPath: /var/lib/mysql
+      - name: backup-storage
+        mountPath: /backup
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-persistent-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: backup-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-sql-credentials
+  namespace: two-tier
+type: Opaque
+data:
+  MY_SQL_USER: YWRtaW4K
+  MY_SQL_PASSWORD: cGFzc3dvcmQyMwo=
+  MY_SQL_DATABASE_NAME: testdb
+---
+#HEADLESS SERVICE
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  clusterIP: None
+  selector:
+    app: mysql
+  ports:
+  - port: 3306
+    name: mysql
+---
