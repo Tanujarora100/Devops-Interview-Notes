@@ -14,7 +14,7 @@
 - If the umask is set to `022`, the permissions for a new file would be calculated as follows:
   - Default file permissions: `666`
   - Umask: `022`
-  - Resulting permissions: `666 - 022 = 644` (read and write for the owner, read for group and others).
+  - Resulting permissions: `666 - 022 = 644`
 
 - For a new directory:
   - Default directory permissions: `777`
@@ -73,3 +73,44 @@ Special permissions in Linux, known as SUID (Set User ID), SGID (Set Group ID), 
 - When the sticky bit is set, only the file owner, directory owner, or root user can delete or rename a file, even if other users have write permissions on the directory.
 - This is commonly used on directories like `/tmp` to prevent users from deleting each other's temporary files.
 - To set the sticky bit, use `chmod +t dir` or `chmod 1755 dir`.
+## UMASK VALUE
+
+To change the `umask` value temporarily for the current session, use the `umask` command followed by the desired value. 
+
+### Example:
+```bash
+umask 022
+```
+
+### For Bash Shell
+
+#### System-Wide Change
+
+To change the `umask` value for all users system-wide, you can modify the `/etc/profile` file or the `/etc/bash.bashrc` file.
+
+1. **Edit `/etc/profile`**:
+   ```bash
+   sudo nano /etc/profile
+   ```
+
+2. **Add or Modify the `umask` Line**:
+   ```bash
+   umask 022
+   ```
+
+#### User-Specific Change
+1. **Edit `~/.bashrc`**:
+   ```bash
+   nano ~/.bashrc
+   ```
+
+2. **Add or Modify the `umask` Line**:
+   ```bash
+   umask 022
+   ```
+
+
+## Understanding `umask` Values
+
+The `umask` value is a bitmask that determines the default permissions for newly created files and directories. 
+- It subtracts permissions from the system's default permissions (usually `777` for directories and `666` for files).

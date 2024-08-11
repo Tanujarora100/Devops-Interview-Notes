@@ -113,3 +113,110 @@ response = s3.list_objects_v2(Bucket='your-bucket-name')
 for obj in response.get('Contents', []):
     print(obj['Key'])
 ```
+### Service Accounts in Kubernetes
+
+#### Overview
+A **Service Account** in Kubernetes is a special type of account that is used by processes running in a Pod to authenticate themselves to the Kubernetes API. 
+
+#### Key Concepts
+
+1. **Service Account Creation**:
+   - By default, when a new namespace is created, Kubernetes automatically creates a `default` service account within that namespace.
+   - You can also create custom service accounts as needed. This is useful when different Pods require different permissions or need to access the Kubernetes API with specific credentials.
+
+
+
+   ```yaml
+   apiVersion: v1
+   kind: ServiceAccount
+   metadata:
+     name: my-service-account
+     namespace: my-namespace
+   ```
+
+2. **Service Account Tokens**:
+   - When a Pod is associated with a service account, Kubernetes automatically creates a token for that service account. 
+   - This token is a JWT (JSON Web Token) and is mounted into the Pod at a predefined path (`/var/run/secrets/kubernetes.io/serviceaccount/token`).
+   - The token allows the processes running within the Pod to authenticate to the Kubernetes API.
+   The component of Kubernetes responsible for creating service account tokens is the **Kubernetes API Server**.
+
+
+
+1. **Service Account Creation**: When a service account is created (either manually or automatically, such as the `default` service account in each namespace), the Kubernetes API Server generates a JSON Web Token (JWT) for that service account.
+
+2. **Secret Creation**: The API Server creates a corresponding Secret object that contains the service account token. This secret is automatically created and managed by Kubernetes. The secret typically includes:
+   - The JWT token.
+   - A reference to the service account's associated CA certificate (to validate the API server).
+   - A reference to the API server’s URL.
+
+   This secret is of type `kubernetes.io/service-account-token`.
+
+3. **Token Injection**: When a Pod is created and associated with a service account, the Kubernetes API Server automatically mounts the service account token (contained in the secret) into the Pod's filesystem at `/var/run/secrets/kubernetes.io/serviceaccount/token`.
+
+4. **Token Use**: Processes running inside the Pod can use this token to authenticate to the Kubernetes API, allowing them to perform actions permitted by the service account’s associated roles and permissions.
+
+
+3. **Service Account in Pods**:
+   - When you create a Pod, you can specify the service account it should use. If you don't specify a service account, the `default` service account in the namespace is used.
+   
+   Example of associating a service account with a Pod:
+
+   ```yaml
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: my-pod
+     namespace: my-namespace
+   spec:
+     serviceAccountName: my-service-account
+     containers:
+     - name: my-container
+       image: my-image
+   ```
+
+4. **Role-Based Access Control (RBAC)**:
+   - Kubernetes uses Role-Based Access Control (RBAC) to define which actions a service account can perform on different Kubernetes resources. Roles and ClusterRoles define the permissions, and RoleBindings and ClusterRoleBindings associate these permissions with specific service accounts.
+   
+   Example of creating a Role and binding it to a service account:
+
+   ```yaml
+   apiVersion: rbac.authorization.k8s.io/v1
+   kind: Role
+   metadata:
+     namespace: my-namespace
+     name: pod-reader
+   rules:
+   - apiGroups: [""]
+     resources: ["pods"]
+     verbs: ["get", "watch", "list"]
+
+   ---
+   apiVersion: rbac.authorization.k8s.io/v1
+   kind: RoleBinding
+   metadata:
+     name: read-pods
+     namespace: my-namespace
+   subjects:
+   - kind: ServiceAccount
+     name: my-service-account
+     namespace: my-namespace
+   roleRef:
+     kind: Role
+     name: pod-reader
+     apiGroup: rbac.authorization.k8s.io
+   ```
+
+   In this example:
+   - A `Role` called `pod-reader` is created, allowing the service account to get, watch, and list Pods in the `my-namespace` namespace.
+   - A `RoleBinding` associates the `pod-reader` Role with the `my-service-account` service account.
+
+5. **Service Account in Practice**:
+   - Service accounts are crucial for automation and ensuring secure, controlled access to the Kubernetes API.
+   - They are used by controllers, operators, and other system components that need to interact with the Kubernetes API.
+   - Service accounts can also be used in conjunction with CI/CD pipelines to deploy applications securely.
+
+#### Best Practices
+
+- **Use Least Privilege**: Assign the minimum necessary permissions to service accounts. Avoid granting excessive permissions that could be exploited if the service account's token is compromised.
+- **Separate Service Accounts**: Use separate service accounts for different applications or components to minimize the blast radius in case of a security breach.
+- **Rotate Tokens**: Regularly rotate service account tokens to minimize the risk of long-lived tokens being compromised.

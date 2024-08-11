@@ -116,3 +116,99 @@
 - Boot volumes: HDD based volumes are not supported (no ST1 or SC1)
 RAID0 + EBS: up to 260000 IOPS (maximum possible IOPS per EC2 instance)
 - **For more than 260000 IOPS - use instance store**
+
+Resizing the root EBS volume of an EC2 instance involves a few steps, including stopping the instance, modifying the volume, and then resizing the filesystem to utilize the additional space. Here's a detailed guide on how to do this:
+
+### Step 1: Stop the Instance (if necessary)
+For some Linux distributions, you can resize the volume without stopping the instance. However, for safety and to avoid any data corruption, it's recommended to stop the instance.
+
+1. **Stop the Instance**:
+   - Go to the EC2 Dashboard.
+   - Select the instance you want to resize.
+   - Click on `Instance State` and then `Stop`.
+
+### Step 2: Modify the Volume
+1. **Navigate to Volumes**:
+   - In the EC2 Dashboard, select `Volumes` under the `Elastic Block Store` section.
+
+2. **Select the Root Volume**:
+   - Find the root EBS volume attached to your instance. The root volume typically has the device name `/dev/xvda` or `/dev/sda1`.
+
+3. **Modify the Volume**:
+   - Select the volume and click on `Actions` > `Modify Volume`.
+   - Enter the new desired size for the volume in the `Size` field.
+   - Click `Modify` and then `Yes` to confirm.
+
+### Step 3: Resize the Filesystem
+After modifying the volume, you need to resize the filesystem to use the new space. This can be done without stopping the instance for modern Linux distributions using `growpart` and `resize2fs` (for ext4 filesystems) or `xfs_growfs` (for XFS filesystems).
+
+#### For ext4 Filesystems:
+1. **Connect to Your Instance**:
+   - Start the instance if it's stopped and connect via SSH.
+
+2. **Install growpart (if not installed)**:
+   ```sh
+   sudo yum install cloud-utils-growpart   # For Amazon Linux
+   sudo apt-get install cloud-guest-utils  # For Ubuntu/Debian
+   ```
+
+3. **Grow the Partition**:
+   ```sh
+   sudo growpart /dev/xvda 1
+   ```
+
+4. **Resize the Filesystem**:
+   ```sh
+   sudo resize2fs /dev/xvda1
+   ```
+
+#### For XFS Filesystems:
+1. **Connect to Your Instance**:
+   - Start the instance if it's stopped and connect via SSH.
+
+2. **Resize the Filesystem**:
+   ```sh
+   sudo xfs_growfs -d /
+   ```
+
+### Verification
+1. **Check the Filesystem**:
+   ```sh
+   df -h
+   ```
+
+   This command will display the disk space usage and should reflect the new size of your root EBS volume.
+
+### Example
+Here's a full example for resizing a root volume on an instance using an ext4 filesystem:
+
+1. **Stop the Instance**:
+   ```sh
+   aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+   ```
+
+2. **Modify the Volume**:
+   ```sh
+   aws ec2 modify-volume --volume-id vol-12345678 --size 50
+   ```
+
+3. **Start the Instance**:
+   ```sh
+   aws ec2 start-instances --instance-ids i-1234567890abcdef0
+   ```
+
+4. **Connect to the Instance**:
+   ```sh
+   ssh ec2-user@your-instance-public-dns
+   ```
+
+5. **Resize the Filesystem**:
+   ```sh
+   sudo growpart /dev/xvda 1
+   sudo resize2fs /dev/xvda1
+   ```
+
+6. **Verify**:
+   ```sh
+   df -h
+   ```

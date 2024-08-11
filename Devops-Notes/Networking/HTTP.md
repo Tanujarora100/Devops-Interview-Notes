@@ -1,6 +1,6 @@
 ## HTTP/0.9: The One-Line Protocol
 
-HTTP was originally proposed in 1989 by Tim Berners-Lee, who authored the first HTTP specification. HTTP/0.9, also known as the "One-Line Protocol," was the first version of HTTP introduced in 1991. It was a simple text-based protocol that allowed clients to request documents from servers using a single line command in the format "GET " [1][3][5].
+HTTP was originally proposed in 1989 by Tim Berners-Lee, who authored the first HTTP specification. HTTP/0.9, also known as the "One-Line Protocol," was the first version of HTTP introduced in 1991. It was a simple text-based protocol that allowed clients to request documents from servers using a single line command in the format "GET ".
 
 ## HTTP/1.0: Expanding Functionality
 

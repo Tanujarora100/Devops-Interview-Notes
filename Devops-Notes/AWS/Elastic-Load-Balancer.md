@@ -447,3 +447,130 @@ SNI allows servers to host multiple SSL/TLS certificates for different domains o
 2. **Potential for Man-in-the-Middle (MITM) Attacks**: Due to the plaintext nature of the SNI field, attackers could perform MITM attacks, where they intercept and alter communications between the client and server.
 
 3. **Compatibility Issues**: Not all browsers and servers support SNI, particularly older systems. 
+# To map multiple domains in an Application Load Balancer (ALB) on AWS
+
+### Step 1: Set Up the Application Load Balancer
+1. **Create an ALB**: If you haven't already created an ALB, go to the EC2 dashboard and create one.
+2. **Add at least one listener**: Typically, this will be HTTP (port 80) or HTTPS (port 443).
+
+### Step 2: Configure Domain Names
+1. **Domain Registration**: Ensure your domains are registered and point to Route 53 or another DNS provider.
+2. **Route 53 Hosted Zones**: If using Route 53, create or import hosted zones for each domain.
+
+### Step 3: Create Target Groups
+1. **Create Target Groups**: For each application or service behind the ALB, create a target group.
+2. **Register Instances/Targets**: Register your EC2 instances, ECS services, or Lambda functions in the respective target groups.
+
+### Step 4: Configure Listener Rules
+1. **Access ALB Listeners**:
+   - Go to the EC2 Dashboard.
+   - Select "Load Balancers" and choose your ALB.
+   - Click on the "Listeners" tab.
+
+2. **Create Listener Rules**:
+   - Select your listener (e.g., HTTP 80 or HTTPS 443).
+   - Click on "View/edit rules".
+
+3. **Add Rules for Each Domain**:
+   - **Rule Conditions**: Add a new rule with a condition based on the host header.
+     - For example, `Host header is example1.com` and `Host header is example2.com`.
+   - **Rule Actions**: Forward the traffic to the corresponding target group for each domain.
+
+### Example Rule Configuration:
+- **Rule for example1.com**:
+  - Condition: Host header is `example1.com`
+  - Action: Forward to target group `target-group-1`
+
+- **Rule for example2.com**:
+  - Condition: Host header is `example2.com`
+  - Action: Forward to target group `target-group-2`
+
+### Step 5: Update DNS Records
+1. **Route 53 Alias Records**: Create alias records in Route 53 pointing to your ALB.
+   - For `example1.com`, create an A or CNAME record pointing to the ALB DNS name.
+   - Repeat for `example2.com`.
+
+### Step 6: Verify Configuration
+1. **Test Access**: Open a browser and navigate to each domain (e.g., `http://example1.com` and `http://example2.com`).
+2. **Check Routing**: Ensure each domain routes to the correct target group/application.
+
+### Detailed Example
+Here is a more detailed example of setting up listener rules using the AWS Management Console:
+
+1. **Navigate to ALB Listeners**:
+   - In the EC2 Dashboard, select "Load Balancers".
+   - Choose your ALB and click on "Listeners".
+
+2. **Edit Listener**:
+   - For the HTTP or HTTPS listener, click on "View/edit rules".
+   - Add a rule by clicking on the `+` icon.
+
+3. **Configure Rule for `example1.com`**:
+   - **Condition**: Add a condition for "Host header" and set it to `example1.com`.
+   - **Action**: Add an action to "Forward to" and select the target group for `example1.com`.
+
+4. **Configure Rule for `example2.com`**:
+   - **Condition**: Add a condition for "Host header" and set it to `example2.com`.
+   - **Action**: Add an action to "Forward to" and select the target group for `example2.com`.
+
+5. **Save Rules**: Save the rules to apply the changes.
+
+### Notes:
+- **SSL Certificates**: If using HTTPS, ensure you have SSL certificates for each domain. You can use AWS Certificate Manager (ACM) to manage these certificates and attach them to your ALB.
+- **Wildcard Domains**: If you have subdomains, you can use wildcard rules (e.g., `*.example.com`).
+Here's a textual representation to help you visualize the setup:
+
+```
++----------------------------------------+
+|            Route 53                    |
+|  +----------------------+  +-----------+|
+|  |example1.com          |  |example2.com|
+|  +----------------------+  +-----------+|
+|           |                        |    |
+|           v                        v    |
++----------------------------------------+
+                     |
+                     v
++---------------------------------------------------+
+|               Application Load Balancer (ALB)     |
+|  +----------------------------------------------+ |
+|  | Listener: HTTP/HTTPS                         | |
+|  |  +----------------------+  +----------------+| |
+|  |  | Host header:         |  | Host header:   || |
+|  |  | example1.com         |  | example2.com   || |
+|  |  +----------------------+  +----------------+| |
+|  |  | Action: Forward to   |  | Action: Forward|| |
+|  |  | target-group-1       |  | to target-group|| |
+|  |  +----------------------+  | -2             || |
+|  |                                      |      || |
+|  +----------------------------------------------+ |
+|                  |                               | |
+|                  v                               v |
+|        +--------------------+         +--------------------+|
+|        | Target Group 1     |         | Target Group 2     ||
+|        | +----------------+ |         | +----------------+ ||
+|        | | EC2 Instances  | |         | | EC2 Instances  | ||
+|        | +----------------+ |         | +----------------+ ||
+|        +--------------------+         +--------------------+ |
++---------------------------------------------------+
+```
+
+### Steps to Set Up:
+
+1. **Route 53 Configuration**:
+   - Create DNS records for `example1.com` and `example2.com`, pointing them to the ALB.
+
+2. **ALB Listener Rules**:
+   - Configure listener rules to forward traffic based on the host header.
+   - Rule 1: If `Host header is example1.com`, forward to `target-group-1`.
+   - Rule 2: If `Host header is example2.com`, forward to `target-group-2`.
+
+3. **Target Groups**:
+   - Create two target groups, `target-group-1` and `target-group-2`.
+   - Register EC2 instances or other services with these target groups.
+
+### DNS Setup:
+- **example1.com**: Points to the ALB.
+- **example2.com**: Points to the ALB.
+
+This configuration ensures that traffic to `example1.com` is directed to `target-group-1` and traffic to `example2.com` is directed to `target-group-2`, allowing for effective routing based on domain names.
