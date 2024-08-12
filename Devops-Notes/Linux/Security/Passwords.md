@@ -9,7 +9,7 @@
 
 ## 3. Set Appropriate File Permissions
 
-The `/etc/shadow` file should have strict permissions
+- The `/etc/shadow` file should have strict permissions
 - Should be accessible by root only.
 
 ## 4. Regularly Check File Consistency

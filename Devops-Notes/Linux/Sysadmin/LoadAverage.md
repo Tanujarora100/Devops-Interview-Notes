@@ -21,11 +21,7 @@ In this example:
 
 ### Commands to Check Load Average
 
-1. **uptime**: Displays the current time, system uptime, number of users, and load average.
-   ```shell
-   $ uptime
-   10:20:30 up 10 days,  4:38,  2 users,  load average: 0.10, 0.20, 0.30
-   ```
+1. **uptime**: 
 
 2. **top**: Provides a dynamic, real-time view of the system's processes, including load average at the top.
    ```shell
@@ -43,7 +39,6 @@ In this example:
 
 ### Practical Example
 
-Here's how you might script a check for high load average in a bash script:
 
 ```bash
 #!/bin/bash
@@ -51,12 +46,8 @@ Here's how you might script a check for high load average in a bash script:
 # Get the load average for the last 1 minute
 #!/bin/bash
 
-# Get the load average for the last 1 minute
 LOAD_1=$(awk '{print $1}' /proc/loadavg)
-
-# Define a threshold for high load
 THRESHOLD=4.0
-
 # Compare the load average with the threshold as it is a floating point number
 if (( $(echo "$LOAD_1 > $THRESHOLD" | bc -l) )); then 
     echo "Load average is higher than threshold"

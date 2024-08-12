@@ -1,7 +1,6 @@
 
 - `/proc` is a virtual file system.
-- It contains virtual files and not real files
-- These are created by the kernel itself.
+- Proc files are created by the kernel itself.
 
 ## Structure and Purpose of `/proc`
 

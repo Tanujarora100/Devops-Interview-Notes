@@ -8,20 +8,18 @@ df -h
 ## Diving into the du command
 
 ```bash
-du -x / | sort -nr | head -10
+du -m / | sort -nr | head -10
 ```
 ![alt text](image-1.png)
 
 ## Cleaning Up Disk Space
 1. **Remove Unnecessary Packages and Dependencies**:  you can use `apt-get autoremove`
 ![alt text](image-2.png)
-2. **Clear Package Manager Cache**: Clear cache using `yum clean`
+2. **Clear Package Manager Cache**: `yum clean`
 
 3. **Find and Remove Large Files**: You can use the `find` command to locate file.
 
 4. **Use a Disk Cleanup Utility**: Tools like `bleachbit` 
-
-
 
 ### Bash Script Example for Disk Usage Monitoring
 

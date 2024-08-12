@@ -1,21 +1,11 @@
 
 ## Finding Files Modified in the Last 7 Days
 
-To find files modified in the last 7 days, you can use the `-mtime` option with the `find` command:
-
 ```bash
 find /path/to/directory -type f -mtime -7
 ```
 
-- **Explanation**:
-  - `/path/to/directory`: The directory to search in.
-  - `-type f`: Only find files.
-  - `-mtime -7`: Find files modified in the last 7 days.
-
 ## Finding Files Modified More Than 7 Days Ago
-
-To find files modified more than 7 days ago, use the `-mtime` option with a positive value:
-
 ```bash
 find /path/to/directory -type f -mtime +7
 ```
@@ -60,8 +50,6 @@ find / -type f -exec du -h {} + | sort -rh | head -n 1
 
 ## Finding the Smallest File
 
-To find the smallest file in the system, use the following command:
-
 ```bash
 find / -type f -exec du -h {} + | sort -h | head -n 1
 ```
@@ -69,19 +57,11 @@ find / -type f -exec du -h {} + | sort -h | head -n 1
 
 ## Finding Files Modified in the Last 7 Days
 
-To find files that were modified in the last 7 days, use the following command:
-
 ```bash
 find / -type f -mtime -7
 ```
 
-- **Explanation**:
-  - `find / -type f`: Searches for all files starting from the root directory (`/`).
-  - `-mtime -7`: Finds files modified in the last 7 days.
-
 ## Finding Files Modified More Than 7 Days Ago
-
-To find files that were modified more than 7 days ago, use the following command:
 
 ```bash
 find / -type f -mtime +7
