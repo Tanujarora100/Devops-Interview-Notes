@@ -15,18 +15,15 @@
      - Visualization tools: Such as Grafana for displaying metrics.
 
 4. **How does Prometheus collect metrics?**
-   - **Answer**: Prometheus collects metrics by scraping HTTP endpoints that expose metrics in a specific format. These endpoints can be applications instrumented with a Prometheus client library or exporters that convert data from other systems into the Prometheus format.
+   - **Answer**: Prometheus collects metrics by scraping HTTP endpoints that expose metrics in a specific format. 
+   - These endpoints can be applications instrumented with a Prometheus client library or exporters that convert data from other systems into the Prometheus format.
 
 5. **What is a Prometheus server?**
    - **Answer**: The Prometheus server is the core component that retrieves and stores time series data from instrumented targets by scraping their HTTP endpoints. 
    - It also provides a powerful query language (PromQL)
 
 6. **What is a time-series database in the context of Prometheus?**
-   - **Answer**: In Prometheus, a time-series database stores data points indexed by a timestamp and a set of labels (key-value pairs). 
-   - This allows efficient storage and querying of time-series data.
-
-7. **What is the Prometheus query language (PromQL)?**
-   - **Answer**: PromQL is a powerful query language designed for querying and extracting meaningful insights from Prometheus' time series data.
+   - **Answer**: In Prometheus, a time-series database stores data points indexed by a timestamp.
 
 8. **What is an exporter in Prometheus?**
    - **Answer**: An exporter is a component that collects metrics from a third-party system and exposes them in a format that Prometheus can scrape. Examples include node_exporter for hardware metrics and blackbox_exporter for probing endpoints.
@@ -94,7 +91,8 @@
     - In push-based collection, targets push metrics to Prometheus through the Pushgateway, suitable for short-lived jobs.
 
 19. **How does Prometheus handle high availability?**
-    - **Answer**: Prometheus handles high availability by running multiple Prometheus instances in parallel, often in a federated setup. Tools like Thanos or Cortex can be used to aggregate data from multiple instances and provide long-term storage.
+    - **Answer**: Prometheus handles high availability by running multiple Prometheus instances in parallel, often in a federated setup. 
+    - Tools like Thanos or Cortex can be used to aggregate data from multiple instances and provide long-term storage.
 
 
 21. **How do you scale Prometheus for a large environment?**
@@ -107,7 +105,7 @@
     - **Answer**: Storage optimization in Prometheus includes configuring retention policies, using remote storage integrations for long-term storage, and employing efficient hardware resources. Additionally, managing label cardinality helps reduce storage usage.
 
 24. **What are recording rules in Prometheus?**
-    - **Answer**: Recording rules allow you to precompute frequently needed or computationally expensive queries and save their results as new time series. 
+    - **Answer**: Recording rules allow you to precompute frequently needed or computationally **expensive queries and save their results as new time series**. 
     - These rules are defined in the configuration file and help improve query performance.
 
 25. **How do you handle metric cardinality issues in Prometheus?**
@@ -127,7 +125,8 @@
     - **Answer**: Prometheus can be integrated with other monitoring systems through various exporters, remote write/read interfaces, and using tools like Grafana for unified visualization.
 
 29. **How does Prometheus handle data retention and compaction?**
-    - **Answer**: Prometheus uses a retention policy defined in the configuration file to determine how long to retain data. Data compaction reduces storage usage by merging smaller data chunks into larger ones, optimizing query performance.
+    - **Answer**: Prometheus uses a **retention policy defined in the configuration file to determine how long to retain data.** 
+    - Data compaction reduces storage usage by merging smaller data chunks into larger ones, optimizing query performance.
 
 30. **What are Thanos and Cortex, and how do they relate to Prometheus?**
     - **Answer**: Thanos and Cortex are projects that extend Prometheus capabilities:

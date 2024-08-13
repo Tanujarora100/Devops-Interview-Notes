@@ -1,7 +1,5 @@
 ## cgroups vs. Namespaces in Linux
 
-Control groups (cgroups) and namespaces are two fundamental features of the Linux kernel that provide resource management and process isolation, respectively.
-
 ### cgroups (Control Groups)
 
 **Description**:
@@ -9,8 +7,8 @@ Cgroups allow you to allocate, limit, and monitor the usage of system resources 
 - They provide fine-grained control over how resources are distributed and used.
 
 **Key Features**:
-- **Resource Limiting**: Set limits on the amount of resources (CPU, memory, etc.) that a group of processes can use.
-- **Prioritization**: Allocate more resources to certain processes over others.
+- **Resource Limiting**: 
+- **Prioritization**: 
 - **Accounting**: Monitor and report resource usage.
 - **Control**: Freeze, stop, or restart processes within a cgroup.
 
@@ -35,15 +33,15 @@ Namespaces provide isolation by partitioning kernel resources so that one set of
 
 **Types of Namespaces**:
 1. **Mount Namespace**: Isolates the set of mounted filesystems.
-2. **UTS Namespace**: Isolates hostname and domain name.
+2. **UTS Namespace**: .
 3. **IPC Namespace**: Isolates inter-process communication resources.
 4. **Network Namespace**: Isolates network interfaces, IP addresses, routing tables, etc.
 5. **PID Namespace**: Isolates process IDs.
 6. **User Namespace**: Isolates user and group IDs.
 
 **Key Features**:
-- **Process Isolation**: Each namespace provides a separate instance of a global resource.
-- **Security**: Limits the visibility and interaction of processes with system resources.
+- **Process Isolation**: 
+- **Security**:
 
 **Use Cases**:
 - **Containers**: Provide isolated environments for running applications.

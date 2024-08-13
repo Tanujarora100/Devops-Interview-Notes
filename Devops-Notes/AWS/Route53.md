@@ -11,7 +11,7 @@
 
 ### 3. **Latency Routing Policy**
 - **Use Case**: When you have resources in multiple AWS Regions and want to route traffic to the region that provides the best latency.
-- **Behavior**: Route 53 routes traffic based on latency measurements between users and AWS data centers. It selects the region that provides the lowest latency for the user[3].
+- **Behavior**: Route 53 routes traffic based on latency measurements between users and AWS data centers. It selects the region that provides the lowest latency for the user.
 
 ### 4. **Failover Routing Policy**
 - **Use Case**: To configure active-passive failover.

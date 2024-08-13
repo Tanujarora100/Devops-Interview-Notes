@@ -1,25 +1,50 @@
 version: '3.9'
+
 services:
   nginx:
-   image: nginx:latest
-   ports: 
-   - "80:80"
-   volumes:
-   - nginx-config:/etc/nginx/nginx.conf
-   depends_on:
-    - mongodb
+    image: nginx:latest
+    ports: 
+      - "80:80"
+    volumes:
+      - nginx-config:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - mongodb
+    user: "nginx:nginx"
+    networks:
+      - app-network
+
   mongodb:
-   image: mongo:latest
-   ports:
-   - "27017:27017"
-   volumes:
-   - mongo-data:/data/db
-   - mongo-configdb:/data/configdb
-   environment:
-   - MONGO_INITDB_ROOT_USERNAME=root
-   - MONGO_INITDB_ROOT_PASSWORD=<PASSWORD>
-   - MONGO_INITDB_DATABASE=test
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - mongo-configdb:/data/configdb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/mongo_root_username
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_root_password
+      - MONGO_INITDB_DATABASE=test
+    secrets:
+      - mongo_root_username
+      - mongo_root_password
+    networks:
+      - app-network
+    user: "mongodb:mongodb"
+
 volumes:
   nginx-config:
+    driver: local
   mongo-data:
+    driver: local
   mongo-configdb:
+    driver: local
+
+secrets:
+  mongo_root_username:
+    file: ./secrets/mongo_root_username.txt
+  mongo_root_password:
+    file: ./secrets/mongo_root_password.txt
+
+networks:
+  app-network:
+    driver: bridge

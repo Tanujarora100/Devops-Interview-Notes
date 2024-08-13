@@ -9,7 +9,8 @@ You can specify the location of a custom plugin using the `--plugin-dir` option 
 
 #### 1. Using the `.terraformrc` Configuration File
 
-You can configure Terraform to use a local plugin cache by creating a `.terraformrc` file in your home directory. This file can specify a `plugin_cache_dir`, which allows Terraform to look for plugins in a designated directory instead of downloading them from the Terraform registry.
+You can configure Terraform to use a local plugin cache by creating a `.terraformrc` file in your home directory. 
+- This file can specify a `plugin_cache_dir`, which allows Terraform to look for plugins in a designated directory instead of downloading them from the Terraform registry.
 ```hcl
 plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"
 disable_checkpoint = true
@@ -82,7 +83,6 @@ The `.terraform.d` directory is a special directory used by Terraform to store v
 - **Linux/macOS**: `~/.terraform.d`
 
 1. **Terraform CLI Configuration File**:
-   - On Linux/macOS, the configuration file is named `.terraformrc`
    - This file allows customizing Terraform's behavior, such as specifying a plugin cache directory or disabling checkpoints.
 
 2. **Plugin Cache Directory**:
@@ -98,11 +98,7 @@ The `.terraform.d` directory is a special directory used by Terraform to store v
 The `.terraform.d` directory is managed by Terraform and is not meant to be modified manually. It is used to store various configuration files and cached data.
 The `terraform.d/plugins` directory and the `.terraform` directory serve different purposes in Terraform's architecture, particularly regarding plugin management and storage.
 
-### terraform.d/plugins Directory
 
-- **Purpose**: The `terraform.d/plugins` directory is used to store custom or pre-installed provider plugins. This directory allows users to manually manage and install plugins, providing a way to bypass automatic downloads during the `terraform init` process.
-
-- **Functionality**: When you run `terraform init`, Terraform will first look in this directory for any required provider plugins. If the necessary plugins are found, Terraform will use them; if not, it will attempt to download the missing plugins from the Terraform Registry.
 ### .terraform Directory
 
 - **Purpose**: The `.terraform` directory is created within each Terraform working directory and is used to store the state and metadata related to the specific Terraform configuration being managed.

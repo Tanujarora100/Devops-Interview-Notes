@@ -1,6 +1,5 @@
 ### How to Take Backup of etcd
 
-Backing up etcd is crucial for disaster recovery and maintaining the state of your Kubernetes cluster. Here’s a step-by-step guide on how to take a backup of etcd using the `etcdctl` command-line utility.
 
 #### **Prerequisites**
 

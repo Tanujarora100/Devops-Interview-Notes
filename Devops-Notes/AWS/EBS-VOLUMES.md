@@ -1,7 +1,6 @@
 ## Amazon EBS Overview
 
 ### General Characteristics
-<<<<<<< HEAD
 - **Volume:** A collection of blocks, each with a unique identifier.
 - **Attachment:** Both encrypted and unencrypted volumes can be attached to an EC2 instance simultaneously.
 - **Mountable and Bootable:** Block storage is **mountable and bootable**.
@@ -9,15 +8,6 @@
 ### EBS Volume Specifics
 - **Single Instance Mount:** EBS volumes can only be mounted to one instance at a time
   - except for EBS multi-attach.
-=======
-- **Attachment:** Both encrypted and unencrypted volumes can be attached to an EC2 instance simultaneously.
-- **Mountable and Bootable:**
-
-### EBS Volume Specifics
-- **Single Instance Mount:** 
-  - only be mounted to one instance at a time
-  - **except for EBS multi-attach.**
->>>>>>> master
   - exclusively on (io1 and io2) volumes
   - can't be created as boot volumes.
   - We need to take care of concurrency.
@@ -91,27 +81,17 @@
   - **Suited for Small Data Sets:**
     - **Performance:** Approx. 100 IOPS
 ### EBS ENCRYPTION
-- EBS encryption is only available on certain instance types.
+- EBS encryption is only available on **certain instance types**.
 - There is no direct way to encrypt an existing unencrypted volume, or to remove encryption from an encrypted volume. 
-<<<<<<< HEAD
   - However, you can migrate data between encrypted and unencrypted volumes.
 ## Snapshots
 - Snapshots are incremental
 - EBS backups use IO and we should not run them while the application is handling a lot of traffic
-=======
-  - **However, you can migrate data between encrypted and unencrypted volumes.**
-## Snapshots
-- Snapshots are incremental
->>>>>>> master
 - Snapshots are stored in S3 (we are not able to see them)
 - It is not necessary to detach the volume to do a snapshot, but it is recommended
 -  EBS volumes restored from snapshots need to be pre-warmed (using fio or dd commands to read the entire volume)
 - You can’t delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first deregister the AMI before you can delete the snapshot.
-<<<<<<< HEAD
-- Snapshots can be automated using Amazon Data Lifecycle Manage
-=======
-- Snapshots can be automated using **Amazon Data Lifecycle Manage**
->>>>>>> master
+- Snapshots can be automated using **Amazon Data Lifecycle Manager**
 
 
 
@@ -170,7 +150,7 @@ After modifying the volume, you need to resize the filesystem to use the new spa
 2. **Install growpart (if not installed)**:
    ```sh
    sudo yum install cloud-utils-growpart   # For Amazon Linux
-   sudo apt-get install cloud-guest-utils  # For Ubuntu/Debian
+   sudo apt-get install cloud-guest-utils   Ubuntu/Debian
    ```
 
 3. **Grow the Partition**:

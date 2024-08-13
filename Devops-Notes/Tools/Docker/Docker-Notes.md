@@ -2,30 +2,18 @@
 ## Difference between ADD and COPY
 
 ### COPY
-<<<<<<< HEAD
-- **Function**: Copies files from the host to the container. It is a straightforward file copy operation.
-- **Example**: `COPY . /app`
-
-### ADD
-- **Function**: Similar to COPY but has some additional features. It can also fetch remote URLs and extract tarballs.
-=======
 - It is a straightforward file copy operation.
 - **Example**: `COPY . /app`
 
 ### ADD
 - It can also fetch remote URLs and extract tarballs.
->>>>>>> master
 - **Example**: `ADD http://example.com/file.tar.gz /tmp/`
 
 ## Difference between ENTRYPOINT and CMD
 
 ### CMD
-<<<<<<< HEAD
-- **Function**: Specifies the default command and parameters for the container. It can be overridden at runtime.
-=======
 - **Function**: Specifies the default command and parameters for the container. 
 - It can be overridden at runtime.
->>>>>>> master
 - **Example**: `CMD ["python3", "app.py"]`
 
 ### ENTRYPOINT
@@ -39,73 +27,41 @@
 ## Docker Networks
 
 ### List Docker Networks
-<<<<<<< HEAD
-To see a list of all available Docker networks, use the `docker network ls` command.
-=======
->>>>>>> master
 ```sh
 docker network ls
 ```
 
 ### Create a Custom Bridge Network
-<<<<<<< HEAD
-You can create a custom bridge network to isolate containers from the host network. This is useful when you want containers to communicate with each other privately.
-=======
->>>>>>> master
 ```sh
 docker network create my_custom_network
 ```
 
 ### Create a Container on a Specific Network
-<<<<<<< HEAD
-When running a container, you can specify the network it should connect to using the `--network` flag.
-=======
->>>>>>> master
 ```sh
 docker run --name container1 --network my_custom_network -d nginx
 ```
 
 ### Inspect Network Details
-<<<<<<< HEAD
-To view details about a specific network, use the `docker network inspect` command.
-=======
->>>>>>> master
 ```sh
 docker network inspect my_custom_network
 ```
 
 ### Create a Container with a Specific IP Address
-<<<<<<< HEAD
-You can specify a static IP address for a container within a custom bridge network using the `--ip` flag.
-=======
->>>>>>> master
 ```sh
 docker run --name container2 --network my_custom_network --ip 172.18.0.10 -d nginx
 ```
 
 ### Connect an Existing Container to a Network
-<<<<<<< HEAD
-You can also connect an existing container to a network using the `docker network connect` command.
-=======
->>>>>>> master
 ```sh
 docker network connect my_custom_network container1
 ```
 
 ### Disconnect a Container from a Network
-<<<<<<< HEAD
-To disconnect a container from a network, use the `docker network disconnect` command.
-=======
->>>>>>> master
 ```sh
 docker network disconnect my_custom_network container1
 ```
 
 ### Remove a Custom Network
-<<<<<<< HEAD
-To remove a custom network, use the `docker network rm` command.
-=======
->>>>>>> master
 ```sh
 docker network rm my_custom_network
 ```
@@ -113,20 +69,12 @@ docker network rm my_custom_network
 ## Docker Network Types
 
 ### Bridge Network (bridge)
-<<<<<<< HEAD
-- **Description**: The default network mode for Docker containers when no network is specified. It creates an internal private network on the host, and containers can communicate with each other using container names.
-- **Use Cases**: Suitable for most containerized applications where containers need to communicate on the same host.
-
-### Host Network (host)
-- **Description**: Containers share the host network stack, making them directly accessible from the host and other containers without any network address translation (NAT).
-=======
 - **Description**: The default network mode for Docker containers when no network is specified. 
 - It creates an internal private network on the host, and containers can communicate with each other using container names.
 - **Use Cases**: Suitable for most containerized applications where containers need to communicate on the same host.
 
 ### Host Network (host)
 - **Description**: Containers share the host network stack, **making them directly accessible from the host** and other containers without any network address translation (NAT).
->>>>>>> master
 - **Use Cases**: High-performance scenarios where containers need to bind to specific host ports, but it lacks network isolation.
 
 ### Overlay Network (overlay)
@@ -135,13 +83,6 @@ docker network rm my_custom_network
 - **Use Cases**: Multi-host, multi-container applications orchestrated with Docker Swarm.
 
 ### Macvlan Network (macvlan)
-<<<<<<< HEAD
-- **Description**: Allows containers to have their own MAC addresses and appear as separate devices on the host network. Each container has a unique network identity.
-- **Use Cases**: When containers need to be directly on an external network, e.g., connecting containers to physical networks or VLANs.
-
-### None Network (none)
-- **Description**: Containers on this network have no network connectivity. It's often used for isolated testing or when the container only needs loopback connectivity.
-=======
 - **Description**: Allows containers to have their own MAC addresses and **appear as separate devices on the host network**. 
 - Each container has a unique network identity.
 - **Use Cases**: When containers need to be directly on an external network, e.g., connecting containers to physical networks or VLANs.
@@ -149,26 +90,18 @@ docker network rm my_custom_network
 ### None Network (none)
 - **Description**: Containers on this network have no network connectivity. 
 - It's often used for isolated testing or when the container only needs loopback connectivity.
->>>>>>> master
 - **Use Cases**: Limited use cases, primarily for debugging or security purposes.
 
 ### Custom Bridge Network (user-defined bridge)
 - **Use Cases**: Isolating containers, customizing DNS settings, or when you need multiple bridge networks on the same host.
 
 ### Overlay2 Network (overlay2)
-<<<<<<< HEAD
-- **Description**: Introduced in Docker 20.10, the Overlay2 network driver is optimized for container-to-container communication within the same network namespace.
-
-### Cilium Network (cilium)
-- **Description**: Cilium is an open-source networking and security project that offers advanced networking features, including API-aware network security and load balancing.
-=======
 - **Description**: Introduced in `Docker 20.10`, the Overlay2 network driver is optimized.
 
 ### Cilium Network (cilium)
 - **Description**: Cilium is an open-source networking and security project that offers advanced networking features
   - API-aware network 
   - security and load balancing.
->>>>>>> master
 - **Use Cases**: Advanced networking and security requirements, often in Kubernetes environments.
 
 ### Gossip Network (gossip)
@@ -176,12 +109,8 @@ docker network rm my_custom_network
 
 ## Docker Compose
 
-<<<<<<< HEAD
-Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to define your application's services, networks, and volumes in a single `docker-compose.yml` file, making it easier to manage complex Docker setups.
-=======
 Docker Compose is a tool for defining and running multi-container Docker applications. 
 - It allows you to define your application's services, networks, and volumes in a single `docker-compose.yml` file, making it easier to manage complex Docker setups.
->>>>>>> master
 
 ### Example `docker-compose.yml`
 ```yaml
@@ -191,23 +120,14 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
-<<<<<<< HEAD
-=======
     depends_on:
      - mongo_database
->>>>>>> master
   backend:
     image: node:14
     working_dir: /app
     volumes:
       - ./backend:/app
     command: npm start
-<<<<<<< HEAD
-```
-
-### Docker Compose Commands
-
-=======
   mongo_database:
    image: mongo 
    ports:
@@ -217,7 +137,6 @@ services:
      MONGO_INIT_PASSWORD='PASSWORD'
 ```
 
->>>>>>> master
 - **Start Services**: 
   ```sh
   docker-compose up -d
@@ -243,14 +162,6 @@ services:
   docker-compose up -d --scale backend=2
   ```
 
-<<<<<<< HEAD
-- **Execute Commands in a Running Container**: 
-  ```sh
-  docker-compose exec backend sh
-  ```
-
-=======
->>>>>>> master
 # How to Secure the Docker Daemon
 
 ## Security Concerns
@@ -264,20 +175,12 @@ services:
 ### Best Practices
 - **Disable Root Users**: Prevent direct root access to the host.
 - **SSH Authentication**: Use SSH keys for secure access.
-<<<<<<< HEAD
-- **Daemon Configuration**: Add IP addresses to the `daemon.json` file to restrict access and use a secured port.
-- **TLS Certificates**: Secure communication using TLS certificates.
-  - Set the environment variable `DOCKER_TLS=true`.
-  - Use `tlsverify`, `tlscert`, and `tlskey` for encryption (note: these do not guarantee authentication).
-  - Use port 2376 for encrypted traffic.
-=======
 - **Daemon Configuration**: Whitelist the IP and Ports in the `daemon.json`
 - **TLS Certificates**: Secure communication using TLS certificates.
   - Set the environment variable `DOCKER_TLS=true`
   - Use port `2376` for encrypted traffic.
 - Scan the images using Trivy.
 - Docker Scan trust
->>>>>>> master
 
 ### Example Configuration
 ```json
@@ -291,26 +194,6 @@ services:
 }
 ```
 
-<<<<<<< HEAD
-## Second Level of Security: Adding Authentication
-
-### Enabling Authentication
-- **TLS Verify Flag**: Enable authentication by setting the `tlsverify` flag.
-- **CA Certificate**: Use a CA certificate for authentication.
-![alt text](image.png)
-### Example Commands
-```sh
-# Start Docker daemon with TLS and authentication
-dockerd --tlsverify --tlscacert=ca.pem --tlscert=server-cert.pem --tlskey=server-key.pem -H=0.0.0.0:2376
-
-# Connect to Docker daemon securely
-docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$HOST:2376 version
-```
-
-## Additional Security Measures
-
-=======
->>>>>>> master
 ### Protect the Docker Daemon Socket
 - **Default Unix Socket**: Docker runs through a non-networked Unix socket by default.
 - **SSH Protection**: Use SSH to protect the Docker daemon socket.
@@ -318,38 +201,9 @@ docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$HO
   DOCKER_HOST=ssh://USER@HOST
   ```
 
-<<<<<<< HEAD
-### Rootless Mode
-- **Run Docker as Non-Root**: Use rootless mode to run Docker daemon and containers as an unprivileged user.
-
-### Regular Updates
-- **Keep Software Updated**: Regularly update the host OS, Docker Engine, and kernel to protect against known vulnerabilities.
-
-### Limit Inter-Container Communication
-- **Disable ICC**: Launch Docker daemon with ICC disabled to restrict container communication.
-  ```sh
-  dockerd --icc=false
-  ```
-
-### Use Docker Secrets
-- **Manage Sensitive Data**: Use Docker Secrets to securely manage sensitive data like passwords and tokens.
-  ```yaml
-  version: "3.8"
-  secrets:
-    my_secret:
-      file: ./super-secret-data.txt
-  services:
-    web:
-      image: nginx:latest
-      secrets:
-        - my_secret
-  ```
-
-=======
 ### Regular Updates
 
 ### Use Docker Secrets
->>>>>>> master
 ### User Namespace Remapping
 - **Prevent Privilege Escalation**: Enable user namespace remapping to isolate container user accounts.
   ```sh
@@ -371,11 +225,10 @@ LABEL maintainer_email="tanujarora2703@gmail.com"
 
 COPY --from=staging /app/build /usr/share/nginx/html
 RUN chown -R nginx:nginx /usr/share/nginx/html
+USER nginx
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
-<<<<<<< HEAD
-=======
 ## How Docker Daemon Communicates with Docker Client
 
 Docker uses a client-server architecture where the Docker client and Docker daemon communicate to manage and execute Docker containers.
@@ -507,7 +360,8 @@ docker service create --name traefik --constraint=node.role==manager --publish 8
 Monitor the canary deployment closely.
 ## Docker Build Context
 
-The Docker build context is a crucial concept in Docker image creation. It refers to the set of files and directories that are accessible to the Docker engine during the build process. When you run the `docker build` command.
+The Docker build context is a crucial concept in Docker image creation. It refers to the set of files and directories that are accessible to the Docker engine during the build process. 
+-  When you run the `docker build` command.
 
 #### **Types of Build Contexts**
 
@@ -631,7 +485,8 @@ A build secret is sensitive information, such as a password or API token, used i
 
 #### **Secret Mounts**
 
-Secret mounts allow you to expose secrets to build containers as files. This is done using the `--mount` flag in `RUN` instructions within the Dockerfile.
+Secret mounts allow you to expose secrets to build containers as files. 
+- This is done using the `--mount` flag in `RUN` instructions within the Dockerfile.
 
 - **Example Usage**:
   ```dockerfile
@@ -737,9 +592,6 @@ You can set `GIT_AUTH_TOKEN` and `GIT_AUTH_HEADER` secrets on a per-host basis.
   ```
 ## BIND MOUNTS
 ### Sharing Local Files with Docker Containers
-
-Docker allows you to share files between your host system and containers using two primary methods: **volumes** and **bind mounts**. 
-
 ### **Volume vs. Bind Mounts**
 
 **Volumes**:
@@ -754,19 +606,19 @@ Docker allows you to share files between your host system and containers using t
 
 #### **Using Bind Mounts**
 
-To share files between the host and a container using bind mounts, you can use the `-v` (or `--volume`) and `--mount` flags with the `docker run` command.
+To share files between the host and a container using bind mounts, you can use the `-v` (or `--volume`) and `--mount`
 
 **Example with `-v` Flag**:
 ```sh
 docker run -v /HOST/PATH:/CONTAINER/PATH -it nginx
 ```
 - **Behavior**: If the host directory does not exist, Docker will create it automatically.
-
 **Example with `--mount` Flag**:
 ```sh
 docker run --mount type=bind,source=/HOST/PATH,target=/CONTAINER/PATH,readonly nginx
 ```
-- **Behavior**: Provides more advanced features and control. If the host directory does not exist, Docker will generate an error.
+- **Behavior**: Provides more advanced features and control. 
+- If the host directory does not exist, Docker will generate an error.
 
 ### **File Permissions**
 
@@ -832,18 +684,6 @@ Docker build arguments (`ARG`) provide a flexible way to pass variables to the D
 2. **Injecting Values into Source Code**:
    - Build arguments can be used to inject values into the application's source code at build time, avoiding hard-coded values.
 
-3. **Linker Flags (`-ldflags`)**:
-   - In Go, build arguments can be used with linker flags to set variables in the code.
-   - **Example**:
-     ```go
-     // cmd/server/main.go
-     var version string
-     func main() {
-         if version != "" {
-             log.Printf("Version: %s", version)
-         }
-     }
-     ```
 
 #### **Example Workflow**
 
@@ -1028,11 +868,11 @@ Docker Alpine is a Dockerized version of Alpine Linux
 
 To build efficient and secure Docker images, follow these best practices:
 
-- **Multi-Stage Builds:** Use multi-stage builds to separate build-time dependencies from runtime dependencies, reducing the final image size.
-- **Layer Caching:** Structure Dockerfiles to take advantage of layer caching.
-- **Minimize Layers:** Combine commands to reduce the number of layers in the image.
+- **Multi-Stage Builds:** 
+- **Layer Caching:** 
+- **Minimize Layers:** 
 - **Use .dockerignore:** Exclude unnecessary files from the build context using a `.dockerignore` file.
-- **Run as Non-Root:** Configure containers to run as a non-root user for better security.
+- **Run as Non-Root:** 
 - **Keep Images Small:** Use minimal base images like Alpine or `scratch`.
 
 ### **Docker Command Case Sensitivity**
@@ -1053,13 +893,11 @@ docker-compose -p project2 up -d
 ```
 
 ## **Using Multiple Compose Files**
-You can also run multiple Docker Compose files simultaneously by specifying them with the `-f` option. This method is useful when you want to combine configurations from different files:
+You can also run multiple Docker Compose files simultaneously by specifying them with the `-f` option. 
 
 ```sh
 docker-compose -f docker-compose1.yml -f docker-compose2.yml up -d
 ```
-
-This command will merge the configurations from both files and start the containers accordingly[3].
 
 ## **Environment Variable Interpolation**
 
@@ -1073,15 +911,10 @@ services:
     ports:
       - "${APP_PORT}:80"
 ```
-
-You can then start the Compose file with different environment variables:
-
 ```sh
 APP_PORT=8080 docker-compose -p project1 up -d
 APP_PORT=8081 docker-compose -p project2 up -d
 ```
-
-This approach allows you to customize the configuration for each instance without modifying the Compose file[4].
 
 ## **Using Override Files**
 
@@ -1091,7 +924,7 @@ Docker Compose supports override files, which can be used to extend or modify th
 docker-compose -f docker-compose.yml -f docker-compose.override.yml -f custom-override.yml up -d
 ```
 
-This method allows you to maintain a base configuration and apply specific overrides as needed[3].
+This method allows you to maintain a base configuration and apply specific overrides as needed.
 
 ## **Handling Shared Resources**
 
@@ -1130,13 +963,14 @@ A reverse proxy in Docker serves several important functions, enhancing the mana
 
 ## Load Balancing and Performance
 
-1. **Load Balancing**: A reverse proxy can distribute incoming traffic across multiple backend services, helping to balance the load and improve performance. This is particularly beneficial for applications with high traffic[3].
+1. **Load Balancing**: A reverse proxy can distribute incoming traffic across multiple backend services, helping to balance the load and improve performance. This is particularly beneficial for applications with high traffic.
 
-2. **Caching**: It can cache responses from backend services, reducing the load on those services and improving response times for clients[5].
+2. **Caching**: It can cache responses from backend services, reducing the load on those services and improving response times for clients.
 
 ## Dynamic Configuration
 
-1. **Automatic Configuration**: Tools like Traefik and Nginx Proxy Manager allow for dynamic configuration of reverse proxies based on Docker labels or environment variables. This means that as new containers are added or removed, the reverse proxy can automatically update its routing without manual intervention.
+1. **Automatic Configuration**: Tools like Traefik and Nginx Proxy Manager allow for dynamic configuration of reverse proxies based on Docker labels or environment variables. 
+- This means that as new containers are added or removed, the reverse proxy can automatically update its routing without manual intervention.
 
 ### EXEC COMMAND
 - You can only execute commands in running conainers and not stopped containers.
@@ -1167,7 +1001,8 @@ In Docker, `ARG` and `ENV` are both used to define variables in a Dockerfile, bu
 
 - **Scope**: `ENV` variables are available both during the build process and in the running container. This means they can be accessed by the application running inside the container.
 
-- **Usage**: Used to define environment variables that the application can use at runtime. This is useful for configuration values that may change between different environments (e.g., development, testing, production).
+- **Usage**: Used to define environment variables that the application can use at runtime. 
+  - This is useful for configuration values that may change between different environments (e.g., development, testing, production).
 
 - **Default Values**: You can set default values for `ENV` variables in the Dockerfile, and these can be overridden when running the container using the `-e` flag:
   
@@ -1198,7 +1033,6 @@ In Docker, `ARG` and `ENV` are both used to define variables in a Dockerfile, bu
 4. **Use Cases**:
    - Use `ARG` for build-time configurations (like version numbers).
    - Use `ENV` for runtime configurations (like environment settings).
-In Docker, layers are created during the image building process based on the instructions specified in a Dockerfile. Each instruction typically results in a new layer being added to the image. Here are the key instructions that create layers in Docker:
 
 ### Instructions That Create Layers
 
@@ -1225,13 +1059,9 @@ In Docker, layers are created during the image building process based on the ins
 
 ### Instructions That Do Not Create Layers
 
-Some instructions do not create layers that affect the image size:
-
-- **LABEL**: Adds metadata to the image but does not modify the filesystem in a way that creates a new layer.
-  
+- **LABEL**: Adds metadata to the image but does not modify the filesystem in a way that creates a new layer.  
 - **ENTRYPOINT** and **CMD**: These define how the container should run but do not create layers that increase the image size.
-
 ### Layer Caching
 
-Docker uses a caching mechanism for layers. If a layer has not changed since the last build, Docker will reuse the cached layer, which speeds up the build process. This is why the order of instructions in a Dockerfile is important; optimizing the order can help take advantage of the cache effectively.
->>>>>>> master
+Docker uses a caching mechanism for layers. If a layer has not changed since the last build, Docker will reuse the cached layer, which speeds up the build process. 
+- This is why the order of instructions in a Dockerfile is important; optimizing the order can help take advantage of the cache effectively.

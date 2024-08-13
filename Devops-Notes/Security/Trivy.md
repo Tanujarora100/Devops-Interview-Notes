@@ -37,7 +37,7 @@
          }
          stage('Scan') {
            steps {
-             sh 'trivy image myapp:latest'
+             sh 'trivy image --SEVERITY=CRITICAL myapp:latest'
            }
          }
        }

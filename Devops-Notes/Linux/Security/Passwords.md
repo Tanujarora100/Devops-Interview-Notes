@@ -3,7 +3,7 @@
 - Shadow file stores the password in hash format + salt is added.
 - `etc/passwd` file stores the user account info but not the password.
 ## 2. Strong Password Hashing
- - The `/etc/shadow` file typically uses SHA-512 hashing (indicated by `$6$` in the hash).
+ - The `/etc/shadow` file typically uses SHA-512 hashing 
  - Unique salt added to protect against `rainbow table attacks`.
 
 
@@ -17,13 +17,10 @@
 ## 6. Account Lockout Mechanisms
 - Configure account lockout policies that temporarily disable accounts after a certain number of failed login attempts
 
-### Shadow Password in Linux
 
-The `/etc/shadow` file in Linux is a critical system file that stores secure user account information, specifically the hashed passwords and associated password aging information. This file is only accessible to the root user and certain privileged processes, enhancing the security of user passwords.
+## Structure of `/etc/shadow`
 
-#### Structure of `/etc/shadow`
-
-Each line in the `/etc/shadow` file corresponds to a user account and contains multiple fields separated by colons (`:`). Here is a breakdown of these fields:
+Each line in the `/etc/shadow` file corresponds to a user account and contains multiple fields separated by colons (`:`)
 
 1. **Username**: The login name of the user.
 2. **Password**: The hashed password. This field can also contain special symbols like `!`, `!!`, or `*` to indicate different states of the password.
@@ -64,4 +61,5 @@ This entry represents the following:
 
 #### Security Considerations
 
-The `/etc/shadow` file is not world-readable, unlike the `/etc/passwd` file, which is necessary for various system utilities to map user IDs to usernames. This restriction helps protect the hashed passwords from unauthorized access and potential brute-force attacks.
+The `/etc/shadow` file is not world-readable, unlike the `/etc/passwd` file, which is necessary for various system utilities to map user IDs to usernames. 
+- This restriction helps protect the hashed passwords from unauthorized access and potential brute-force attacks.

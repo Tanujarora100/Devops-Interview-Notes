@@ -30,3 +30,17 @@
 11. **How would you handle false positives in SonarQube analysis?**
     - Marking issues as "False Positive" in the SonarQube dashboard.
     - Customizing the quality profile
+In SonarQube, **Quality Gates** and **Quality Profiles** serve different purposes, though both are critical for maintaining code quality.
+
+### Quality Profiles
+- **Purpose**: Quality Profiles in SonarQube define the set of rules that your code will be checked against during the analysis. Think of it as a ruleset or a collection of coding standards.
+- **Customization**: You can create custom Quality Profiles tailored to your project's specific needs or use the default ones provided by SonarQube. Each profile can include a variety of rules such as coding standards, best practices, security checks, and more.
+- **Per Language**: Quality Profiles are language-specific, meaning you can have different profiles for Java, Python, JavaScript, etc.
+- **Application**: During the analysis, SonarQube checks the code against the rules defined in the Quality Profile.
+
+### Quality Gates
+- **Purpose**: A Quality Gate in SonarQube acts as a checkpoint that determines whether your project passes or fails the quality standards based on the analysis results. 
+- It essentially enforces the quality threshold that your code must meet.
+- **Conditions**: Quality Gates consist of a set of conditions based on metrics like code coverage, number of bugs, vulnerabilities, code smells, duplications, and more. 
+- **Pass/Fail Criteria**:
+- **Global or Project-Specific**: 

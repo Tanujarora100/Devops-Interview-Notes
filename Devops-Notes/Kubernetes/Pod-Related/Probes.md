@@ -46,6 +46,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-deployment
+  labels:
+    app:my-test-app
 spec:
   template:
     metadata:

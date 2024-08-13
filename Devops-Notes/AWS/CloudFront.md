@@ -31,7 +31,8 @@ To disable caching, you can set the following TTL values to 0 seconds:
 This forces CloudFront to forward all requests to the origin server[1].
 
 ### 11. **What is Origin Shield in CloudFront?**
-- Origin Shield is an additional caching layer that helps increase cache hit ratios and reduce the load on the origin server. When enabled, CloudFront routes all origin fetches through Origin Shield, which collapses multiple requests into a single request to the origin.
+- Origin Shield is an additional caching layer that helps increase cache hit ratios and reduce the load on the origin server. 
+- When enabled, CloudFront routes all origin fetches through Origin Shield, which collapses multiple requests into a single request to the origin.
 
 ### 12. **What are CloudFront Functions?**
 - serverless edge compute

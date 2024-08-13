@@ -1,7 +1,5 @@
 ### Backoff Algorithm in Kubernetes
 
-- Helps in Managing the restart policy of the containers.
-
 #### **Key Concepts of Backoff Algorithm**
 
 1. **Exponential Backoff**:

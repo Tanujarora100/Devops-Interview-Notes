@@ -46,7 +46,6 @@ To make umask changes permanent, you can add the umask command to user-specific 
 | `027`       | Owner has full permissions; group has read and execute; others have no permissions. |
 
 
-Special permissions in Linux, known as SUID (Set User ID), SGID (Set Group ID), and the sticky bit.
 
 ## SUID (Set User ID)
 
@@ -60,7 +59,7 @@ Special permissions in Linux, known as SUID (Set User ID), SGID (Set Group ID), 
 - For a directory, use `chmod g+s dir` or `chmod 2755 dir`.
 
 ## Sticky Bit
-- Only for files and not for directories.
+- Only for **files** and not for directories.
 - Restrict the naming and deletion of fles within those directories.
 - When the sticky bit is set, only the file owner, directory owner, or root user can delete or rename a file, even if other users have write permissions on the directory.
 - This is commonly used on directories like `/tmp` to prevent users from deleting each other's temporary files.

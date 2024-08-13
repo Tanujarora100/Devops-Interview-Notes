@@ -6,11 +6,7 @@
 - **Automatic Registration**: Automatically register new instances to a load balancer.
 
 ### **ASG Attributes**
-<<<<<<< HEAD
-- **Launch Configuration**: Consists of:
-=======
 - **Launch Configuration**:
->>>>>>> master
   - AMI + Instance Type
   - EC2 User Data
   - EBS Volumes
@@ -52,11 +48,7 @@
 
 ### **Scaling Cool-downs**
 - **Cool-down Period**: Ensures ASG doesn’t launch or terminate additional instances before the previous scaling activity takes effect.
-<<<<<<< HEAD
-- default is 5 minutes, maximum is 60 minutes.
-=======
 - **default is 5 minutes, maximum is 60 minutes**.
->>>>>>> master
 
 ### **Suspend and Resume Scaling Processes**
 - **Suspend/Resume**: Suspend and resume scaling processes for troubleshooting or making changes.
@@ -80,10 +72,6 @@
 - **Launch Templates**:
   - Allow multiple versions.
   - configuration reuse and inheritance.
-<<<<<<< HEAD
-  - Provision both On-Demand and Spot instances.
-  - Recommended by AWS.
-=======
   - **Provision both On-Demand and Spot instances**
   - Recommended by AWS.
 
@@ -118,4 +106,3 @@
 - Spot Instances
 - Billing issues
 - Check Cloudwatch logs
->>>>>>> master

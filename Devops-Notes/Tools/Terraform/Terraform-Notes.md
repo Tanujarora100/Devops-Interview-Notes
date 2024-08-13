@@ -219,9 +219,7 @@ well as the for expression in variable assignments.
 ```
 variable "instance_names" {
 type = list(string)
-default = ["instance1"
-,
-"instance2"]
+default = ["instance1", "instance2"]
 }
 resource "aws_instance" "example" {
 for_each = toset(var.instance_names)
@@ -681,7 +679,8 @@ resource "null_resource" "example" {
 ## **Why Both Files are Needed**
 
 ### **Separation of Concerns**
-- **variables.tf:** This file focuses on defining the structure and constraints of the variables. It ensures that all variables are declared in one place, making the configuration more readable and maintainable.
+- **variables.tf:** This file focuses on defining the structure and constraints of the variables. 
+  - It ensures that all variables are declared in one place, making the configuration more readable and maintainable.
 - **terraform.tfvars:** This file is used to provide specific values for those variables, which can vary between different environments (e.g., development, staging, production).
 
 ### **Flexibility and Reusability**
@@ -950,3 +949,21 @@ The external data source in Terraform allows you to integrate external programs 
 ### Multiple People Working In Same Directory But Different Infrastructure
 - Using Terraform Workspaces
 - Each workspace has its own state data, which allows you to create and manage different sets of infrastructure
+
+### RUN ANSIBLE USING TERRAFORM
+```bash
+resource "aws_instance" "example" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+
+  provisioner "local-exec" {
+    command = <<EOT
+      ansible-playbook -i '${self.public_ip},' -u ec2-user playbook.yml
+    EOT
+  }
+
+  tags = {
+    Name = "Ansible-Example"
+  }
+}
+```

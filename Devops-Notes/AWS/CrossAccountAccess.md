@@ -83,4 +83,3 @@ To assign an IAM role to an instance profile in AWS, you can follow these steps 
 - An instance profile can contain only one IAM role, but a role can be associated with multiple instance profiles.
 - If you need to change the role associated with an instance profile, you must first remove the existing role and then add a new one.
 
-By following these steps, you can effectively assign an IAM role to an instance profile, allowing EC2 instances to assume the role and access AWS resources as needed.
