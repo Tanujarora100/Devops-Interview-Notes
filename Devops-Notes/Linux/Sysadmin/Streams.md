@@ -6,7 +6,7 @@ In Linux, there are three primary types of streams:
 - **Usage**: You can redirect input from files or other commands using the `<` operator. For example, `command < inputfile.txt` reads from `inputfile.txt` instead of the keyboard.
 
 ### 2. Standard Output (STDOUT)
-- **Description**: This stream is used for output data from programs. By default, it sends output to the terminal (console).
+- **Description**: This stream is used for output data from programs.
 - **File Descriptor**: 1
 - **Usage**: You can redirect output to files or other commands using the `>` operator. For example, `command > outputfile.txt` writes the output to `outputfile.txt`, overwriting it if it exists. To append to a file, you can use `>>`.
 

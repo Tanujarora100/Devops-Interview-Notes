@@ -7,19 +7,17 @@
 
 - **Anacron**:
   - Used when we need to run the job even if the system is not running.
-  - It is useful for laptops or desktop systems that are not always on.
+  - Maintains a timestamp file to compare the current time with the execution time.
   - Anacron jobs are defined in a configuration file (usually `/etc/anacrontab`), and it can run jobs **daily, weekly, or monthly**.
   - It does not have so much customization of scheduled as the normal cron job.
 
 #### 2. **Execution Timing**
 
 - **Cron**:
-  - Executes jobs at precise times as specified in the crontab.
   - If a job is missed (e.g., if the system is down), it will not run until the next scheduled time.
 
 - **Anacron**:
   - Checks if a job was supposed to run while the system was off and executes it when the system starts up.
-  - It ensures that periodic jobs are run even if the system is not continuously running.
 
 #### 3. **Configuration Files**
 
@@ -30,7 +28,14 @@
 - **Anacron**:
   - Configuration is typically found in `/etc/anacrontab`
 
-#### When to use Anacron.
-1. **Infrequently Used Systems**: Machine that is not running every time.
-2. **Guaranteed Execution of Periodic Tasks**: Anacron is designed to run tasks that may have been missed due to the system being down.
-5. **Backup and Maintenance Tasks**: For tasks like system updates, backups, and log rotations that are critical but can be run at a later time if missed.
+### FAQ
+1. **Infrequently Used Systems**: 
+2. **Guaranteed Execution of Periodic Tasks**:
+5. **Backup and Maintenance Tasks**:
+2. **How does Anacron manage scheduling?**
+    - Anacron maintains a timestamp file (**`/var/spool/anacron`**). .
+
+7. **Explain the format of a crontab entry.**
+        ```bash
+        minute hour day month day_of_week command
+        ```

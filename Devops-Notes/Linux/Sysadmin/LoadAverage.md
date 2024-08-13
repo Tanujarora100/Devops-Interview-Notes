@@ -16,21 +16,12 @@ In this example:
 
 - **Load Values**: Load values represent the number of processes waiting to be run or currently running. 
 - If a system has 4 CPUs, a load average of `4.0` means that on average, each CPU is fully utilized.
-- **Comparing Load to CPU Count**: To interpret these values accurately, compare them to the number of CPUs in the system. For example, on a system with 4 CPUs, a load average of `4.0` means the system is at full capacity. 
-- A load average higher than `4.0` indicates more work than the system can handle comfortably, leading to delays.
 
 ### Commands to Check Load Average
 
 1. **uptime**: 
 
-2. **top**: Provides a dynamic, real-time view of the system's processes, including load average at the top.
-   ```shell
-   $ top
-   top - 10:20:30 up 10 days,  4:38,  2 users,  load average: 0.10, 0.20, 0.30
-   Tasks: 102 total,   1 running, 101 sleeping,   0 stopped,   0 zombie
-   %Cpu(s):  0.3 us,  0.1 sy,  0.0 ni, 99.5 id,  0.1 wa,  0.0 hi,  0.0 si,  0.0 st
-   ```
-
+2. **top**: 
 3. **cat /proc/loadavg**: Directly reads the load average from the `/proc` filesystem.
    ```shell
    $ cat /proc/loadavg

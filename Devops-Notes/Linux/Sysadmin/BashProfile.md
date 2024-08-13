@@ -58,7 +58,8 @@ fi
 
 ### Ensuring Consistency
 
-To ensure that the configurations in `.bashrc` are also applied to login shells, it is common practice to source `.bashrc` from within `.bash_profile`. This way, any settings or aliases defined in `.bashrc` will be available in both login and non-login shells.
+To ensure that the configurations in `.bashrc` are also applied to login shells, it is common practice to source `.bashrc` from within `.bash_profile`. 
+- This way, any settings or aliases defined in `.bashrc` will be available in both login and non-login shells.
 
 ### `.bash_profile` vs `.profile`
 

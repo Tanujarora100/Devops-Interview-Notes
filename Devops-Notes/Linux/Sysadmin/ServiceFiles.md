@@ -79,19 +79,19 @@ Interpretation of Results
 
 Creating a custom service in SystemD involves writing a service unit file. 
 **This file is a configuration script that provides instructions to SystemD on how to manage and execute the service. These scripts are typically placed in the `/etc/systemd/system/` directory.**
- A service script is divided into several sections, each serving a specific purpose.
 
 ### Common Sections in a Service Script
 - `[Unit]`: This section provides a description of the service and defines its dependencies. 
 - Key directives in this section can include `Description`, which gives a brief description of the service, `Documentation`, providing links to the relevant documentation, and `After`, specifying the order of service startup relative to other units.
 
-- `[Service]`: This section details how the service should be started, stopped, and how it should respond under various conditions. Common directives here include `Type`, defining the startup behavior of the service; `ExecStart`, specifying the command to run when the service starts; `ExecStop` and `ExecReload`, defining the commands to stop and reload the service; and `Restart`, specifying the service's restart behavior.
+- `[Service]`: 
+- Common directives here include `Type`, defining the startup behavior of the service; `ExecStart`, specifying the command to run when the service starts
+- `ExecStop` and `ExecReload`, defining the commands to stop and reload the service; and `Restart`
 
-- `[Install]`: This section is used to define how the service integrates into the system's boot process. It typically includes directives like `WantedBy` and `RequiredBy`, which specify the targets that should include this service during their initialization.
+- `[Install]`: This section is used to define how the service integrates into the system's boot process. 
+- It typically includes directives like `WantedBy` and `RequiredBy`, which specify the targets that should include this service during their initialization.
 
 ### Example of a Simple Service Script
-
-Below is an example of a basic service script. This script configures SystemD to run a specific executable file at startup:
 
 ```systemd
 [Unit]
@@ -105,20 +105,8 @@ ExecStart=/valid/path/to/an/executable/file
 WantedBy=multi-user.target
 ```
 
-This script includes:
-
-- `Description`: A brief explanation of the service.
-- `Type=idle`: Indicates that the service should be started after all jobs are dispatched.
-- `ExecStart`: The path to the executable file that will be run when the service starts.
-- `WantedBy=multi-user.target`: Specifies that the service should be started under the `multi-user.target`, which is a standard target for creating a multi-user environment.
-
-
 After creating or modifying a service script, use `systemctl daemon-reload` to reload the SystemD configuration and `systemctl enable [service-name].service` to enable the service.
 
 1. The file is named with a `.service` extension, for example, `my_custom_service.service`.
 2. The `[service-name]` is the filename without the `.service` extension, i.e., `my_custom_service` in this example.
 
-
-- To enable the service: `systemctl enable my_custom_service.service`
-- To start the service: `systemctl start my_custom_service.service`
-- To check the service status: `systemctl status my_custom_service.service`

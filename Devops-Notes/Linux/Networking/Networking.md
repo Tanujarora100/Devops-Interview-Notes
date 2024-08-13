@@ -4,11 +4,8 @@
 
 * `ip addr show`
 
-* The hostname can be changed editing `/etc/hostname`
-
-  * `hostname` show current hostname
+### The hostname can be changed editing `/etc/hostname`
   * Alternative: `hostnamectl set-hostname your-new-hostname` set hostname equal to your-new-hostname
-  * Reboot is required to see new hostname applied
 
 * In `/etc/hosts` is configured a name resolution that take precedence of DNS 
 

@@ -1,8 +1,6 @@
-Runlevels in Linux are predefined states that a system can be in, each characterized by a specific set of services and processes that are either running or stopped.
 
 ## Standard Runlevels in Linux
-
-- **Runlevel S or 1**: Often referred to as single-user mode, used for maintenance and administrative tasks. It is a minimal environment with only essential services running.
+- **Runlevel S or 1**: Often referred to as single-user mode, used for maintenance and administrative tasks. 
 - **Runlevel 2**: Typically used for multi-user mode but without NFS (Network File System) services.
 - **Runlevel 3**: Commonly used for multi-user mode with networking, but without a graphical interface.
 - **Runlevel 4**: Rarely used, can be customized by the user for specific needs.
@@ -23,21 +21,11 @@ sudo telinit 3
 ```
 
 ### Setting the Default Runlevel
-The default runlevel is specified in the `/etc/inittab` file for systems using SysVinit.
-
-```plaintext
-id:5:initdefault:
-```
-
 For systems using `systemd`, the default target (equivalent to runlevel) can be set using the `systemctl` command. For example, to set the default target to graphical mode:
 
 ```bash
 sudo systemctl set-default graphical.target
 ```
-
-## Systemd and Targets
-
-Most modern Linux distributions have moved from SysVinit to `systemd`, which uses targets instead of runlevels. Targets provide more flexibility and features compared to traditional runlevels.
 
 ### Common Systemd Targets
 

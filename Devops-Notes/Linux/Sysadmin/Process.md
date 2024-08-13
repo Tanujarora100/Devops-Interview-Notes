@@ -1,23 +1,16 @@
 
 Processes in a system can be broadly categorized into two types:
-* **Shell Job**: Interactive from user end and interacts with different processes.
+* **Shell Job**: 
+  - Interactive from user end and interacts with different processes.
 
 * **Daemon**: 
   - need elevated privileges
   - Background process.
-## Process Management Commands
-```
-ps -e --format uid,pid,ppid,%cpu,cmd
-```
 
-```
-ps fax # For child relationship
-```
-![alt text](image.png)
+  ![alt text](image.png)
 
 ## Process life cycle
 
-The life cycle of a process in an operating system is a critical concept. The provided diagram illustrates the various stages a process goes through:
 
 ```
                         +---------+
@@ -72,6 +65,7 @@ pkill java
 kill -SIGINT 12345
 ```
 
+-` SIGTERM (15): Graceful termination of a process.`
 
 | Signal | Value | Description |
 | --- | --- | --- |
@@ -84,7 +78,7 @@ kill -SIGINT 12345
 
 ### Special PID Values in `kill`
 - **`-1`**: 
-  - kill -1 pid will kill all the process except the process itself.
+  - kill -1 pid will kill all the process except the init process itself.
   - init process is also not killed by -1 but all other process which user has the permission to signal will be killed.
 - **`0`**: 
   - This PID will be in such a group 
@@ -104,23 +98,11 @@ kill -2 -SIGTERM
 ```
 
 
-## Methods for Searching Processes
-
-```bash
-ps -ef | grep process_name
-```
-```bash
-pgrep chromium
-```
-
-
 
 ## Foreground and Background Jobs
-The tasks running on your system can be in one of two states, either running in the 'foreground' or in the 'background'. 
 
-- **Foreground Process**: A process is said to be running in the foreground if it is actively executing and interacting with the terminal's input and output.
-
-- **Background Process**: On the contrary, a background process operates without directly interacting with the terminal's input and output. 
+- **Foreground Process**: 
+- **Background Process**: 
 
 ```
 +------------------------+
@@ -156,12 +138,7 @@ You can direct a program to run in the background right from its initiation by a
 ```bash
 sleep 1000 &
 ```
-
-
-
 ### Job and Process Management Commands
-
-To view all active jobs in the system, use the `jobs` command.
 
 If you wish to bring a background job to the foreground, utilize the fg command followed by the job number. For instance, to bring job number 3 to the foreground, you would use:
 
@@ -174,5 +151,3 @@ To convert a foreground process to a background process, you can use Ctrl+Z. Thi
 ```bash
 bg 1
 ```
-
-This command will resume job number 1 in the background. 

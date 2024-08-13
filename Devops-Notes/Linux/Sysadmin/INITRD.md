@@ -1,6 +1,8 @@
 ### INITRD (Initial RAM Disk)
 
-**INITRD (Initial RAM Disk)** is a temporary file system used in the Linux boot process to facilitate the loading of the operating system. It is loaded into memory by the bootloader and provides the necessary environment for the kernel to mount the real root file system.
+**INITRD (Initial RAM Disk)** is a temporary file system used in the Linux boot process.
+- It is a temporary file system loaded by the kernel at the boot process to facilitate the loading of the operating system.
+- It helps in mounting of the root filesystem also.
 
 #### Purpose and Function of INITRD
 
@@ -8,7 +10,7 @@
    - Modern Linux kernels are modular, meaning not all drivers and components are built directly into the kernel. INITRD provides the required modules that the kernel might need to access the root file system.
 
 2. **Hardware Initialization:**
-   - INITRD helps in initializing hardware that is essential for mounting the root file system. This includes drivers for storage controllers, file systems, and other hardware components that might not be directly supported by the kernel.
+   - INITRD helps in initializing hardware that is essential for mounting the root file system. This includes drivers for storage controllers.
 
 3. **System Boot Flexibility:**
    - By using INITRD, the same kernel can be used across different hardware configurations. The specific drivers and modules required for a particular system can be loaded dynamically during the boot process.
@@ -87,132 +89,4 @@
 5. **Transition to Real Root File System:**
    - The script mounts `/dev/sda1` (real root file system) and switches to it.
    - The system continues booting from the real root file system.
-
-Certainly! Below are diagrams to help explain the concept of INITRD (Initial RAM Disk) and its role in the Linux boot process.
-
-### 1. Boot Process Overview
-
-```
-+-----------------+       +--------------+       +---------------+
-|     BIOS/UEFI   | ----> |  Bootloader  | ----> |      Kernel   |
-+-----------------+       +--------------+       +---------------+
-                                            |                      |
-                                            v                      v
-                                      +-----------+        +-------------+
-                                      |  INITRD   |        | Real Root FS|
-                                      +-----------+        +-------------+
-                                           |                     |
-                                           v                     v
-                                      +------------------------------+
-                                      |   Init Scripts & Drivers     |
-                                      +------------------------------+
-```
-
-### 2. Detailed Boot Process with INITRD
-
-#### 2.1 Bootloader Stage
-
-```
-Bootloader (e.g., GRUB)
-+--------------------------------------+
-| Load Kernel                         |
-| Load INITRD Image                   |
-+--------------------------------------+
-                  |
-                  v
-```
-
-#### 2.2 Kernel Initialization
-
-```
-Kernel Initialization
-+--------------------------------------+
-| Mount INITRD as Root FS             |
-| Execute Init Scripts in INITRD      |
-+--------------------------------------+
-                  |
-                  v
-```
-
-#### 2.3 INITRD Initialization
-
-```
-INITRD Initialization
-+--------------------------------------+
-| Load Necessary Kernel Modules       |
-| Setup Hardware                      |
-| Mount Real Root File System         |
-+--------------------------------------+
-                  |
-                  v
-```
-
-#### 2.4 Switch to Real Root File System
-
-```
-Switch Root FS
-+--------------------------------------+
-| Use pivot_root or switch_root        |
-| Unmount INITRD                       |
-+--------------------------------------+
-                  |
-                  v
-```
-
-#### 2.5 Continue Boot Process
-
-```
-Continue Boot Process
-+--------------------------------------+
-| Transition to Real Root FS          |
-| Initialize User Space & Services    |
-+--------------------------------------+
-```
-
-### Diagram Summary
-
-1. **Bootloader Stage:** The bootloader loads the kernel and the INITRD image into memory.
-
-2. **Kernel Initialization:** The kernel mounts the INITRD image as the temporary root file system and executes the initialization scripts inside INITRD.
-
-3. **INITRD Initialization:** The initialization scripts in INITRD load necessary kernel modules (drivers), set up hardware, and prepare to mount the real root file system.
-
-4. **Switch to Real Root File System:** The system uses commands like `pivot_root` or `switch_root` to transition from the INITRD root file system to the real root file system. The INITRD is then unmounted.
-
-5. **Continue Boot Process:** The system continues the normal boot process from the real root file system, leading to the initialization of user space and starting system services.
-
-### Visualizing the Transition with INITRD
-
-```
-+------------------+
-| Bootloader       |
-| (Loads Kernel    |
-|  & INITRD)       |
-+--------|---------+
-         v
-+------------------+
-| Kernel           |
-| (Mounts INITRD   |
-|  as Root FS)     |
-+--------|---------+
-         v
-+------------------+
-| INITRD           |
-| (Runs Init       |
-|  Scripts, Loads  |
-|  Modules)        |
-+--------|---------+
-         v
-+------------------+
-| Switch to        |
-| Real Root FS     |
-| (Unmount INITRD) |
-+--------|---------+
-         v
-+------------------+
-| Real Root FS     |
-| (Continues Boot  |
-|  Process)        |
-+------------------+
-```
 

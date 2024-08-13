@@ -1,25 +1,7 @@
 #### High Disk Usage Issue
 - If root volume then check logs and clear some mount points
-- If EBS volume take a snapshot and increase the disk space for EC2 Instance.
 1. EC2 ASG is Going Down- `top` Command or `ps aux --sort=-%cpu | head -n 11`
-2. **How does Anacron manage scheduling?**
-    - Anacron maintains a timestamp file for each job in the system's spool directory (**`/var/spool/anacron`**). 
-    - It compares the last execution time stored in the timestamp file with the current time to determine if a job needs to be executed.
-3. **What happens if a scheduled Anacron job is missed?**
-    - Anacron detects missed executions by comparing the current time with the expected time of the last execution. 
-    - If a job is missed, Anacron executes it when the system is next booted or when Anacron is run manually.
-4. **How do you configure Anacron jobs?**
-    - Anacron jobs are defined in configuration files located in the **`/etc/anacrontab`** file or in individual files in the **`/etc/cron.{daily,weekly,monthly}`** directories.
-5. **How does Anacron differ from Cron?**
-    - Unlike Cron, Anacron is designed to handle jobs that should be executed periodically, even if the system is powered off during the scheduled time.
-6. **How do you troubleshoot cron job failures?**
-    - Check the system logs (**`/var/log/syslog`** or **`/var/log/cron`**) for any error messages.
-    - Verify the permissions of the files and directories accessed by the cron job.
-7. **Explain the format of a crontab entry.**
-    - Crontab entries consist of six fields separated by spaces:
-        ```bash
-        minute hour day month day_of_week command
-        ```
+
 8. How to see the partition sizes :
     1. `fdisk -l`
     2. check linux version - `uname -a` or `'cat /etc/*release`
@@ -448,36 +430,4 @@ ip addr show
 #### Lock user
 ```
 usermod -L user1
-```
-#### List open file
-```
-lsof
-```
-Find who opens this file at the moment
-```
-lsof -u user_name
-```
-#### Which process is listening on what port
-```
-lsof -i :port_name
-```
-#### Which process is listening to tcp protocol
-```
-lsof -i tcp
-```
-
-Linux Lifecycle & Processes
-- running
-- waiting or sleeping
-- stopped
-- zombie
-
-#### To list zombie processes
-```
-ps aux | grep 'Z'
-``` 
-##### Find the Parent Process ID (PPID)
-Once you have the PID of the zombie process, you can find its parent process ID (PPID) using the ps command with specific options:
-``` bash
-ps -o ppid= -p <zombie_pid>
 ```
