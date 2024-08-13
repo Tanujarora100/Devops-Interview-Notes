@@ -29,4 +29,7 @@ for bucket in $S3_bucket_list; do
    echo "Encryption already enabled on bucket $bucket"
   fi
 done
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset AWS_SESSION_TOKEN
 done
