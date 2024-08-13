@@ -7,22 +7,7 @@
     2. check linux version - `uname -a` or `'cat /etc/*release`
 9. Limit the memory usage of the process - `ulimit -Sv 1000`
 10. Check the full path of file `readlink -f file.txt`
-11. **What is Zombie Process?**
-- Process Creation: When a parent process creates a child process using the fork() system call, both processes start running concurrently.
-- Child Process Completes: The child process finishes its execution and exits. Normally, when a process exits, it releases all its resources (like memory and file descriptors).
-- Exit Status: Even though the child process has finished, it leaves behind an exit status. This status needs to be read by the parent process to know how the child terminated (whether it was successful or if there was an error).
-- Parent Process Responsibility: The parent process reads the exit status of the child process using the wait() system call. This action is known as "reaping" the child process.
-- Zombie State: If the parent process does not call wait(), the child process remains in the process table as a "zombie". 
-    - It is essentially a "dead" process that has not been fully cleaned up.
-    
-12. System calls in Linux:
-    - **fork():** Used to create a new process.
-    - **exec():** Execute new process.
-    - **wait():** wait until process execution.
-    - **exit():** exit from the process.
-    System calls to get the Process id :
-    - **getpid():** to find the unique process id.
-    - **getppid():** to find the unique parent process id.
+
 13. A user cannot telnet or ssh to the server:
     1. server might be down
     2. Server sshd service is not running
@@ -34,7 +19,6 @@
     3. To get a compressed archive we need to use the tar and gzip together
 15. List directory only inside a directory
     1. `find . -type d`
-16. Difference in TCP and UDP
 17. check disk space - `df -h` 
 18. Check Swap Memory `free -gh` 
 19. hostname check - `hostname` 
@@ -188,46 +172,8 @@ passwd root
 ```bash
 exec /sbin/init
 ```
-## KILL SIGNALS
-
-### Common Kill Signals
-
-| Signal Number | Signal Name | Description |
-|---------------|-------------|-------------|
-| 1             | SIGHUP      | Hangup detected on controlling terminal or death of controlling process. Often used to reload configuration files. |
-| 2             | SIGINT      | Interrupt from the keyboard (Ctrl+C). |
-| 3             | SIGQUIT     | Quit from the keyboard (Ctrl+$$. Generates a core dump. |
-| 9             | SIGKILL     | Kill signal. Forces the process to terminate immediately. Cannot be caught, blocked, or ignored. |
-| 15            | SIGTERM     | Termination signal. Requests the process to terminate gracefully. |
-| 18            | SIGCONT     | Continue if stopped. |
-| 19            | SIGSTOP     | Stop the process. Cannot be caught or ignored. |
-| 20            | SIGTSTP     | Stop typed at the terminal (Ctrl+Z). |
-| 11            | SIGSEGV     | Invalid memory reference. Generates a core dump. |
-| 6             | SIGABRT     | Abort signal from abort(3). Generates a core dump. |
 
 
-### Special Considerations
-
-- **SIGKILL (9)**: This signal cannot be caught, blocked, or ignored. It forces the process to terminate immediately without performing any cleanup.
-- **SIGTERM (15)**: This is the default signal sent by the `kill` command. It allows the process to terminate gracefully, performing any cleanup operations.
-- **SIGSTOP (19) and SIGCONT (18)**: These signals are used to stop and continue processes, respectively. They are useful for pausing and resuming processes without terminating them.
-
-### Advanced Usage
-
-- **Sending signals to multiple processes:**
-  ```bash
-  kill -9 <PID1> <PID2> <PID3>
-  ```
-
-- **Using `pkill` to send signals by process name:**
-  ```bash
-  pkill -9 <process_name>
-  ```
-
-- **Using `killall` to send signals to all instances of a process:**
-  ```bash
-  killall -9 <process_name>
-  ```
 ### Shadow Password in Linux
 
 The `/etc/shadow` file in Linux is a critical system file that stores secure user account information, specifically the hashed passwords and associated password aging information. This file is only accessible to the root user and certain privileged processes, enhancing the security of user passwords.

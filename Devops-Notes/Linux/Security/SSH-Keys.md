@@ -41,10 +41,10 @@ PasswordAuthentication no
 sudo systemctl restart sshd
 ```
 ## Passpharse
-- It is used for encrypting the private key to protect the SSH key even on client side.
 
 1. **Protection Against Key Theft**:
-   A passphrase encrypts the private key, making it useless to an attacker if they manage to obtain it. Without the passphrase, the attacker cannot use the private key for authentication.
+   A passphrase encrypts the private key, making it useless to an attacker if they manage to obtain it. 
+   - Without the passphrase, the attacker cannot use the private key for authentication.
 
 2. **Mitigating Risks from Accidental Exposure**:
    If a private key is accidentally leaked—through backups, decommissioned hardware

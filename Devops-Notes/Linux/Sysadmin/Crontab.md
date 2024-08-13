@@ -36,6 +36,6 @@
     - Anacron maintains a timestamp file (**`/var/spool/anacron`**). .
 
 7. **Explain the format of a crontab entry.**
-        ```bash
+        ```
         minute hour day month day_of_week command
         ```
