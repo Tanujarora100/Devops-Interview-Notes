@@ -1,0 +1,53 @@
+groups:
+- name: system_alerts
+  rules:
+  - alert: Website Down
+    expr: probe_success == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Website is down on {{ $labels.instance }}"
+  - alert: SwapMemoryUsageHigh
+    expr: node_memory_SwapUsed_bytes / node_memory_SwapTotal_bytes * 100 > 80
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Swap memory usage is high on {{ $labels.instance }}"
+      description: "Swap memory usage is above 80% on {{ $labels.instance }} for the last 5 minutes."
+
+  - alert: DiskUsageHigh
+    expr: node_filesystem_avail_bytes{fstype!~"tmpfs|devtmpfs"} / node_filesystem_size_bytes{fstype!~"tmpfs|devtmpfs"} * 100 < 20
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Disk usage is high on {{ $labels.instance }}"
+      description: "Disk usage is above 80% on {{ $labels.instance }} for the last 5 minutes."
+
+  - alert: DockerServiceDown
+    expr: up{job="docker"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Docker service is down on {{ $labels.instance }}"
+      description: "Docker service has been down on {{ $labels.instance }} for the last 1 minute."
+
+  - alert: CrontabScriptCommented
+    expr: changes(node_cron_jobs{status="commented"}) > 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Crontab script commented on {{ $labels.instance }}"
+      description: "A crontab script has been commented out on {{ $labels.instance }} for the last 5 minutes."
+  - alert: HighLoadAverage
+    expr: node_load1 > (count(node_cpu_seconds_total{mode="system"}) BY (instance)) * 2
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High load average on {{ $labels.instance }}"
+      description: "Load average is above twice the number of CPU cores on {{ $labels.instance }} for the last 5 minutes."

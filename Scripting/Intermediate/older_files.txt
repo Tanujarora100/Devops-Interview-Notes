@@ -1,0 +1,26 @@
+-------------------------------------
+2024-13-08
+-------------------------------------
+CloudFront.md 2024-13-08
+ec2.md 2024-13-08
+Route53.md 2024-13-08
+DisasterRecovery.md 2024-13-08
+CrossAccountAccess.md 2024-13-08
+FileStorage.md 2024-13-08
+SNS.md 2024-13-08
+Lamda.md 2024-13-08
+asg.md 2024-13-08
+EFS.md 2024-13-08
+s3.md 2024-13-08
+AWS-Macie.md 2024-13-08
+WAF.md 2024-13-08
+ControlTower.md 2024-13-08
+image-1.png 2024-13-08
+Data-Encryption.md 2024-13-08
+image-3.png 2024-13-08
+image-2.png 2024-13-08
+VPC-Networking.md 2024-13-08
+CI-CD.md 2024-13-08
+image.png 2024-13-08
+image-4.png 2024-13-08
+-------------------------------------

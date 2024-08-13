@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  nginx:
+   image: nginx:latest
+   ports: 
+   - "80:80"
+   volumes:
+   - nginx-config:/etc/nginx/nginx.conf
+   depends_on:
+    - mongodb
+  mongodb:
+   image: mongo:latest
+   ports:
+   - "27017:27017"
+   volumes:
+   - mongo-data:/data/db
+   - mongo-configdb:/data/configdb
+   environment:
+   - MONGO_INITDB_ROOT_USERNAME=root
+   - MONGO_INITDB_ROOT_PASSWORD=<PASSWORD>
+   - MONGO_INITDB_DATABASE=test
+volumes:
+  nginx-config:
+  mongo-data:
+  mongo-configdb:

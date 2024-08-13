@@ -6,7 +6,11 @@
 - **Automatic Registration**: Automatically register new instances to a load balancer.
 
 ### **ASG Attributes**
+<<<<<<< HEAD
 - **Launch Configuration**: Consists of:
+=======
+- **Launch Configuration**:
+>>>>>>> master
   - AMI + Instance Type
   - EC2 User Data
   - EBS Volumes
@@ -48,7 +52,11 @@
 
 ### **Scaling Cool-downs**
 - **Cool-down Period**: Ensures ASG doesn’t launch or terminate additional instances before the previous scaling activity takes effect.
+<<<<<<< HEAD
 - default is 5 minutes, maximum is 60 minutes.
+=======
+- **default is 5 minutes, maximum is 60 minutes**.
+>>>>>>> master
 
 ### **Suspend and Resume Scaling Processes**
 - **Suspend/Resume**: Suspend and resume scaling processes for troubleshooting or making changes.
@@ -72,5 +80,42 @@
 - **Launch Templates**:
   - Allow multiple versions.
   - configuration reuse and inheritance.
+<<<<<<< HEAD
   - Provision both On-Demand and Spot instances.
   - Recommended by AWS.
+=======
+  - **Provision both On-Demand and Spot instances**
+  - Recommended by AWS.
+
+#### How to Login to EC2 Without pem file
+- Use Ec2 instance Connect
+- Unmount the volume, attach the volume to new ec2 instance add the new ssh key remount it to old ec2 instance
+- System Manager Just attach the `ssm role` to it and install ssm agent.
+- Benefits:
+  - No need of ssh keys
+  - no open ports
+  - centralized access control
+#### High CPU Utilization:
+- Scale the instance
+- Load balance
+- Auto Scaling
+- Monitoring
+
+#### Web site unreachable
+- ping command
+- check sg and load balancer health checks
+- DNS settings
+- Web server logs.
+
+#### EC2 Connection
+- SG Rules
+- Networks ACL
+- Key Pairs
+- Instance Status
+
+#### Instance Termination
+- Instance Limits
+- Spot Instances
+- Billing issues
+- Check Cloudwatch logs
+>>>>>>> master

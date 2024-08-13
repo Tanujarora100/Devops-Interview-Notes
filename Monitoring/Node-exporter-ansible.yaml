@@ -1,0 +1,68 @@
+- name: Install Node Exporter
+  hosts: all
+  become: yes
+  tasks:
+  - name: Check if node exporter exists
+    user:
+      name: node_exporter
+      state: present
+      system: yes
+  - name: Download and install node exporter
+    get_url: 
+       url: https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+       dest: /tmp/node_exporter.tar.gz
+       mode: 0755
+    retries: 5 
+    delay: 10 
+    until: result is success 
+  - name: Extract Node Exporter 
+    unarchive: 
+     src: /tmp/node_exporter.tar.gz
+     dest: /usr/local/bin/
+     remote_src: yes
+    retries: 3
+    delay: 5
+    until: result is success
+  - name: Move Node Exporter Binary 
+    command: mv /usr/local/bin/node_exporter-1.5.0.linux-amd64/node_exporter /usr/local/bin/node_exporter
+    args: 
+     creates: /usr/local/bin/node_exporter
+    retries: 3
+    delay: 5
+    until: result is success
+  - name: Ensure Node Exporter Binary is installed 
+    file: 
+      path: /usr/local/bin/node_exporter
+      state: present
+    retries: 3
+    delay: 5
+    until: result is success
+  - name: Create Node Exporter systemd service file
+    copy:
+        dest: /etc/systemd/system/node_exporter.service
+        content: |
+          [Unit]
+          Description=Node Exporter
+          Wants=network-online.target
+          After=network-online.target
+
+          [Service]
+          User=node_exporter
+          ExecStart=/usr/local/bin/node_exporter
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+  - name: Reload Sytsemd Daemon Binary 
+    command: systemctl daemon-reload 
+    retries: 3
+    delay: 5
+    until: result is success
+  - name: Restart node_exporter  
+    systemd: 
+      name: node_exporter.service
+      state: started 
+      enabled: yes
+    retries: 3
+    delay: 5
+    until: result is success

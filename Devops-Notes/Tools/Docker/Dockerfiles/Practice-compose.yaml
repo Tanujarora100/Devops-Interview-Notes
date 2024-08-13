@@ -1,0 +1,20 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+    - "80:80"
+    depends_on:
+    - mongo_database
+  node:
+    image: nodejs:latest
+    working_dir: "/app"
+    command: npm start
+  mongo_database:
+  - image: mongo:latest
+    ports:
+    - "27017:27017"
+    volumes:
+    - mongo_volume:/db/data
+volumes:
+- mongo_volume
+

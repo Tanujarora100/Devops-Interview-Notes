@@ -1,12 +1,26 @@
 ## **Amazon Virtual Private Cloud (VPC) and Related Components**
 
 ### **Amazon VPC**
+<<<<<<< HEAD
 
 Amazon Virtual Private Cloud (Amazon VPC) allows you to launch AWS resources in a logically isolated virtual network that you define. This virtual network closely resembles a traditional network that you would operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
 
 #### **Key Features**
 - **Subnets**: A subnet is a range of IP addresses in your VPC. 
   - Each subnet must reside in a single Availability Zone.
+=======
+### HOW TO IDENTIFY PUBLIC AND PRIVATE SUBNETS:
+1. **Public Subnet**: 
+   - A subnet is classified as public if its route table has a route that directs traffic to an **Internet Gateway** (IGW). 
+   - Specifically, you will see a route entry for `0.0.0.0/0` pointing to `igw-xxxxxxxxxxxxxxxxx` in the route table.
+
+2. **Private Subnet**: 
+   - Conversely, a subnet is considered private if its route table does not have a route to an Internet Gateway. 
+   - Instead, it may route to a **NAT Gateway** or simply have no route for `0.0.0.0/0`, meaning it cannot directly access the internet.
+#### **Key Features**
+- **Subnets**: A subnet is a range of IP addresses in your VPC. 
+  - Each **subnet must reside in a single Availability Zone**.
+>>>>>>> master
 - **IP Addressing**: You can assign both IPv4 and IPv6 addresses to your VPCs and subnets.
 - **Routing**: Route tables determine where network traffic from your subnet or gateway is directed.
 - **Gateways and Endpoints**: Gateways connect your VPC to another network, such as the internet or AWS services.
@@ -26,6 +40,40 @@ A VPC endpoint enables you to privately connect your VPC to supported AWS servic
 - **Gateway Endpoints**: Used for services like Amazon S3 and DynamoDB. 
   - They are configured in the route table of your VPC.
 
+<<<<<<< HEAD
+=======
+### NACL VS SECURITY GROUP:
+- The default NACL allows everything outbound and everything inbound
+- We define one NACL per subnet, new subnets are assigned the default NACL
+- Rules have a number (1 - 32766) which defines the precedence
+- Rules with lower number have higher precedence
+- Last rule is has the precedence of **asterisk (*)** and denies all the requests. This rule is not editable
+- **AWS recommends adding rules by increment of 100**
+
+### **Security Groups**
+   - Security groups are stateful. 
+     - This means that if an inbound request is allowed, the response is automatically allowed.
+   - Only support `"allow"`rules. 
+   - By default, all inbound traffic is denied, and all outbound traffic is allowed.
+   - Changes to security group rules take effect immediately.
+
+
+### **Comparison Table**
+
+| Feature                  | Security Groups                              | Network ACLs                              |
+|--------------------------|----------------------------------------------|-------------------------------------------|
+| **Level of Operation**   | Instance level                               | Subnet level                              |
+| **Statefulness**         | Stateful                                     | Stateless                                 |
+| **Rules**                | Only "allow" rules                           | Both "allow" and "deny" rules             |
+| **Default Behavior**     | Deny all inbound, allow all outbound         | Allow all inbound and outbound by default |
+| **Rule Evaluation**      | All rules are evaluated collectively         | Rules are evaluated in numerical order    |
+| **Use Cases**            | Granular control at instance level           | Broad control at subnet level             |
+| **Configuration**        | Immediate effect, based on IP, protocol, port| Immediate effect, based on IP, protocol, port |
+
+
+
+
+>>>>>>> master
 ### **Internet Gateway**
 
 - horizontally scaled, redundant, and highly available VPC component. 
@@ -42,8 +90,13 @@ A NAT gateway is a managed service that allows instances in a private subnet to 
 - There are two types of NAT gateways: public and private.
 
 #### **Key Functions**
+<<<<<<< HEAD
 - **Public NAT Gateway**: Allows instances in private subnets to connect to the internet using an Elastic IP address.
 - **Private NAT Gateway**: Allows instances in private subnets to connect to other VPCs or on-premises networks without using an Elastic IP address.
+=======
+- **Public NAT Gateway**: Allows instances in private subnets to **connect to the internet using an Elastic IP address**.
+- **Private NAT Gateway**: Allows instances in private subnets to connect to **other VPCs or on-premises networks without using an Elastic IP address**.
+>>>>>>> master
 
 ### **VPC Flow Logs**
 
@@ -79,8 +132,11 @@ VPC Flow Logs capture information about the IP traffic going to and from network
 - **Cost**: No additional cost.
 
 ### **CIDR Ranges in VPC**
+<<<<<<< HEAD
 
 CIDR (Classless Inter-Domain Routing) notation is used to define IP address ranges in a VPC. 
+=======
+>>>>>>> master
 - A VPC must have an associated IPv4 CIDR block, and optionally, an IPv6 CIDR block.
 
 #### **IPv4 CIDR Blocks**
@@ -129,10 +185,13 @@ aws ec2 associate-vpc-cidr-block --vpc-id vpc-12345678 --cidr-block 10.1.0.0/16
 - It resides in a public subnet and requires an Elastic IP address.
 - Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to the internet gateway.
 
+<<<<<<< HEAD
 **Key Characteristics**:
 - **Outbound Internet Access**: Instances in private subnets can access the internet for updates, patches, and other outbound connections.
 - **No Inbound Connections**: Prevents inbound connections from the internet, enhancing security.
 - **Elastic IP**: Requires an **Elastic IP address**, which is used for outbound traffic.
+=======
+>>>>>>> master
 
 **Use Cases**:
 - **Software Updates**: 
@@ -148,7 +207,11 @@ aws ec2 associate-vpc-cidr-block --vpc-id vpc-12345678 --cidr-block 10.1.0.0/16
 **Description**:
 - A Private NAT Gateway enables instances in private subnets to connect to **other VPCs or on-premises networks**.
 - It resides in a **private subnet** and does not require an Elastic IP address.
+<<<<<<< HEAD
 - Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to a transit gateway..
+=======
+- Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to a transit gateway.
+>>>>>>> master
 
 **Key Characteristics**:
 - **No Internet Access**: Used for communication between VPCs or with on-premises networks.
@@ -206,3 +269,8 @@ An Elastic IP address is a static IPv4 address
 - **Charges**: 
   - AWS charges for Elastic IP addresses that are not associated with running instances. 
   - There is no charge for Elastic IP addresses associated with running instances.
+<<<<<<< HEAD
+=======
+- No, you cannot attach the same Elastic IP address to multiple Amazon EC2 instances simultaneously. Each Elastic IP (EIP) can only be associated with one instance or network interface at a time. 
+- If you need multiple instances to share a single public IP address, you can use a Network Address Translation (NAT) gateway or a load balancer.
+>>>>>>> master
