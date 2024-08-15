@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: production_deployment
+  name: production
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: s3-access-sa
-  namespace: production_deployment
+  namespace: production
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::992382476319:role/YOUR_IAM_ROLE_NAME
+    amazonaws.com/role-arn: arn:aws:iam::992382476319:role/s3-read-policy
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -18,7 +18,7 @@ metadata:
     app: my-deployment
     tier: production
   name: my-deployment
-  namespace: production_deployment
+  namespace: production
 spec:
   replicas: 3
   selector:
@@ -32,22 +32,9 @@ spec:
         tier: production
     spec:
       serviceAccountName: s3-access-sa
-      initContainers:
-      - name: configure-aws-cli
-        image: amazonlinux:2
-        command:
-        - "sh"
-        - "-c"
-        - |
-          set -x
-          yum install -y unzip curl
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-          unzip /tmp/awscliv2.zip -d /tmp
-          /tmp/aws/install
-          aws --version
-        volumeMounts:
-        - name: aws-cli-mount-volume
-          mountPath: /root/.aws/
+      volumeMounts:
+      - name: aws-cli-mount-volume
+        mountPath: /root/.aws/
 
       containers:
       - image: nginx:latest
@@ -65,8 +52,8 @@ spec:
         - name: aws-cli-mount-volume
           mountPath: /root/.aws/
         securityContext:
-          privileged: false 
-          runAsUser: 1000 
+          privileged: false
+          runAsUser: 1000
           runAsGroup: 1000
         readinessProbe:
           httpGet:
@@ -85,7 +72,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-app-service
-  namespace: production_deployment
+  namespace: production
 spec:
   selector:
     app: my-deployment

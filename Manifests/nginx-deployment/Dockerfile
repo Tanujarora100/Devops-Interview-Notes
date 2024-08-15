@@ -1,11 +1,15 @@
+# Use the latest Ubuntu as the base image
+FROM ubuntu:latest
+RUN set -x && \
+    apt update && apt install -y unzip curl && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip" && \
+    unzip /tmp/awscliv2.zip -d /tmp && \
+    /tmp/aws/install && \
+    aws --version
 
-FROM nginx:latest
-
-# Set the working directory to the default location where Nginx serves content
+RUN apt install -y nginx
 WORKDIR /usr/share/nginx/html
 
-# Copy the custom index.html file to the Nginx HTML directory
 COPY index.html ./index.html
-
-# Expose port 80 to the outside world
 EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
