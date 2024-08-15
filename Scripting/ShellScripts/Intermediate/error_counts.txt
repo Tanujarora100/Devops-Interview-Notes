@@ -1,0 +1,8 @@
+File: fsck_apfs_error.log, Error Count:        0
+File: fsck_hfs.log, Error Count:        0
+File: launchd.log, Error Count:      814
+File: shutdown_monitor.log, Error Count:        0
+File: system.log, Error Count:        0
+File: wifi.log, Error Count:       48
+File: install.log, Error Count:     9279
+File: fsck_apfs.log, Error Count:      119
