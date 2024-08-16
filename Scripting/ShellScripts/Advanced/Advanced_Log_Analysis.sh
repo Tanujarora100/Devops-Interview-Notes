@@ -3,13 +3,10 @@
 LOG_FILE="/var/log/install.log"
 LOG_ANALYSIS_LOG="$PWD/log_analysis.log"
 
-# Check if the log file exists
 if [[ ! -f "$LOG_FILE" ]]; then 
     echo "ERROR: Log file $LOG_FILE not found." | tee -a "$LOG_ANALYSIS_LOG"
     exit 1
 fi 
-
-# Ensure the analysis log file exists and is writable
 if [[ ! -f "$LOG_ANALYSIS_LOG" ]]; then
     touch "$LOG_ANALYSIS_LOG"
 elif [[ ! -w "$LOG_ANALYSIS_LOG" ]]; then
@@ -19,11 +16,9 @@ fi
 
 echo "Starting log analysis..." | tee -a "$LOG_ANALYSIS_LOG"
 
-# Initialize counters
 
 error_types=( ["ERROR"]=0 ["WARNING"]=0 ["CRITICAL"]=0 )
 
-# Count occurrences of each error type
 while IFS= read -r line; do
     for key in "${!error_types[@]}"; do
         if echo "$line" | grep -q "$key"; then

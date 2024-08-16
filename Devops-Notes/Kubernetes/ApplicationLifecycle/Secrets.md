@@ -54,9 +54,39 @@ data:
       containers:
     	  - name: httpd
     	    image: httpd:2.4-alpine
-    			envFrom:
-    				- secretRef:
-    					 name: app-secret
+    			spec:
+  containers:
+  - envFrom:
+    - secretRef:
+        name: db-secret
+    image: kodekloud/simple-webapp-mysql
+    imagePullPolicy: Always
+    name: webapp
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-m4m65
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: controlplane
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
     ```
     
 - Passing a single key-value pair of the secret to ENV
@@ -78,8 +108,50 @@ data:
     							name: app-secret
     							key: PASSWORD
     ```
-    
-- Passing a file as Secret by mounting the Secret as a volume
+### Check the environment variables of the application
+
+```bash
+root@mysql:/# printenv
+SQL01_PORT_3306_TCP_ADDR=10.43.186.111
+WEBAPP_SERVICE_PORT=tcp://10.43.8.164:8080
+HOSTNAME=mysql
+SQL01_PORT_3306_TCP=tcp://10.43.186.111:3306
+WEBAPP_SERVICE_PORT_8080_TCP_ADDR=10.43.8.164
+WEBAPP_SERVICE_PORT_8080_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.43.0.1
+MYSQL_ROOT_PASSWORD=password123
+KUBERNETES_PORT=tcp://10.43.0.1:443
+WEBAPP_SERVICE_SERVICE_PORT=8080
+SQL01_PORT=tcp://10.43.186.111:3306
+PWD=/
+HOME=/root
+MYSQL_MAJOR=5.6
+GOSU_VERSION=1.12
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT_443_TCP_PORT=443
+MYSQL_VERSION=5.6.51-1debian9
+SQL01_PORT_3306_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP=tcp://10.43.0.1:443
+TERM=xterm
+SQL01_PORT_3306_TCP_PORT=3306
+WEBAPP_SERVICE_PORT_8080_TCP_PORT=8080
+SHLVL=1
+WEBAPP_SERVICE_SERVICE_HOST=10.43.8.164
+SQL01_SERVICE_HOST=10.43.186.111
+KUBERNETES_SERVICE_PORT=443
+SQL01_SERVICE_PORT=3306
+WEBAPP_SERVICE_PORT_8080_TCP=tcp://10.43.8.164:8080
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+KUBERNETES_SERVICE_HOST=10.43.0.1
+_=/usr/bin/printenv
+OLDPWD=/home
+root@mysql:/# whoami
+root
+root@mysql:/# 
+```
+
+### Passing a file as Secret by mounting the Secret as a volume
 - Each Secret then is created as a separate file under the volume
     
     ```yaml
