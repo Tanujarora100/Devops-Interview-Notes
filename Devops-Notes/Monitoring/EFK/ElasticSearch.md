@@ -62,7 +62,7 @@
 
 
 ### Do all the nodes have the same type of work or roles?
-![alt text](image-4.png)
+  ![alt text](image-4.png)
 - There are multiple roles for the servers.
 - Master Node: Controller of the cluster.
 - Data Node: Stores the data and indexing the data.
@@ -299,3 +299,13 @@ Elasticsearch uses several search strategies and algorithms to efficiently retri
      - **Metrics:** Calculating statistics (like average, sum, min, max) on grouped data.
    - **Usage:** Aggregations are often used for data analysis, reporting, and dashboards.
 
+## TOKENIZERS:
+1. **Standard Tokenizer**: This is the default tokenizer that splits text based on word boundaries and removes punctuation.
+2. **Keyword Tokenizer**: Treats the entire input as a single token, useful for exact matches where no splitting is needed.
+3. **Whitespace Tokenizer**: Splits text only on whitespace characters, preserving the original form of the text.
+4. **Pattern Tokenizer**: Uses a regular expression to define how text should be split into tokens.
+5. **NGram Tokenizer**: Creates n-grams of characters from text, useful for partial matching, like autocomplete features.
+6. **Edge NGram Tokenizer**: Similar to the NGram tokenizer but generates n-grams starting from the beginning of the text, typically used for prefix matching.
+7. **Letter Tokenizer**: Splits text at non-letter characters, keeping only sequences of letters as tokens.
+8. **Lowercase Tokenizer**: Similar to the letter tokenizer but also converts text to lowercase.
+9. **UAX URL Email Tokenizer**: Specialized tokenizer that splits text based on word boundaries, while also recognizing URLs and email addresses as single tokens.

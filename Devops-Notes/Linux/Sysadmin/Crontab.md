@@ -1,30 +1,28 @@
-### Comparison: Cron vs Anacron
-#### 1. **Functionality**
+### Utilities 
+- Anacron - Execute when the system gets powered on.
+ - Day
+ - Week
+ - Month
+ - Year
+- Cron- Miss Jobs when power is off.
+  - Minutes
+  - Hour
+  - Day 
+  - For specific dates
+- At utility: Focus on tasks which runs once only.
+```bash
+# Check the syntax
+cat /etc/crontab
+# This file will be overwritten when the system is updated.
+# First it will check the /etc/crontab file 
+# Then it checks for the root user
+# Then for the specific user.
 
-- **Cron**:
-  - used for systems which are continously running.
-  - Cron jobs are defined in crontab files, which can be user-specific or system-wide.
-
-- **Anacron**:
-  - Used when we need to run the job even if the system is not running.
-  - Maintains a timestamp file to compare the current time with the execution time.
-  - Anacron jobs are defined in a configuration file (usually `/etc/anacrontab`), and it can run jobs **daily, weekly, or monthly**.
-  - It does not have so much customization of scheduled as the normal cron job.
-
-#### 2. **Execution Timing**
-
-- **Cron**:
-  - If a job is missed (e.g., if the system is down), it will not run until the next scheduled time.
-
-- **Anacron**:
-  - Checks if a job was supposed to run while the system was off and executes it when the system starts up.
-
-#### 3. **Configuration Files**
-
+```
+![alt text](image-9.png)
+![alt text](image-8.png)
 - **Cron**:
   -  accessible via the `crontab -e` command.
-  - System-wide jobs can be found in `/etc/crontab` or in files within `/etc/cron.d/`.
-
 - **Anacron**:
   - Configuration is typically found in `/etc/anacrontab`
 
@@ -39,3 +37,29 @@
         ```
         minute hour day month day_of_week command
         ```
+8. Remove Cronjob - crontab -r -u jane
+9. ShellScript should not have any extension if we need to use it with a crontab entry.
+![alt text](image-10.png)
+10. Logs for both anacron and cron are stored in `/var/log/syslog`
+
+```bash
+
+bob@ubuntu-host ~ ➜  cat /etc/anacrontab 
+# /etc/anacrontab: configuration file for anacron
+
+# See anacron(8) and anacrontab(5) for details.
+
+SHELL=/bin/sh
+HOME=/root
+LOGNAME=root
+
+# These replace cron's entries
+1       5       cron.daily      run-parts --report /etc/cron.daily
+7       10      cron.weekly     run-parts --report /etc/cron.weekly
+@monthly        15      cron.monthly    run-parts --report /etc/cron.monthly
+10   5 db_cleanup /usr/bin/touch /root/anacron_created_this
+
+bob@ubuntu-host ~ ➜  
+```
+
+

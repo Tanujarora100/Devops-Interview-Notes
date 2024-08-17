@@ -5,7 +5,24 @@
    - **`exec()`**: Replaces the current process image with a new process image. This is used to run a different program.
    - **`wait()`**: Makes the parent process wait until one of its child processes terminates.
    - **`exit()`**: 
+## Kernel Space and User Space
+- Application running in user space makes system calls to the kernel to do something on unix.
+```bash
+/usr/bin strace
+strace touch /tmp/error.log
+```
+![alt text](image-4.png)
+- First Argument is the absolute path to the file 
+- Second Argument is the array of arguments.
+- 23 vars is the number of environment variables present at the time of system calls.
+### Check the Systemcalls of a process
+```bash
+# use -p Flag
+pidof <process>
+strace -p <pid>
+```
 
+![alt text](image-3.png)
 2. **File Management System Calls**:
    - **`open()`**: 
    - **`read()`**: 
@@ -34,7 +51,7 @@
 ```
 lsof
 ```
-Find who opens this file at the moment
+#### Find who opens this file at the moment
 ```
 lsof -u user_name
 ```
@@ -76,3 +93,25 @@ lsof -i tcp
 5. **Checking Kernel Messages**:
    - `dmesg`: This command displays kernel-related messages.
 
+## Tracing System Calls
+- Can use Aquasecurity Tracee.
+- Can Load the programs in the kernel space without modification of the kernel environment.
+- Uses EBPF internally to work.
+- Run it as binary or docker container.
+- We need to bound the `/usr/src` and `/lib/modules` in read only mode bind them .
+- Run the docker container in privileged mode.
+![alt text](image-5.png)
+
+### SECCOMP IN KERNEL
+- Introduced in 2005 and part of kernel since then.
+- Check the boot config for name 
+- Docker has an inbuilt filter for mode 2 of seccomp
+![alt text](image-7.png)
+```bash
+grep -i seccomp /boot/config-$(uname -r)
+```
+![alt text](image-6.png)
+### Modes
+- Mode 0: Disabled
+- Mode 1: Strict mode only fork calls are allowed
+- Mode 2: Selective strictness and filteration of the system calls can be done.
