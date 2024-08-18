@@ -66,7 +66,6 @@ find / -type f -mtime -7
 ```bash
 find / -type f -mtime +7
 ```
-
 - **Explanation**:
   - `find / -type f`: Searches for all files starting from the root directory (`/`).
   - `-mtime +7`: Finds files modified more than 7 days ago.
@@ -83,3 +82,35 @@ find /path/to/directory -type f -mtime +7 -delete
   - `find /path/to/directory -type f`: Searches for all files in the specified directory.
   - `-mtime +7`: Finds files modified more than 7 days ago.
   - `-delete`: Deletes the files found.
+
+## FINDING FILES WITH PERMISSIONS
+```bash
+bob@ubuntu-host ~ ➜  find /var/log -perm -g=w > /home/bob/data.txt
+```
+## GREP FOR LAST WORD
+![alt text](image-1.png)
+## MATCH ANY CHARACTER IN BETWEEN
+![alt text](image-2.png)
+## ESCAPING SPECIAL CHARATCERS
+![alt text](image-3.png)
+
+## GREP FOR STARTING WORD
+```bash
+grep -i '^PS' <file_path>
+# ^ Called Carrot Character
+```
+## Grep for Uncommented Lines
+```bash
+# -v is to invert the output or take not of output
+grep -v '^#' <file_path>
+```
+## Case Insensitive Sed Command
+```bash
+# add i at the end
+bob@ubuntu-host ~ ➜  sed -i s/disabled/enabled/gi values.conf 
+
+```
+## Stream Edit Within Specific Lines
+```bash
+sed -i '500,2000s/enabled/disabled/g' values.conf
+```
