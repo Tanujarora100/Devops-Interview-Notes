@@ -220,3 +220,50 @@ A **Service Account** in Kubernetes is a special type of account that is used by
 - **Use Least Privilege**: Assign the minimum necessary permissions to service accounts. Avoid granting excessive permissions that could be exploited if the service account's token is compromised.
 - **Separate Service Accounts**: Use separate service accounts for different applications or components to minimize the blast radius in case of a security breach.
 - **Rotate Tokens**: Regularly rotate service account tokens to minimize the risk of long-lived tokens being compromised.
+Starting with Kubernetes 1.21, the default behavior for service account tokens has changed, but tokens can still be mounted as secret volumes inside pods depending on the configuration. Here's how it works:
+
+### 1. **Bound Service Account Token Volumes (Kubernetes 1.21+)**
+
+- **Bound Service Account Tokens:** Kubernetes introduced a new type of service account token called "bound service account tokens" as a more secure alternative to the legacy tokens. These tokens are bound to specific pods and have a limited lifetime. They are automatically rotated and invalidated when the pod is deleted.
+
+- **Mounting Bound Tokens:** By default, Kubernetes will mount a bound service account token into the pod at the location `/var/run/secrets/kubernetes.io/serviceaccount/token`. This token is different from the legacy token, as it is bound to the specific pod, has a limited lifetime, and is automatically rotated.
+
+### 2. **Legacy Service Account Tokens**
+
+- **Legacy Tokens:** Before Kubernetes 1.21, service account tokens were automatically created as Kubernetes Secrets and mounted into pods. These tokens had an unlimited lifetime and were not automatically rotated, which presented some security risks.
+
+- **Disabling Legacy Token Mounting:** With the introduction of bound service account tokens, Kubernetes deprecated the use of legacy tokens. If you are using a Kubernetes version 1.21 or later, the automatic creation and mounting of legacy tokens are disabled by default. However, you can still enable legacy token mounting if needed by setting the `automountServiceAccountToken` field to `true` in your pod or service account definition.
+
+### 3. **Controlling Token Mounting in Pods**
+
+You can control whether a token is mounted inside a pod using the `automountServiceAccountToken` field:
+
+- **In the Pod Spec:**
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: mypod
+  spec:
+    serviceAccountName: myserviceaccount
+    automountServiceAccountToken: true  # Explicitly mounts the token
+    containers:
+    - name: mycontainer
+      image: myimage
+  ```
+
+- **In the Service Account Spec:**
+  ```yaml
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: myserviceaccount
+  automountServiceAccountToken: false  # Prevents automatic mounting
+  ```
+
+If `automountServiceAccountToken` is set to `true` in either the pod or the service account, the token will be mounted as a secret volume inside the pod. If it is set to `false` in both, the token will not be mounted.
+
+### 4. **Using the Token Request API Instead**
+
+If you don't want the token to be mounted as a secret inside the pod, you can use the Token Request API to obtain a token programmatically when needed, as previously explained.
+
