@@ -2,7 +2,6 @@
 INPUT_FILE="/path/to/usernames.txt"
 OUTPUT_FILE="/path/to/nonexistent_users.txt"
 
-# Ensure the output file is cleared
 > "$OUTPUT_FILE"
 
 if [[ ! -f "$INPUT_FILE" ]]; then
