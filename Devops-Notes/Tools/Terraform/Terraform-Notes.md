@@ -967,3 +967,144 @@ resource "aws_instance" "example" {
   }
 }
 ```
+In Terraform, you can use loops to dynamically create resources, modules, or outputs. Terraform provides two main constructs for looping: `count` and `for_each`. Here are examples of both:
+
+### 1. **Using `count`**
+
+The `count` parameter allows you to create multiple instances of a resource.
+
+#### Example: Creating Multiple EC2 Instances
+
+```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+resource "aws_instance" "example" {
+  count         = 3  # Create 3 instances
+  ami           = "ami-12345678"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "Instance-${count.index + 1}"
+  }
+}
+```
+
+In this example, Terraform will create three EC2 instances. The `${count.index}` starts at 0, so `${count.index + 1}` ensures that the instances are named "Instance-1", "Instance-2", and "Instance-3".
+
+### 2. **Using `for_each`**
+
+The `for_each` parameter allows you to loop over a map or a set to create resources. This is more flexible than `count` because it works with named items.
+
+#### Example: Creating Multiple S3 Buckets from a List
+
+```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+variable "bucket_names" {
+  type    = list(string)
+  default = ["bucket-1", "bucket-2", "bucket-3"]
+}
+
+resource "aws_s3_bucket" "example" {
+  for_each = toset(var.bucket_names)
+
+  bucket = each.value
+
+  tags = {
+    Name = each.value
+  }
+}
+```
+
+
+### 3. **Using `for` Expression in Variables or Outputs**
+
+You can use `for` expressions within variables or outputs to create complex structures.
+
+#### Example: Creating a List of Tags
+
+```hcl
+variable "instances" {
+  type    = list(string)
+  default = ["web", "db", "cache"]
+}
+
+output "instance_tags" {
+  value = { for inst in var.instances : inst => "${inst}-server" }
+}
+```
+
+### 4. **Using `for_each` with Maps**
+
+If you have a map and want to create resources with specific values, `for_each` is perfect.
+
+#### Example: Creating Security Groups with Specific Rules
+
+```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+variable "security_groups" {
+  type = map(object({
+    name_prefix = string
+    port        = number
+  }))
+
+  default = {
+    web = {
+      name_prefix = "web-sg"
+      port        = 80
+    }
+    db = {
+      name_prefix = "db-sg"
+      port        = 5432
+    }
+  }
+}
+
+resource "aws_security_group" "example" {
+  for_each = var.security_groups
+
+  name        = each.value.name_prefix
+  description = "Security group for ${each.key}"
+
+  ingress {
+    from_port   = each.value.port
+    to_port     = each.value.port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+
+
+### 5. **Using `for_each` with Modules**
+
+You can also loop over a set or map to create multiple instances of a module.
+
+#### Example: Deploying Multiple VPCs Using a Module
+
+```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+
+  for_each = {
+    prod = "10.0.0.0/16"
+    dev  = "10.1.0.0/16"
+  }
+
+  vpc_name = each.key
+  cidr     = each.value
+}
+```
+
+
