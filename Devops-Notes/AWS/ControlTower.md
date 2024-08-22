@@ -4,7 +4,6 @@ AWS Control Tower is a service that offers a straightforward way to set up and g
 - It orchestrates the capabilities of several AWS services, including AWS Organizations, AWS Service Catalog, and AWS IAM Identity Center.
 
 ## Key Features of AWS Control Tower
-
 1. **Landing Zone** - A well-architected, multi-account environment based on security and compliance best practices. It includes:
 2. **Guardrails (Controls)** - High-level rules that provide ongoing governance
 3. **Account Factory** - Automates provisioning of new accounts with pre-approved configurations.

@@ -43,6 +43,7 @@ resource "aws_autoscaling_group" "example" {
 ```
 #### What is the purpose of the terraform_remote_state data source and how is it used?
 - The terraform_remote_state data source in Terraform enables sharing and retrieving outputs from a separate Terraform state file. 
+- We can get information about the infrastructure of some other state file.
 
 ```hcl
 data "terraform_remote_state" "networking" {
@@ -99,6 +100,26 @@ module "example_module" {
   source = "./path/to/module"
   example_input = module.module_name.example_output
 }
+
+provider "aws" {
+  region = "us-west-2"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-12345678"
+  instance_type = "t2.micro"
+}
+
+output "instance_id" {
+  description = "The ID of the EC2 instance"
+  value       = aws_instance.example.id
+}
+
+output "instance_public_ip" {
+  description = "The public IP of the EC2 instance"
+  value       = aws_instance.example.public_ip
+}
+
 ```
 
 
@@ -175,12 +196,12 @@ version = "~> 3.0"
 - Locals in Terraform are used to define local values that can be reused within a module. 
 ```
 locals {
-instance_type = "t2.micro"
-ami_id = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  ami_id = "ami-0c55b159cbfafe1f0"
 }
 resource "aws_instance" "example" {
-ami = local.ami_id
-instance_type = local.instance_type
+  ami = local.ami_id
+  instance_type = local.instance_type
 }
 ```
 #### What is the terraform console command used for?
@@ -204,8 +225,7 @@ provider "registry.terraform.io/hashicorp/aws" {
 
 
 #### What is a count parameter in Terraform?
-- The count parameter in Terraform is used to create multiple instances of a resource based on a
-specified number.
+- The count parameter in Terraform is used to create multiple instances of a resource based on a specified number.
 ```
 resource "aws_instance" "example" {
 count = 3
@@ -440,6 +460,7 @@ dynamodb_table=”terraform_state_db”
 }}
 ```
 - Do terraform init promt will come
+
 ### Local_exec and remote_exec
 Local Exec:
 The local-exec provisioner runs a command locally on the machine where Terraform is being executed.
@@ -657,7 +678,7 @@ resource "null_resource" "example" {
 ## **Variables Declaration vs. Assignment**
 
 ### **variables.tf**
-- **Purpose:** The `variables.tf` file is used to declare variables. This includes specifying the variable names, types, and optionally, default values and descriptions.
+- **Purpose:** The `variables.tf` file is used to declare variables. 
 - **Example:**
   ```hcl
   variable "instance_type" {
@@ -717,13 +738,16 @@ resource "null_resource" "example" {
    ```sh
    terraform plan -var-file="dev.tfvars"
    ```
-#### Question: When you created the environment using Terraform, what components did you create using Terraform?
-
-Answer: I created ec2 instances, s3 buckets, network security groups, application gateways
+### When you need to use a specific tfvars file for terraform plan how you will do it?
+```bash
+terraform plan -var-file="dev.tfvars"
+terraform plan -var-file="prod.tfvars"
+```
 
 #### Question: How can you make changes in the configuration of already created resources using Terraform?
 - To make changes in the configuration of already created resources, we can use the terraform import command.
 - Second is make changes in the configuration and run terraform apply again, terraform refresh is also there to check drifting.
+- Manual changes in the configuration can be caught using terraform refresh commmand and again running terraform apply.
 
 #### Question: In case the state file is lost, how do you resolve that issue?
 - If the state file is lost, using the terraform import command can help. 
@@ -732,12 +756,9 @@ Answer: I created ec2 instances, s3 buckets, network security groups, applicatio
 - Easy to use
 - Multiple providers
 - Awesome documentaton.
+
 #### Question: What is the full form of HCL?
 Answer: HCL stands for HashiCorp Configuration Language.
-
-#### What is the lifecycle block in Terraform?
-
-Answer: The lifecycle block is a nested block within a resource block, containing meta-arguments for resource behavior, such as create_before_destroy, prevent_destroy, and others.
 
 #### Question: Is it possible to destroy a single resource out of multiple resources using Terraform?
 Answer: Yes, it is possible. We can use the terraform destroy -target command followed by the resource type
@@ -746,11 +767,11 @@ Answer: Yes, it is possible. We can use the terraform destroy -target command fo
 - Keys created using Terraform can be preserved by storing them in the AWS CLI configuration folder under the credentials directory and instructing Terraform to use a specific profile during execution.
 
 #### Question: What happens if the Terraform state file is accidentally deleted?
-- If the Terraform state file is deleted, Terraform may duplicate all resources, leading to increased costs and potential issues with overlapping and cross-pollination between resources.
+- If the Terraform state file is deleted, `Terraform may duplicate all resources`, leading to increased costs and potential issues with overlapping and cross-pollination between resources.
 
 #### Question: Have you worked with Terraform modules?
 Answer: Yes, I have worked with Terraform modules. 
-- There are root modules, child modules, and published modules in Terraform.
+- There are `root modules, child modules, and published modules` in Terraform.
 
 #### Question: How do you manage Terraform code in multiple environments?
 - Answer: Terraform workspaces and reusable modules can be used to manage Terraform code in multiple environments, allowing separate state files for each workspace.
@@ -771,21 +792,6 @@ You can pass variable values directly when running Terraform commands using the 
 terraform apply -var="ami=ami-123456" -var="instance_type=t2.micro"
 ```
 ### 2. Variable Definition Files (`.tfvars`)
- These files typically have the `.tfvars` extension and contain key-value pairs for your variables.
-
-#### Example `variables.tf`
-
-```hcl
-variable "ami" {
-  description = "The AMI ID"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "The instance type"
-  type        = string
-}
-```
 
 #### Example `terraform.tfvars`
 
@@ -805,7 +811,7 @@ Terraform also supports setting variable values through environment variables. T
 export TF_VAR_ami="ami-123456"
 export TF_VAR_instance_type="t2.micro"
 ```
- environment variables to set the corresponding values.
+
 #### Question: Can you mention some drawbacks of Terraform based on your experience?
 - lack of error handling
 - restriction to (HCL)
@@ -895,7 +901,6 @@ The external data source in Terraform allows you to integrate external programs 
 #### Key Concepts
 - **External Program**: An external script or program that Terraform calls to fetch data.
 - **Result**: The output from the external program, which must be in JSON format.
-
 #### How It Works
 
 1. **Define the External Data Source**: Use the `data "external"` block to specify the external program and its input parameters.
@@ -967,7 +972,8 @@ resource "aws_instance" "example" {
   }
 }
 ```
-In Terraform, you can use loops to dynamically create resources, modules, or outputs. Terraform provides two main constructs for looping: `count` and `for_each`. Here are examples of both:
+
+In Terraform, you can use loops to dynamically create resources, modules, or outputs. Terraform provides two main constructs for looping: `count` and `for_each`. 
 
 ### 1. **Using `count`**
 
@@ -1106,5 +1112,112 @@ module "vpc" {
   cidr     = each.value
 }
 ```
+## CHILD AND PARENT MODULES:
 
+### 1. **Parent Module**
+
+A **parent module** is the Terraform configuration that invokes one or more child modules. The parent module typically includes the main configuration files (like `main.tf`, `variables.tf`, `outputs.tf`, etc.) and uses the `module` block to call or reference other modules (child modules). The parent module can pass variables to the child modules and receive outputs from them.
+
+#### Example of a Parent Module (`main.tf`):
+```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+
+  vpc_name = "my-vpc"
+  cidr     = "10.0.0.0/16"
+}
+
+module "ec2" {
+  source = "./modules/ec2"
+
+  instance_type = "t2.micro"
+  ami_id        = "ami-12345678"
+  vpc_id        = module.vpc.vpc_id
+}
+```
+
+In this example:
+- The `main.tf` file is part of the parent module.
+- It calls two child modules: one for creating a VPC (`vpc`) and one for creating EC2 instances (`ec2`).
+- The parent module passes inputs (`vpc_name`, `cidr`, `instance_type`, etc.) to the child modules and can use the outputs from these modules.
+
+### 2. **Child Module**
+
+A **child module** is a reusable Terraform configuration that is invoked by a parent module. 
+- Child modules are typically stored in separate directories, either within the same repository or in an external source (like a version control repository or a Terraform Registry). 
+- The child module receives inputs (via variables) from the parent module and provides outputs that the parent module can use.
+
+#### Example of a Child Module (`modules/vpc/main.tf`):
+```hcl
+variable "vpc_name" {
+  type = string
+}
+
+variable "cidr" {
+  type = string
+}
+
+resource "aws_vpc" "example" {
+  cidr_block = var.cidr
+  tags = {
+    Name = var.vpc_name
+  }
+}
+
+output "vpc_id" {
+  value = aws_vpc.example.id
+}
+```
+
+In this example:
+- The `modules/vpc` directory contains a child module for creating a VPC.
+- It expects two variables: `vpc_name` and `cidr`, which are passed from the parent module.
+- The child module defines resources (like `aws_vpc`) and can output values (like `vpc_id`), which the parent module can use.
+
+### 3. **Relationship Between Parent and Child Modules**
+
+- **Parent Module:** This is the main orchestrator. It defines the overall infrastructure by calling multiple child modules. 
+- It is responsible for passing variable values to child modules and using the outputs generated by those child modules.
+  
+- **Child Module:** This is the reusable unit. It encapsulates a specific part of the infrastructure, such as creating a VPC, deploying EC2 instances, or managing S3 buckets.
+-  The child module is defined independently but can be used in multiple parent modules or in different contexts.
+
+### 4. **Why Use Parent and Child Modules?**
+
+- **Reusability:** Child modules can be reused across different projects or environments without duplicating code.
+- **Organization:** Breaking infrastructure into modules helps keep configurations organized and manageable, especially as infrastructure grows in complexity.
+- **Consistency:** By using modules, you ensure that the same configuration is applied consistently across different environments (e.g., development, staging, production).
+- **Maintainability:** Modular code is easier to maintain. Changes in a module can be applied to all instances of that module across your infrastructure.
+
+### 5. **Example Project Structure**
+
+Here’s a typical project structure that includes parent and child modules:
+
+```
+project/
+├── main.tf                # Parent module
+├── variables.tf
+├── outputs.tf
+├── modules/
+│   ├── vpc/
+│   │   ├── main.tf        # Child module for VPC
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── ec2/
+│   │   ├── main.tf        # Child module for EC2
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   └── s3/
+│       ├── main.tf        # Child module for S3
+│       ├── variables.tf
+│       └── outputs.tf
+```
+
+In this structure:
+- The root of the project contains the parent module (`main.tf`, `variables.tf`, `outputs.tf`).
+- The `modules/` directory contains the child modules (`vpc`, `ec2`, `s3`), each with their own configurations.
 

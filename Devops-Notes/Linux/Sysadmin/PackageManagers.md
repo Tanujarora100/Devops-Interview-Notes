@@ -1,7 +1,21 @@
 ## LIST THE FILES OF PACKAGE
 ```bash
 dpkg --listfiles nginx
+dpkg --listfiles nginx
+/.
+/usr
+/usr/sbin
+/usr/sbin/nginx
+/usr/share
+/usr/share/doc
+/usr/share/doc/nginx
+/usr/share/doc/nginx/changelog.Debian.gz
+/usr/share/doc/nginx/copyright
+/usr/share/man
+/usr/share/man/man8
+/usr/share/man/man8/nginx.8.gz
 ```
+
 ## Search a file is associated with the package
 ```bash
 dpkg --search /usr/sbin/nginx

@@ -2,14 +2,16 @@
 
 When you attach an IAM role to an EC2 instance, it allows the instance to assume the role and access resources in other AWS accounts. Here's how it works:
 
-1. **You create an IAM role** in the destination account that has the necessary permissions to access resources in that account. For example, the role might have permissions to read from an S3 bucket.
+1. **You create an IAM role** in the destination account that has the necessary permissions to access resources in that account. 
+- For example, the role might have permissions to read from an S3 bucket.
 
 2. **You attach the IAM role** to an EC2 instance in the originating account. 
 - This establishes a trust relationship between the instance and the role.
 
 3. **When the application running on the EC2 instance needs to access resources** in the destination account, it makes API calls using the instance profile associated with the role.
 
-4. **AWS STS (Security Token Service) generates temporary security credentials** for the role, including an access key ID, secret access key, and session token. These are known as "assumed role" credentials.
+4. **AWS STS (Security Token Service) generates temporary security credentials** for the role, including an access key ID, secret access key, and session token. 
+- These are known as "assumed role" credentials.
 
 5. **The EC2 instance uses these temporary credentials** to sign API requests and access resources in the destination account that the role has permissions for.
 

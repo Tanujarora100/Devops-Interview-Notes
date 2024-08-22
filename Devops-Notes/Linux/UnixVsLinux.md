@@ -1,16 +1,12 @@
 
 ### 1. **UNIX Components**
-UNIX is a broad term that encompasses a variety of operating systems that are UNIX-like, such as AIX, HP-UX, Solaris, and BSD variants.
+UNIX is a broad term that encompasses a variety of operating systems that are UNIX-like, such as Solaris, and BSD variants.
 
 - **Kernel**: The core of the UNIX operating system. It manages hardware resources and system calls. 
   - **Monolithic Kernel**: Used by older UNIX systems like those based on the original AT&T UNIX.
-  - **Microkernel**: Some UNIX systems, like Mach (used in NeXTSTEP, and influenced macOS), use microkernels.
+  - **Microkernel**: Some UNIX systems, like Mach, use microkernels.
 
 - **Shell**: The command-line interface that interacts with the kernel. Common UNIX shells include:
-  - **Bourne Shell (sh)**
-  - **C Shell (csh)**
-  - **Korn Shell (ksh)**
-  - **Bash (in some modern UNIX variants)**
 
 - **File System**: UNIX systems traditionally use hierarchical file systems like:
   - **UFS (Unix File System)**
@@ -18,7 +14,6 @@ UNIX is a broad term that encompasses a variety of operating systems that are UN
 
 - **Utilities and Tools**: Standard UNIX tools and utilities include:
   - **awk, sed, grep**: Text processing tools.
-  - **vi, ed**: Text editors.
   - **cron**: Task scheduling.
   - **init**: System initialization process.
 
@@ -39,7 +34,8 @@ Linux is a UNIX-like operating system, but it is not UNIX-certified. It was deve
   - **ext4**: The most common file system used in Linux.
   - **XFS, Btrfs**:
 
-- **Package Management**: Unlike traditional UNIX systems, Linux distributions often have package managers:
+- **Package Management**: Unlike traditional UNIX systems
+- Linux distributions often have package managers:
   - **APT (Debian/Ubuntu)**
   - **YUM/DNF (RHEL/CentOS)**
   - **Pacman (Arch Linux)**

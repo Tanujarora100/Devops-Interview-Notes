@@ -8,10 +8,12 @@ Each pair includes:
 
 ### Common File Extensions
 #### OpenSSH Keys:
-- Private Key: Typically named without an extension or with a custom extension like .openssh. 
+- Private Key: Typically named `without an extension` or with a custom extension like .openssh. 
 - Public Key: Generally has the .pub extension, such as id_rsa.pub.
+
 #### PuTTY Keys:
 - Private Key: Uses the .ppk extension.
+
 #### Other Formats:
 - Some applications may use .pem or .der extensions
 

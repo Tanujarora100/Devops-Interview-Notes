@@ -24,7 +24,7 @@
   - **Scale-out Policies**
   - **Scale-in Policies**
 - **SQS Integration**: Use queue length metrics for scaling.
-- **Custom Metrics**: For CPU and memory utilization, install a CloudWatch agent on EC2 instances.
+- **Custom Metrics**: For CPU and memory utilization, install a `CloudWatch agent` on EC2 instances.
 
 ### **Auto Scaling New Rules**
 - **Target Tracking Scaling**: Define rules based on average CPU usage, number of requests on the ELB per instance, average network in/out.
@@ -68,7 +68,7 @@
     - key pair, security groups, and other parameters.
   - Must be recreated every time.
   - This is not reusable and must be created every time.
-  - Cannot provision spot instances.
+  - Cannot `provision spot instances`.
 - **Launch Templates**:
   - Allow multiple versions.
   - configuration reuse and inheritance.

@@ -2,18 +2,19 @@
 ## 1. Use the Shadow Password File
 - Shadow file stores the password in hash format + salt is added.
 - `etc/passwd` file stores the user account info but not the password.
+
 ## 2. Strong Password Hashing
  - The `/etc/shadow` file typically uses SHA-512 hashing 
  - Unique salt added to protect against `rainbow table attacks`.
 
 
 ## 3. Set Appropriate File Permissions
-
 - The `/etc/shadow` file should have strict permissions
 - Should be accessible by root only.
 
 ## 4. Regularly Check File Consistency
 - Use tools like `pwck` to check the consistency of the `/etc/passwd` and `/etc/shadow` files. 
+
 ## 6. Account Lockout Mechanisms
 - Configure account lockout policies that temporarily disable accounts after a certain number of failed login attempts
 
@@ -49,9 +50,9 @@ This entry represents the following:
 
 #### Special Symbols in Password Field
 
-- **`*`**: Indicates that the account is locked and cannot be used for login.
-- **`!`**: Indicates that the password is locked, but other login methods (e.g., SSH keys) may still work.
-- **`!!`**: Typically indicates that the account has been created but no password has been set yet.
+- **`*`**: Account locked out
+- **`!`**: Single exclamation means ssh will work but password will not
+- **`!!`**: Double exclamation means account created but no password set.
 
 #### Commands for Managing `/etc/shadow`
 

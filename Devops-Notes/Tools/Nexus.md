@@ -6,7 +6,7 @@
 - such as Maven, npm, NuGet
 
 ### Explain the concept of a repository proxy.
-- A repository proxy in Nexus serves as a cache for remote repositories.
+- A repository proxy in Nexus serves as a `cache` for remote repositories.
 
 ### What are repository groups, and why are they useful?
 - Repository groups combine multiple repositories into a single virtual repository. 

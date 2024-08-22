@@ -1,4 +1,4 @@
-Load average is a measure of the amount of computational work that a system performs.Load average is typically displayed as three numbers representing the average load over the last 1, 5, and 15 minutes.
+Load average is a measure of the amount of computational work that a system performs.Load average is typically displayed as three numbers representing the average load over the last `1, 5, and 15 minutes`.
 
 ### Example of Load Average Output
 
@@ -37,14 +37,17 @@ In this example:
 # Get the load average for the last 1 minute
 #!/bin/bash
 
-LOAD_1=$(awk '{print $1}' /proc/loadavg)
-THRESHOLD=4.0
-# Compare the load average with the threshold as it is a floating point number
-if (( $(echo "$LOAD_1 > $THRESHOLD" | bc -l) )); then 
-    echo "Load average is higher than threshold"
-else 
-    echo "Load average is normal"
+load_average=$(awk '{print $1}' /proc/loadavg)
+
+# Define the threshold
+threshold=1.0
+# Compare the load average to the threshold
+if (( $(echo "$load_average > $threshold" | bc -l) )); then
+  echo "Load average is high"
+else
+  echo "Load average is normal"
 fi
+
 
 ```
 

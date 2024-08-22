@@ -2,11 +2,10 @@
 - Memory management technique where the computer uses disk space as extension of RAM.
 ## Key Concepts of Virtual Memory
 - **Illusion of Large Memory**: 
-- **Swapping Mechanism**: When the system runs low on RAM, (OS) temporarily transfers inactive data from RAM to a designated space on the hard drive known as the swap space. 
-- **This process, called swapping or paging**
+- **Swapping Mechanism**: When the system runs low on RAM, (OS) temporarily transfers inactive data from RAM to a `designated space on the hard drive known as the swap space`. 
 
 - **Memory Management Unit (MMU)**: 
-    - MMU is responsible for correct address management while using the disk as virtual memory for the process.
+    - MMU is the unit responsible for correct address management of the disk used as virtual memory.
 
 ## Benefits of Virtual Memory
 1. **Multitasking**:
@@ -21,20 +20,16 @@
 free -h
 ```
 ## RESIDENT SET SIZE AND VIRTUAL SET SIZE
-The resident set size (RSS) and virtual set size (VSZ) are two important metrics
 
-## Resident Set Size (RSS)
-- Represents the total ram occupied by the process.
-- Does not include the swap space or any virtual memory or shared libraries.
+### Resident Set Size (RSS)
+- Represents the `total ram occupied by the process`.
+- Does `not include the swap space or any virtual memory` or shared libraries.
 - RSS can be obtained using commands like `ps`, `top`, `pidstat`.
 
-## Virtual Set Size (VSZ) 
+### Virtual Set Size (VSZ) 
 - Represents the total virtual memory occupied by the process.
 - Includes `RSS,SWAP SPACE , Allocated Space but still unused, shared libraries`.
 - VSZ will always be greater than or equal to RSS.
-
-The key differences are:
-
 - RSS only counts `memory in RAM`, while VSZ includes all allocated virtual memory.
 - VSZ includes memory `from shared libraries even if not currently in use`, while RSS only counts shared libraries if the pages are currently in memory.
 
@@ -56,7 +51,7 @@ ps -o %mem,rss,vsize,cmd -C nginx
 - Insufficient RAM 
 - High Process Load
 - Memory Leaks: Some applications might be consuming more memory over time, leading to exhaustion of RAM.
-- Improper System Configuration: Misconfigured swap space or system settings can lead to inefficient memory management.
+- Improper System Configuration: Misconfigured swap space or system settings 
 
 ## Symptoms of Thrashing
 - Slow system performance

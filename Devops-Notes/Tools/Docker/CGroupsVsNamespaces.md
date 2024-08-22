@@ -4,13 +4,12 @@
 
 **Description**:
 Cgroups allow you to allocate, limit, and monitor the usage of system resources (e.g., CPU, memory, disk I/O, network bandwidth) among a collection of processes. 
-- They provide fine-grained control over how resources are distributed and used.
 
 **Key Features**:
 - **Resource Limiting**: 
 - **Prioritization**: 
 - **Accounting**: Monitor and report resource usage.
-- **Control**: Freeze, stop, or restart processes within a cgroup.
+- **Control**: 
 
 **Use Cases**:
 - **Resource Management**
@@ -29,12 +28,12 @@ sudo cgexec -g cpu,memory:/mygroup /path/to/your/process
 
 **Description**:
 Namespaces provide isolation by partitioning kernel resources so that one set of processes sees one set of resources while another set sees a different set. 
-- They create isolated environments for processes, making it appear as if they have their own instance of global resources.
+- They create isolated environments for processes
 
 **Types of Namespaces**:
 1. **Mount Namespace**: Isolates the set of mounted filesystems.
 2. **UTS Namespace**: .
-3. **IPC Namespace**: Isolates inter-process communication resources.
+3. **IPC Namespace**: 
 4. **Network Namespace**: Isolates network interfaces, IP addresses, routing tables, etc.
 5. **PID Namespace**: Isolates process IDs.
 6. **User Namespace**: Isolates user and group IDs.
@@ -43,10 +42,6 @@ Namespaces provide isolation by partitioning kernel resources so that one set of
 - **Process Isolation**: 
 - **Security**:
 
-**Use Cases**:
-- **Containers**: Provide isolated environments for running applications.
-- **Security**: Limit the scope of processes to reduce the attack surface.
-- **Development**: Create isolated environments for testing and development.
 
 **Example**:
 To create a new network namespace and run a process within it:

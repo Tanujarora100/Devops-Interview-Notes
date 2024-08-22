@@ -1,19 +1,19 @@
 ### INITRD (Initial RAM Disk)
 
 **INITRD (Initial RAM Disk)** is a temporary file system used in the Linux boot process.
-- It is a temporary file system loaded by the kernel at the boot process to facilitate the loading of the operating system.
-- It helps in mounting of the root filesystem also.
+- temporary file system for loading of OS and mounting of root filesystem
 
 #### Purpose and Function of INITRD
 
 1. **Modular Kernel Support:**
-   - Modern Linux kernels are modular, meaning not all drivers and components are built directly into the kernel. INITRD provides the required modules that the kernel might need to access the root file system.
+   - INIT RD is a temporary file system which provides the kernel level modules at the boot time so that the kernel can load the OS and root filesystem.
 
 2. **Hardware Initialization:**
-   - INITRD helps in initializing hardware that is essential for mounting the root file system. This includes drivers for storage controllers.
+   - INITRD helps in initializing hardware that is essential for mounting the root file system. 
+   - This includes drivers for storage controllers.
 
 3. **System Boot Flexibility:**
-   - By using INITRD, the same kernel can be used across different hardware configurations. The specific drivers and modules required for a particular system can be loaded dynamically during the boot process.
+   - The specific drivers and modules required for a particular system can be loaded dynamically during the boot process.
 
 4. **Support for Complex Root File Systems:**
    - If the root file system is on a device that requires additional setup (e.g., a RAID array, encrypted partition, or network file system), INITRD provides the necessary tools and scripts to set up these devices before switching to the real root file system.
@@ -55,7 +55,7 @@
 #### Example Workflow
 
 1. **GRUB Configuration:**
-   - GRUB is configured to load the kernel and INITRD image.
+   - GRUB config file has the image for the INITRD and the kernel.
    - Example entry in `/boot/grub/grub.cfg`:
      ```plaintext
      menuentry 'Linux' {
@@ -69,7 +69,7 @@
    - GRUB loads `/vmlinuz-linux` (kernel) and `/initramfs-linux.img` (INITRD image).
 
 3. **Kernel Executes INITRD:**
-   - Kernel mounts the INITRD as its root file system and runs the initialization scripts.
+   - Kernel mounts the INITRD as its `temporary root file system` and runs the initialization scripts as the kernel level modules are given to the kernel dynamically.
 
 4. **Initialization Scripts in INITRD:**
    - Scripts in INITRD load necessary modules and drivers.
@@ -78,11 +78,8 @@
      # Load necessary modules
      modprobe ahci
      modprobe ext4
-     
      # Mount the real root file system
      mount /dev/sda1 /mnt/root
-     
-     # Switch to the real root file system
      exec switch_root /mnt/root /sbin/init
      ```
 

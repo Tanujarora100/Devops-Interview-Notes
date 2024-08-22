@@ -40,7 +40,7 @@ To make umask changes permanent, you can add the umask command to user-specific 
 
 | Umask Value | Description                                                  |
 |-------------|--------------------------------------------------------------|
-| `000`       | No restrictions; all users have read, write, and execute permissions. (Potential security risk) |
+| `000`       | No restrictions; all users have read, write, and execute permissions.  |
 | `022`       | Owner has full permissions; group and others have read permissions. |
 | `077`       | Only the owner has read, write, and execute permissions; group and others have no permissions. |
 | `027`       | Owner has full permissions; group has read and execute; others have no permissions. |
@@ -48,7 +48,6 @@ To make umask changes permanent, you can add the umask command to user-specific 
 
 
 ## SUID (Set User ID)
-
 - When the SUID bit is set on an executable file, it allows users to run the program with the permissions of the file's owner, rather than their own.
 - This is useful for programs that require elevated privileges, such as the `passwd` command, which allows users to change their passwords even if they don't have write access to the `/etc/shadow` file.
 - To set the SUID bit, use `chmod u+s file` or `chmod 4755 file`.
@@ -59,8 +58,8 @@ To make umask changes permanent, you can add the umask command to user-specific 
 - For a directory, use `chmod g+s dir` or `chmod 2755 dir`.
 
 ## Sticky Bit
-- Only for **files** and not for directories.
+- Only for **files** and `not for directories`.
 - Restrict the naming and deletion of fles within those directories.
-- When the sticky bit is set, only the file owner, directory owner, or root user can delete or rename a file, even if other users have write permissions on the directory.
+- When the sticky bit is set, `only the file owner, directory owner, or root user` can delete or rename a file, even if other users have write permissions on the directory.
 - This is commonly used on directories like `/tmp` to prevent users from deleting each other's temporary files.
 - To set the sticky bit, use `chmod +t dir`.

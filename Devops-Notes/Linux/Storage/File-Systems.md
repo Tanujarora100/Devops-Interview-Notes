@@ -194,3 +194,86 @@ The last number (`1` or `2`) is the `pass` field:
 - `0`: Do not check.
 - `1`: Check this file system first (usually the root file system).
 - `2`: Check this file system after the ones with `1`.
+## JOURNALING
+Journaling in file systems is a feature that helps to ensure the integrity of data on a disk, especially in the event of a system crash, power failure, or other unexpected shutdowns. It does this by keeping a log, or "journal," of changes that are going to be made to the file system. If the system crashes before the changes are fully committed to disk, the journal can be used to "replay" the changes when the system restarts, ensuring that the file system remains in a consistent state.
+
+### How Journaling Works
+
+1. **Journal Entry:** Before making any changes to the file system (like writing data to a file or modifying directory structures), the file system first writes a record of the intended changes to the journal. This record includes information on what changes are going to be made.
+
+2. **Commit Changes:** Once the intended changes are safely recorded in the journal, the file system then proceeds to make those changes to the actual file system structures on the disk.
+
+3. **Journal Completion:** After the changes have been successfully written to the file system, the journal entry is marked as complete or removed, depending on the file system.
+
+4. **Crash Recovery:** If the system crashes before the changes are completely written to the disk, the file system can read the journal when the system restarts. It will replay any incomplete operations logged in the journal to ensure the file system is consistent.
+
+### Types of Journaling
+
+There are different types of journaling that vary based on what kind of information is logged:
+
+1. **Metadata Journaling:**
+   - Only file system metadata (information about the structure of files and directories) is journaled. 
+   - This is faster but does not protect the actual data within the files.
+
+2. **Full Data Journaling:**
+   - Both metadata and file data are journaled. 
+   - This provides a higher level of data integrity but is slower because it requires more data to be written to the journal.
+
+3. **Ordered Journaling:**
+   - Metadata is journaled, but data blocks are written to disk before the metadata is committed to the journal.
+   - This provides a compromise between performance and data integrity.
+
+### Journaling File Systems in Linux
+
+Some common journaling file systems in Linux include:
+
+- **ext3:** The third extended file system, which introduced journaling. 
+- It supports metadata journaling and ordered journaling.
+- **ext4:** An improved version of ext3, with better performance and additional features. It also supports journaling.
+- **XFS:** A high-performance journaling file system, particularly suitable for large files and parallel I/O.
+
+## Extent Based Allocation
+
+
+### Key Concepts of Extent-Based Allocation
+
+1. **Extent:**
+   - An extent is a contiguous block of storage on a disk that is allocated to a file. Instead of managing each block of data individually, the file system manages these extents, which can be much larger than the traditional fixed-size blocks.
+   - A single extent could be composed of multiple disk blocks (e.g., an extent might cover 4 KB, 8 KB, or even larger chunks of contiguous disk space).
+
+2. **Reduced Fragmentation:**
+   - Because extents are larger and contiguous, the likelihood of a file being fragmented (split across multiple non-contiguous locations on the disk) is reduced
+   - This leads to better performance, as the file system can read or write larger portions of the file in one operation.
+
+3. **Improved Performance:**
+4. **Efficient Management of Large Files:**
+   - Extent-based allocation is particularly advantageous for managing large files, as it reduces the overhead associated with tracking many small blocks of storage. 
+
+
+### Example File Systems Using Extent-Based Allocation
+
+- **ext4:**
+  - The ext4 file system (an evolution of the ext3 file system) uses extent-based allocation. 
+  
+- **XFS:**
+  - XFS is a high-performance file system that also uses extent-based allocation. 
+
+### How Extent-Based Allocation Works
+
+When a file is created and data is written to it, the file system allocates an extent, which is a contiguous chunk of disk space. 
+- If the file grows and the initial extent becomes full, the file system will allocate additional extents as needed. These extents might be contiguous with the previous ones (ideal case) or might be located elsewhere on the disk if contiguous space is not available.
+- Each extent is described in the file system’s metadata by its starting location and length, which makes it easier to manage than tracking individual blocks. 
+- When the file is accessed, the file system reads the extent information and can quickly locate and read the entire extent in one operation.
+
+### Advantages of Extent-Based Allocation
+
+- **Less Fragmentation:** 
+- **Better Performance:** 
+- **Scalability:** 
+- **Simplified Metadata:** 
+
+### Disadvantages of Extent-Based Allocation
+
+- **Overhead with Small Files:** 
+- **Complexity:** 
+

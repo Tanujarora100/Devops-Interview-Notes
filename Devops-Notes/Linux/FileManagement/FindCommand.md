@@ -45,13 +45,13 @@ find /path/to/directory -type f -mtime -7 -exec ls -lt {} + | tail -n 1
 ## Finding the Largest File
 
 ```bash
-find / -type f -exec du -h {} + | sort -rh | head -n 1
+find / -type f -exec du -ah {} + | sort -rh | head -n 1
 ```
 
 ## Finding the Smallest File
 
 ```bash
-find / -type f -exec du -h {} + | sort -h | head -n 1
+find / -type f -exec du -ah {} + | sort -h | head -n 1
 ```
 
 
@@ -66,28 +66,22 @@ find / -type f -mtime -7
 ```bash
 find / -type f -mtime +7
 ```
-- **Explanation**:
-  - `find / -type f`: Searches for all files starting from the root directory (`/`).
-  - `-mtime +7`: Finds files modified more than 7 days ago.
 
 ## Removing Files Modified More Than 7 Days Ago
-
-To remove files that were modified more than 7 days ago, you can use the `-delete` option with the `find` command:
 
 ```bash
 find /path/to/directory -type f -mtime +7 -delete
 ```
 
-- **Explanation**:
-  - `find /path/to/directory -type f`: Searches for all files in the specified directory.
-  - `-mtime +7`: Finds files modified more than 7 days ago.
-  - `-delete`: Deletes the files found.
 
 ## FINDING FILES WITH PERMISSIONS
 ```bash
 bob@ubuntu-host ~ ➜  find /var/log -perm -g=w > /home/bob/data.txt
 ```
 ## GREP FOR LAST WORD
+```sh
+grep '7$' /home/bob/data.txt
+```
 ![alt text](image-1.png)
 ## MATCH ANY CHARACTER IN BETWEEN
 ![alt text](image-2.png)

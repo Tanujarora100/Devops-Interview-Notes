@@ -22,7 +22,12 @@ sudo telinit 3
 
 ### Setting the Default Runlevel
 For systems using `systemd`, the default target (equivalent to runlevel) can be set using the `systemctl` command. For example, to set the default target to graphical mode:
-
+```bash
+who -r
+    run-level 5  2024-08-22 03:49
+systemctl get-default
+    graphical.target
+```
 ```bash
 sudo systemctl set-default graphical.target
 ```

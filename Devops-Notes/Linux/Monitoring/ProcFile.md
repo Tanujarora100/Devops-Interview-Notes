@@ -11,13 +11,13 @@
 ## Virtual Files and Their Characteristics
 
 - Zero KB Size files and created in realtime by kernel.
-- Most of these files appear to have a size of zero bytes, but when accessed, they return significant amounts of information. For example, using the command `cat /proc/cpuinfo` displays detailed CPU information, while `cat /proc/meminfo` provides memory statistics[
+- Most of these files appear to have a size of zero bytes, but when accessed, they return significant amounts of information. For example, using the command `cat /proc/cpuinfo` displays detailed CPU information, while `cat /proc/meminfo` provides memory statistics
 
 The `/proc` file system also allows users to interact with kernel parameters. 
 - Some files within `/proc/sys` can be modified to change kernel settings on-the-fly
 ![alt text](image.png)
-## Key Files and Directories
 
+## Key Files and Directories
 - **`/proc/filesystems`**: 
 - **`/proc/loadavg`**: 
 - **`/proc/uptime`**: 

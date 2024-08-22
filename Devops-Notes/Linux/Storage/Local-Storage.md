@@ -19,7 +19,6 @@
   sudo fdisk /dev/sdX
   ```
   - Enter `d` to delete a partition.
-  - Follow prompts to specify the partition number.
   - Enter `w` to write changes.
 
 ### **Modifying Partitions**
@@ -28,6 +27,7 @@
   sudo parted /dev/sdX
   ```
   - Enter `resizepart NUMBER END` to resize a partition.
+  - Parted does not need the deletion of the partition by fdisk does.
 
 - **Resizing with `fdisk`** (requires deletion and recreation):
   ```bash
@@ -43,21 +43,23 @@
   sudo fdisk /dev/sdX
   ```
   - Create a new partition and set the type to `82` (Linux swap).
+  - 82 type is for swap space.
   - Format the partition:
-  ```bash
-  sudo mkswap /dev/sdXn
-  ```
+    ```bash
+    sudo mkswap /dev/sdXn
+    ```
   - Enable the swap:
-  ```bash
-  sudo swapon /dev/sdXn
-  ```
+    - Swapon is used to enable the swap space. 
+    ```bash
+    sudo swapon /dev/sdXn
+    ```
 
-- **Creating a Swap File**:
-  ```bash
-  sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
-  sudo mkswap /swapfile
-  sudo swapon /swapfile
-  ```
+  - **Creating a Swap File**:
+    ```bash
+    sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    ```
 
 ### **Managing Swap Space**
 - **Check Swap Space**:
@@ -70,7 +72,7 @@
   /swapfile swap swap defaults 0 0
   ```
 
-## **Manage and Configure LVM Storage**
+# **Manage and Configure LVM Storage**
 
 ### **Creating LVM Components**
 - **Create Physical Volumes**:
