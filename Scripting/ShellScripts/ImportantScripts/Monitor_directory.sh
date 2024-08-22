@@ -7,12 +7,12 @@ LOG_FILE="/home/$USER/log_monitor.log"
 if [[ ! -d "$ARCHIVE_DIRECTORY" ]]; then
     mkdir -p "$ARCHIVE_DIRECTORY"
 fi
-inotifywait -m -e create --format '%w%f' "$MONITORING_DIRECTORY" | while read NEWFILE
+inotifywait -m -e create "$MONITORING_DIRECTORY" | while read path action file;
 do
-    if [[ "$NEWFILE" == *.log ]]; then
-        FILENAME=$(basename "$NEWFILE")
+    if [[ "$file" == *.log ]]; then
+        FILENAME=$(basename "$file")
         ARCHIVE_PATH="$ARCHIVE_DIRECTORY/$FILENAME"
-        mv "$NEWFILE" "$ARCHIVE_PATH"
+        mv "$file" "$ARCHIVE_PATH"
         if [[ $? -eq 0 ]]; then
             echo "$(date): Log file $FILENAME moved to the archive directory." | tee -a "$LOG_FILE"
         else

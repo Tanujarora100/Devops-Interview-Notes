@@ -14,7 +14,7 @@ log_files=$(find "$log_directory" -type f -name "*.log")
 if [[ -z "$log_files" ]]; then
   echo "$(date): No .log files found in $log_directory." >> "$log_file"
 else
-  tar -czf "$archive_name" $log_files 2>> "$log_file"
+  tar -czvf "$archive_name" $log_files 2>> "$log_file"
 
   if [[ $? -eq 0 ]]; then
     echo "$(date): Compressed the following files into $archive_name:" >> "$log_file"
