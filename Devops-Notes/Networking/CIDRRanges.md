@@ -34,7 +34,7 @@ $$
 
 ### **CIDR Blocks and Supernetting**
 
-CIDR blocks are groups of IP addresses that share the same network prefix. These blocks can be aggregated into larger blocks, known as supernets, which help reduce the number of entries in routing tables and simplify network management[1][4].
+CIDR blocks are groups of IP addresses that share the same network prefix.
 
 For instance, the CIDR block `192.168.0.0/23` includes addresses from `192.168.0.0` to `192.168.1.255`, combining two `/24` blocks into one larger block.
 
@@ -42,7 +42,7 @@ For instance, the CIDR block `192.168.0.0/23` includes addresses from `192.168.0
 
 - **Efficient IP Address Allocation**: CIDR allows for allocation of IP addresses in variable-sized blocks, reducing wastage.
 - **Reduced Routing Table Size**: Aggregating multiple IP addresses into a single CIDR block reduces the number of entries in routing tables, improving routing efficiency.
-- **Flexibility**: CIDR provides more flexibility in network design and IP address management compared to the rigid classful addressing system[1][10].
+- **Flexibility**: CIDR provides more flexibility in network design and IP address management compared to the rigid classful addressing system.
 
 ### **Example Calculation**
 
@@ -62,17 +62,18 @@ $$
 $$
 
 CIDR is a powerful tool for network administrators, providing flexibility and efficiency in IP address allocation and routing.
-Classless Inter-Domain Routing (CIDR) offers several significant advantages over the traditional classful network design. Here are the key benefits:
+Classless Inter-Domain Routing (CIDR) offers several significant advantages over the traditional classful network design. 
 
 ## **1. Efficient Use of IP Addresses**
 
-- **Reduced Wastage**: CIDR allows for the allocation of IP addresses in variable-sized blocks, which minimizes the wastage of IP addresses. In classful addressing, fixed block sizes often led to inefficient use of IP space, as organizations had to choose from predefined classes (A, B, C) that might not match their actual needs[1][4][6].
-- **Precise Allocation**: With CIDR, IP addresses can be allocated based on the exact number of required addresses, rather than fitting into a class. For example, a company needing 2,000 IP addresses can be allocated a /21 block (2,048 addresses) instead of multiple Class C blocks or a single Class B block, which would waste addresses[3][5].
+- **Reduced Wastage**: CIDR allows for the allocation of IP addresses in variable-sized blocks, which minimizes the wastage of IP addresses. In classful addressing, fixed block sizes often led to inefficient use of IP space, as organizations had to choose from predefined classes (A, B, C) that might not match their actual needs.
+- **Precise Allocation**: With CIDR, IP addresses can be allocated based on the exact number of required addresses, rather than fitting into a class. 
+    - For example, a company needing 2,000 IP addresses can be allocated a /21 block (2,048 addresses) instead of multiple Class C blocks or a single Class B block, which would waste addresses.
 
 ## **2. Flexibility in Network Design**
 
-- **Variable-Length Subnet Masking (VLSM)**: CIDR supports VLSM, allowing network administrators to create subnets of varying sizes within the same network. This flexibility is crucial for efficiently managing IP address space in complex networks[4][9].
-- **Supernetting**: CIDR enables the aggregation of multiple IP networks into a single supernet, simplifying network management and reducing the number of routing table entries[1][2][10].
+- **Variable-Length Subnet Masking (VLSM)**: CIDR supports VLSM, allowing network administrators to create subnets of varying sizes within the same network. This flexibility is crucial for efficiently managing IP address space in complex networks.
+- **Supernetting**: CIDR enables the aggregation of multiple IP networks into a single supernet, simplifying network management and reducing the number of routing table entries.
 
 ## **3. Improved Routing Efficiency**
 

@@ -98,8 +98,8 @@ Directives are special instructions that affect the processing of the zone file.
 
 Resource records are the core components of a zone file, each representing a specific piece of information about the domain. Common types of resource records include:
 
-- **SOA (Start of Authority)**: The first record in a zone file, it contains administrative information about the zone, such as the primary name server, the email of the domain administrator, and various timers relating to zone refresh.
-- **NS (Name Server)**: Specifies the authoritative name servers for the domain.
+- **SOA (Start of Authority)**: The first record in a zone file, it contains `administrative information about the zone, such as the primary name server, the email of the domain administrator`, and various timers relating to zone refresh.
+- **NS (Name Server)**: Specifies the `authoritative name servers for the domain.`
 - **A (Address)**: Maps a domain name to an IPv4 address.
 - **AAAA (IPv6 Address)**: Maps a domain name to an IPv6 address.
 - **CNAME (Canonical Name)**: Alias of one name to another. The DNS lookup will continue by retrying the lookup with the new name.

@@ -1,6 +1,7 @@
 
 1. **What is Prometheus?**
    - **Answer**: Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud. 
+   - Written in GOLANG.
 
 2. **What are the key features of Prometheus?**
    - **Answer**: Key features of Prometheus include a multi-dimensional data model, powerful query language (PromQL), efficient time series database.
@@ -13,10 +14,14 @@
      - Exporters: Collect metrics from third-party systems.
      - Alertmanager: Handles alerts.
      - Visualization tools: Such as Grafana for displaying metrics.
+     - HTTP Server gets the query and then queries the TSDB.
+    ![alt text](image-1.png)
 
 4. **How does Prometheus collect metrics?**
    - **Answer**: Prometheus collects metrics by scraping HTTP endpoints that expose metrics in a specific format. 
    - These endpoints can be applications instrumented with a Prometheus client library or exporters that convert data from other systems into the Prometheus format.
+    ![alt text](image.png)
+    ![alt text](image-3.png)
 
 5. **What is a Prometheus server?**
    - **Answer**: The Prometheus server is the core component that retrieves and stores time series data from instrumented targets by scraping their HTTP endpoints. 
@@ -26,7 +31,10 @@
    - **Answer**: In Prometheus, a time-series database stores data points indexed by a timestamp.
 
 8. **What is an exporter in Prometheus?**
-   - **Answer**: An exporter is a component that collects metrics from a third-party system and exposes them in a format that Prometheus can scrape. Examples include node_exporter for hardware metrics and blackbox_exporter for probing endpoints.
+   - **Answer**: An exporter is a component that collects metrics from a third-party system and exposes them in a format that Prometheus can scrape
+   - Examples include node_exporter for hardware metrics and blackbox_exporter for probing endpoints.
+   - Basically running as a process.
+   - Prometheus queries the data and pulls it.
 
 9. **What is the purpose of a job in Prometheus configuration?**
    - **Answer**: A job in Prometheus configuration defines a set of targets to be scraped and the specific metrics to collect from these targets.
@@ -89,6 +97,7 @@
 18. **What is the difference between push and pull metrics collection in Prometheus?**
     - **Answer**: In pull-based metrics collection, Prometheus scrapes metrics from targets by pulling data from their HTTP endpoints. 
     - In push-based collection, targets push metrics to Prometheus through the Pushgateway, suitable for short-lived jobs.
+    ![alt text](image-2.png)
 
 19. **How does Prometheus handle high availability?**
     - **Answer**: Prometheus handles high availability by running multiple Prometheus instances in parallel, often in a federated setup. 
@@ -131,4 +140,13 @@
 30. **What are Thanos and Cortex, and how do they relate to Prometheus?**
     - **Answer**: Thanos and Cortex are projects that extend Prometheus capabilities:
       - **Thanos**: Provides long-term storage, high availability, and global querying across multiple Prometheus instances.
-     
+31. **What is Service Discovery**
+  - To not hard code the data in scrape config file and then we can  use the service discovery like in kubernetes and the ec2 instances.
+32. **Custom Metrics** 
+ - They have client libraries for collecting metrics for custom applications like number of exceptions etc.
+33. **Benfits of Pull based**
+- Easier to tell if the target is down 
+- Definitive list of targets=> Essential source of truth
+34. **Why Push Based**:
+  - event based systems
+  - short lived jobs (Pushgateway can handle it)

@@ -3,7 +3,7 @@
 1. **Download Prometheus**:
 
    ```bash
-   wget https://github.com/prometheus/prometheus/releases/download/v2.41.0/prometheus-2.41.0.linux-amd64.tar.gz
+   wget https://github.com/prometheus/prometheus/releases/download/v2.40.1/prometheus-2.40.1.linux-amd64.tar.gz
    ```
 
 2. **Extract and move to the appropriate directory**:
@@ -52,7 +52,7 @@
 1. **Download Node Exporter**:
 
    ```bash
-   wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+   wget https://github.com/prometheus/node_exporter/releases/download/v1.4.0/node_exporter-1.4.0.linux-amd64.tar.gz
    ```
 
 2. **Extract and move to the appropriate directory**:
@@ -211,7 +211,7 @@ Repeat the installation steps for Node Exporter on each additional server:
 ### Step 2: Configure Prometheus to Scrape Metrics from Multiple Servers
 
 1. **Edit the Prometheus configuration file (`/etc/prometheus/prometheus.yml`)**:
-
+https://www.stackhero.io/en/services/Prometheus/documentations/Using-Node-Exporter/Add-TLS-encryption-to-Prometheus-Node-Exporter
    ```bash
    sudo nano /etc/prometheus/prometheus.yml
    ```
@@ -268,3 +268,93 @@ scrape_configs:
       - targets: ['localhost:9100', '192.168.1.2:9100', '192.168.1.3:9100']
 ```
 
+## TLS CERTIFICATES
+
+### 1. **Generate TLS Certificates**
+#### Using OpenSSL:
+
+```bash
+# Generate a private key
+openssl genrsa -out prometheus.key 2048
+
+# Generate a certificate signing request (CSR)
+openssl req -new -key prometheus.key -out prometheus.csr
+
+# Generate a self-signed certificate
+openssl x509 -req -days 365 -in prometheus.csr -signkey prometheus.key -out prometheus.crt
+```
+
+### 2. **Configure Prometheus to Use TLS**
+
+After generating the certificates, configure Prometheus to use them. You need to update the Prometheus configuration file (typically named `prometheus.yml`) and the command-line arguments used to start Prometheus.
+
+#### Update the Prometheus Configuration:
+
+Edit your `prometheus.yml` configuration file to include the TLS settings. Under the `scrape_configs` section, configure each job to use TLS:
+
+```yaml
+scrape_configs:
+  - job_name: 'node_exporter'
+    scheme: https
+    tls_config:
+      ca_file: /path/to/ca.crt
+      cert_file: /path/to/prometheus.crt
+      key_file: /path/to/prometheus.key
+    static_configs:
+      - targets: ['localhost:9100']
+```
+
+#### Update the Prometheus Command-Line Arguments:
+
+When starting Prometheus, specify the paths to the certificate and key:
+
+```bash
+./prometheus --web.config.file=/path/to/web-config.yml
+```
+
+### 3. **Create a Web Configuration File**
+
+Prometheus uses a web configuration file to enable TLS. Create a `web-config.yml` file with the following content:
+
+```yaml
+tls_server_config:
+  cert_file: /path/to/prometheus.crt
+  key_file: /path/to/prometheus.key
+```
+
+Make sure this file is referenced by the `--web.config.file` flag when starting Prometheus.
+
+### 4. **Restart Prometheus**
+
+After making these changes, restart the Prometheus service:
+
+```bash
+sudo systemctl restart prometheus
+```
+
+Or if running manually:
+
+```bash
+./prometheus --config.file=prometheus.yml --web.config.file=/path/to/web-config.yml
+```
+
+### 5. **Configure Clients to Use TLS**
+
+Ensure all Prometheus clients, like node exporters or other exporters, are configured to use TLS and have the appropriate certificates. Update their configurations to use the HTTPS scheme and point them to the CA certificate used by Prometheus.
+
+### 6. **Verify Encryption**
+
+To confirm that encryption is working:
+
+1. Access Prometheus using HTTPS in a web browser (`https://<prometheus-server>:9090`).
+2. Check the connection details to verify that a secure connection is established.
+3. Ensure no unencrypted HTTP traffic is allowed.
+
+### 7. **Monitoring and Maintenance**
+
+- **Renew Certificates:** Keep track of certificate expiration dates and renew them as needed.
+- **Security Audits:** Regularly audit and review your Prometheus and client configurations to ensure they meet your security requirements.
+
+### Conclusion
+
+Using TLS to encrypt communications between Prometheus and its clients adds a vital layer of security, especially in environments where sensitive data is monitored. Following these steps will help you set up and maintain secure communication for Prometheus.
