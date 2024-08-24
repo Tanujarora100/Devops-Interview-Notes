@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-elasticsearch
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: /data/elasticsearch
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-headless-service
+  namespace: efk
+spec:
+  selector:
+    app: es-statefulset
+  clusterIP: None
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
+  - name: transport
+    protocol: TCP
+    port: 9300
+    targetPort: 9300
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-nodeport-service
+  namespace: efk
+spec:
+  selector:
+    app: es-statefulset
+  type: NodePort
+  ports:
+  - name: es-port
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
+    nodePort: 30015
+  - name: es-port-2
+    protocol: TCP
+    port: 9300
+    targetPort: 9300
+    nodePort: 30020
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es-statefulset
+  namespace: efk
+spec:
+  selector:
+    matchLabels:
+      app: es-statefulset
+  serviceName: "es-headless-service"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: es-statefulset
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: elastic-search
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        volumeMounts:
+        - name: es-data
+          mountPath: /usr/share/elasticsearch/data
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      initContainers:
+      - name: Permission-Container
+        image: busybox:1.38
+        command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+        volumeMounts:
+        - name: es-data
+          mountPath: /usr/share/elasticsearch/data
+        securityContext:
+          allowPrivilegeEscalation: true
+  volumeClaimTemplates:
+  - metadata:
+      name: es-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 5Gi
