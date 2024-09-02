@@ -13,4 +13,4 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          name: genin
+          kubernetes.io/metadata.name: genin

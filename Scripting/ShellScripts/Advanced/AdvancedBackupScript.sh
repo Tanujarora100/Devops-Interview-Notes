@@ -2,8 +2,8 @@
 DIRECTORY="/var/log"
 TARGET="/tmp/backup_files"
 if [ ! -d "$DIRECTORY" ]; then  
-echo "Error: Directory '$DIRECTORY' does not exist."
-exit 1
+   echo "Error: Directory '$DIRECTORY' does not exist."
+   exit 1
 fi
 
 if [ ! -d "$TARGET" ]; then
