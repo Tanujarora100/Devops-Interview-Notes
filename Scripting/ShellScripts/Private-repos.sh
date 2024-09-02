@@ -16,3 +16,4 @@ for REPO in $REPOS; do
 done
 
 echo "All repositories have been made private." >> "$LOG_FILE"
+

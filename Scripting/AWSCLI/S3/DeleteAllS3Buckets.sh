@@ -3,7 +3,7 @@
 MASTER_ACCOUNT_PROFILE="master-account"
 CROSS_ACCOUNT_ROLE="cross-account-role"
 ACCOUNT_IDS=$(aws organizations list-accounts --query 'Accounts[*].Id' --output text)
-
+# [ account1, account2m,]
 for ACCOUNT_ID in $ACCOUNT_IDS; do
     echo "Processing S3 cleanup for $ACCOUNT_ID"
     CREDENTIALS=$(aws sts assume-role \
@@ -27,14 +27,11 @@ for ACCOUNT_ID in $ACCOUNT_IDS; do
 
         if [ "$OBJECT_COUNT" -gt 0 ]; then
             echo "Deleting $OBJECT_COUNT objects in bucket $BUCKET..."
-            
             OBJECTS=$(aws s3api list-objects-v2 --bucket "$BUCKET" --query 'Contents[].{Key: Key}' --output json)
             aws s3api delete-objects --bucket "$BUCKET" --delete "$(echo $OBJECTS | jq -c '{Objects: .}')"
-            
             if [ $? -eq 0 ]; then
                 echo "Objects in bucket $BUCKET deleted successfully."
                 aws s3api delete-bucket --bucket "$BUCKET"
-                
                 if [ $? -eq 0 ]; then
                     echo "Bucket $BUCKET deleted successfully."
                 else
