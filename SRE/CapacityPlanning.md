@@ -90,7 +90,7 @@ A **Five Nines SLO** (99.999% uptime) is generally considered very good but can 
   - **Complexity:** Maintaining Five Nines can increase operational complexity, making systems harder to manage and potentially introducing risks of over-engineering.
   - **Realistic Expectations:** Not all services need to be available 99.999% of the time. 
     - If the cost of achieving this level of uptime outweighs the business impact of slightly lower availability, it might not be justified.
-
+---
 ### Why is Configuration as Code Important?
 
 **Configuration as Code (CaC)** is the practice of managing system configurations (such as server settings, application configurations, and infrastructure settings) through code and automation tools rather than through manual processes.
@@ -129,3 +129,70 @@ The **CAP Theorem** is a principle in distributed systems that states that it is
 - **In the Context of Technology:**
   - In computing, immutability often refers to data or objects that, once created, cannot be modified. If you need a change, you create a new instance with the desired changes, while the original remains unchanged.
   - **Example:** Imagine writing a letter in ink. Once the ink dries, the content of the letter can’t be changed without starting over with a new piece of paper. Similarly, immutable data can't be changed once it's written; instead, you create a new version with any changes needed.
+## HOW SLO's are calculated
+SLO (Service Level Objective) ko decide karna SRE (Site Reliability Engineering) mein ek critical task hota hai. SLOs define karte hain ki ek service kitne level par operate karegi, aur kya expected performance aur availability hogi. 
+
+### **1. SLOs ka Importance Samajhna**
+
+SLOs service reliability aur performance ko define karte hain. Ye SRE aur business teams ke beech ek contract ki tarah hote hain jismein specify hota hai ki ek service se kitni uptime ya performance expect ki ja rahi hai. 
+
+### **2. Key Components of SLOs**
+
+- **Availability**: Kitna percentage time service available honi chahiye. Example: 99.9% uptime.
+- **Latency**: Response time ke liye acceptable limits. Example: 95% requests ko 200 ms se kam time mein respond karna chahiye.
+- **Error Rate**: Total requests mein se kitne percentage errors acceptable hain. Example: 1% se kam errors.
+- **Throughput**: Kitni requests ek second mein service handle kar sakti hai.
+
+### **3. Steps to Decide SLOs**
+
+#### **Step 1: Business Objectives Samajhna**
+   - Pehla step hai business objectives ko samajhna. SLOs ko business goals se align karna chahiye. 
+   - Aapko ye samajhna hoga ki kaunse features ya services business ke liye critical hain aur unse kya expectations hain.
+   - Example: Agar aap ek e-commerce site operate kar rahe ho, toh check-out service ki availability aur low latency critical hogi.
+
+#### **Step 2: Customer Expectations Identify Karna**
+   - Customers ke feedback, surveys, aur usage patterns se aap unke expectations ko samajh sakte ho. 
+   - Ye help karega realistic SLOs define karne mein jo customers ke liye meaningful ho.
+   - Example: Agar customers complain karte hain ki website slow hai, toh latency SLO ko strict rakhna chahiye.
+
+#### **Step 3: Historical Data Analysis**
+   - Historical performance data analyze karke aap samajh sakte ho ki current system kis level par operate kar raha hai. 
+   - Ye data aapko help karega realistic SLOs set karne mein.
+   - Example: Agar aapka system pichle 6 mahino se 99.5% uptime maintain kar raha hai, toh aap SLO ko 99.5% ya usse upar set karne par focus kar sakte ho.
+
+#### **Step 4: Define Error Budgets**
+   - Error budget ek allowed failure threshold define karta hai. 
+   - Ye SLO se related hota hai aur specify karta hai ki acceptable error rate kitna hai.
+   - Example: Agar aapka SLO 99.9% uptime hai, toh error budget 0.1% downtime hoga. Ye budget batata hai ki SRE team ko kaunse improvements par focus karna chahiye.
+
+#### **Step 5: Competitor Benchmarking**
+   - Industry standards aur competitors ke SLOs ko dekhna bhi important hai. 
+   - Isse aapko pata chalega ki aapki service industry mein kaha stand karti hai aur kitne level ki reliability expect ki ja rahi hai.
+   - Example: Agar industry standard 99.99% uptime ka hai, toh aapko bhi similar SLO achieve karne ki planning karni chahiye.
+
+#### **Step 6: Stakeholder Alignment**
+   - SLOs decide karte waqt stakeholders, jaise product managers, engineering teams, aur customer support teams ke saath align karna zaroori hai. Ye ensure karta hai ki sabhi teams ek hi page par hain.
+   - Regular meetings aur discussions SLOs ko set karne aur monitor karne ke liye zaroori hain.
+
+### **4. Setting Measurable and Realistic SLOs**
+
+- **SMART Criteria**: SLOs ko SMART (Specific, Measurable, Achievable, Relevant, Time-bound) hona chahiye.
+  - **Specific**: Kya measure kar rahe ho, jaise response time ya uptime.
+  - **Measurable**: Metrics kaise collect karenge, jaise monitoring tools.
+  - **Achievable**: Realistic target hone chahiye based on current performance.
+  - **Relevant**: Business aur customer needs se related hone chahiye.
+  - **Time-bound**: Defined time period ke liye hone chahiye, jaise monthly ya quarterly.
+
+### **5. Monitor and Iterate**
+
+- **Monitoring Tools**: Use karo monitoring tools jaise Prometheus, Grafana, ya New Relic SLOs ko track karne ke liye. Ye tools real-time data provide karte hain jo SLO compliance ko ensure karne mein madad karte hain.
+- **Regular Reviews**: SLOs ko regularly review aur update karo. Business needs, customer feedback, ya technological changes ke hisab se SLOs ko adjust karte raho.
+
+### **Example of an SLO Setting Process**
+
+1. **Business Requirement**: Online video streaming service chahati hai ki 99.95% uptime ho.
+2. **Customer Expectation**: Customers complain kar rahe hain ki videos buffer hoti hain, toh latency bhi kam karni hai.
+3. **Historical Data**: Last year ke data se pata chalta hai ki average uptime 99.8% tha, aur latency 300 ms thi.
+4. **Error Budget**: 99.95% uptime ka matlab hai ki 0.05% downtime acceptable hoga. Iske hisab se monthly 22 minutes downtime allow hoga.
+5. **Stakeholder Discussion**: Teams se discuss karke SLO ko finalize karte hain.
+

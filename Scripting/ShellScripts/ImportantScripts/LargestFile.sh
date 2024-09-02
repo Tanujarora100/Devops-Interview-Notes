@@ -8,5 +8,3 @@ fi
 
 largest_file=$(find "$DIRECTORY" -type f -exec du -ah {} + | sort -rh | head -n 1 | awk '{print $2}')
 echo "Largest file in '$DIRECTORY': $(basename "$largest_file")"
-
-#  -exec du -ah {} + | sort -rh | head -n 1 

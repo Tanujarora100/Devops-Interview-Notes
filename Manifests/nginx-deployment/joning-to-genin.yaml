@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: jonin-to-genin
+  namespace: jonin
+spec:
+  podSelector:
+    matchLabels:
+      rank: jonin
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: genin
