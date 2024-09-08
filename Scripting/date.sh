@@ -1,8 +1,10 @@
 #!/bin/bash 
-LOG_FILE="$PWD/date.txt"
-touch "$LOG_FILE"
+echo "Current User Logged in is : $USER"
+echo "Current kernel version is $(uname -a)" 
+echo "Current shell is $SHELL"
+echo "Current date and time is $(date)"
+echo "Total memory in the system is $(df -h  | awk '{print $4}' 
+echo "Disk usage in root directory is $(du -sh / | awk '{print $1}')
 
-echo $(date) >> "$LOG_FILE"
-echo $(date +%Y-%m-%d) >> "$LOG_FILE"
-# echo $(date +%Y-%m-%d) >> "$LOG_FILE"
-
+"$USER" ==> Correct
+ 

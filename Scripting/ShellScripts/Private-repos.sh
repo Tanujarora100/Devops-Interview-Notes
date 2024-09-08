@@ -1,6 +1,6 @@
 #!/bin/bash
 LOG_FILE="$PWD/repo_private.log"
-GITHUB_TOKEN="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" >> "$LOG_FILE"
+GITHUB_TOKEN="" >> "$LOG_FILE"
 
 REPOS_URL="https://api.github.com/user/repos?per_page=100"
 
