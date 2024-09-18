@@ -5,7 +5,7 @@
 - **Swapping Mechanism**: When the system runs low on RAM, (OS) temporarily transfers inactive data from RAM to a `designated space on the hard drive known as the swap space`. 
 
 - **Memory Management Unit (MMU)**: 
-    - MMU is the unit responsible for correct address management of the disk used as virtual memory.
+    - MMU is the unit responsible for correct address management of the `disk used as virtual memory`.
 
 ## Benefits of Virtual Memory
 1. **Multitasking**:
@@ -13,7 +13,7 @@
 
 ## Limitations of Virtual Memory
 1. **Performance Overhead**: Accessing data in virtual memory is slower.
-2. **Thrashing**: Excessive swapping can lead to thrashing, where the system spends more time swapping pages than executing processes.
+2. **Thrashing**: Excessive `swapping can lead to thrashing`, where the system spends more time swapping pages than executing processes.
 4. **Complexity**: 
 
 ```

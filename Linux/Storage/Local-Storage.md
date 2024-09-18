@@ -43,7 +43,7 @@
   sudo fdisk /dev/sdX
   ```
   - Create a new partition and set the type to `82` (Linux swap).
-  - 82 type is for swap space.
+  -  `82 type is for swap space`.
   - Format the partition:
     ```bash
     sudo mkswap /dev/sdXn

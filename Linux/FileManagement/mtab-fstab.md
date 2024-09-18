@@ -24,9 +24,9 @@
 ### `/etc/mtab` (Mounted File Systems)
 
 #### Purpose:
-- The `/etc/mtab` file is a dynamic file that maintains a list of currently mounted file systems. 
+- The `/etc/mtab` file is a `dynamic file` that maintains a list of currently mounted file systems. 
 - Fstab is static while this is dynamic
-  - It is updated by the `mount` and `umount` commands as file systems are mounted and unmounted.
+  - It is updated by the `mount` and `umount` commands as file systems are `mounted and unmounted`.
 
 #### Structure:
 - Each line in `/etc/mtab` contains information similar to `/etc/fstab` but is dynamically generated and reflects the current state of mounted file systems.

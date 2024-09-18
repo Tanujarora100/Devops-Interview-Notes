@@ -12,14 +12,13 @@
 #### **Key Features**
 - **Subnets**: A subnet is a range of IP addresses in your VPC. 
   - Each **subnet must reside in a single Availability Zone**.
-- **IP Addressing**: You can assign both IPv4 and IPv6 addresses to your VPCs and subnets.
-- **Routing**: Route tables determine where network traffic from your subnet or gateway is directed.
+- **IP Addressing**: You can assign both IPv4 and IPv6 
 - **Gateways and Endpoints**: Gateways connect your VPC to another network, such as the internet or AWS services.
 - **Peering Connections**: Route traffic between resources in two VPCs.
 - **Traffic Mirroring**: Copy network traffic from network interfaces for inspection.
 - **Transit Gateways**: Central hub to route traffic between VPCs, VPN connections, and AWS Direct Connect connections.
 - **VPC Flow Logs**: Capture information about IP traffic going to and from network interfaces in your VPC.
-- **VPN Connections**: Connect your VPCs to on-premises networks using AWS VPN.
+
 
 ### **VPC Endpoint**
 

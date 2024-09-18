@@ -3,9 +3,9 @@ Here are the key components of LVM:
 
 1. **Physical Volumes (PVs):**
     - Physical Volumes are the **raw storage devices, such as hard drives or SSDs.**
-    - Before you can use a hard drive with LVM, you must initialise it as a physical volume.
+    - Before you can use a hard drive with LVM,`you must initialise it as a physical volume`.
     - `sudo lvmdiskscan` shows the physical volumes.
-    ![alt text](image-1.png)
+
 2. **Volume Groups (VGs):**
     - Volume Groups are made up of one or more physical volumes.
     - **A Volume Group can be thought of as a pool of storage.**
@@ -18,8 +18,8 @@ LVM allows for dynamic resizing of logical volumes, which means you can change t
 
 ### **Why Use LVM?**
 
-- **Flexibility:** It allows administrators to resize and move partitions while the system is running.
-- **Snapshotting:** LVM supports creating snapshots of logical volumes. This is extremely useful for backups and testing purposes.
+- **Flexibility:** 
+- **Snapshotting:** 
 
 ## **Add a new disk to LVM without using partitions**
 Adding a new disk to LVM without using partitions involves the following steps:

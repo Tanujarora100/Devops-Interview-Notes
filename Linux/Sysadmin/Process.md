@@ -79,11 +79,11 @@ kill -SIGINT 12345
 
 ### Special PID Values in `kill`
 - **`-1`**: 
-  - kill -1 pid will kill all the process except the init process itself.
+  - kill -1 pid will kill all the `process except the init process itself`.
   - init process is also not killed by -1 but all other process which user has the permission to signal will be killed.
 - **`0`**: 
-  - This PID will be in such a group 
-  - By Zero send we can send the signal to all processes in the same process group.
+  - This `PID will be in such a group`
+  - By Zero send we can send the signal to `all processes in the same process group`.
 
 - **Negative values less than -1**
   - any other negative value less than 1 will be considered as a process group id and this signal will be send to all processes in the that particular process group.
@@ -148,7 +148,8 @@ If you wish to bring a background job to the foreground, utilize the fg command 
 fg 3
 ```
 
-To convert a foreground process to a background process, you can use Ctrl+Z. **This operation pauses the process and allows you to resume it in the background using the bg command followed by the job number.** 
+To convert a foreground process to a background process, you can use Ctrl+Z. 
+- **This operation pauses the process and allows you to resume it in the background using the bg command followed by the job number.** 
 
 ```bash
 bg 1

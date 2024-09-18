@@ -73,7 +73,7 @@
   - Allow multiple versions.
   - configuration reuse and inheritance.
   - **Provision both On-Demand and Spot instances**
-  - Recommended by AWS.
+  - `Recommended by AWS`.
 
 #### How to Login to EC2 Without pem file
 - Use Ec2 instance Connect
@@ -83,6 +83,7 @@
   - No need of ssh keys
   - no open ports
   - centralized access control
+
 #### High CPU Utilization:
 - Scale the instance
 - Load balance

@@ -1,9 +1,9 @@
 Control groups, commonly known as **cgroups**, are a feature of the Linux kernel that allows for the management of resource allocation.
-- Feature of linux kernel
+- Feature of `linux kernel`
 - Management of resource allocation across processes.
 - Resource Limits like CPU and memory for a process.
 - **Priority** of resource allocation across processes
-- Each cgroup has multiple processes but these have multiple controllers which check the CPU and Memory Limits.
+- Each cgroup has `multiple processes but these have multiple controllers` which check the CPU and Memory Limits.
 
 ### Subsystems
 Cgroups utilize various subsystems to manage resources, including:
@@ -44,5 +44,5 @@ Cgroups utilize various subsystems to manage resources, including:
      ```
    - Start the database server within the `dbserver` cgroup:
      ```bash
-     sudo cgexec -g cpu,memory:/dbserver /path/to/dbserver
+     sudo cgexec -g cpu,memory:/dbserver /etc/oracle/oracle.ora
      ```

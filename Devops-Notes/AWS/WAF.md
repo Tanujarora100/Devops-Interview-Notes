@@ -13,11 +13,11 @@
     - HTTP headers
     - HTTP body.
 - **Bot Control**: Monitor, block
-- **Web ACLs (Access Control Lists)**: 
+- **Web ACLs**: 
 
  **How does AWS WAF integrate with other AWS services?**
    - Amazon CloudFront
-   - Application Load Balancer (ALB)
+   - ALB
    - Amazon API Gateway.
 
 **What are Managed Rules in AWS WAF?**

@@ -1,7 +1,7 @@
 ## **Amazon Macie**
 - **Sensitive Data Discovery**:
 - **Security Posture Evaluation**: Macie continually `evaluates the security posture` of your S3.
-- **Automated Remediation**: automatically alert you to security risks
+- **Automated Remediation**: 
 
 **What are the different types of sensitive data discovery jobs in Amazon Macie?**
    - one-time

@@ -42,9 +42,9 @@ echo "Top 10 Directories by Size:" >> "$LOG_FILE"
 du -x / | sort -nr | head -10 >> "$LOG_FILE"
 
 # # Send the log via email
-# MAIL_RECIPIENT="recipient@example.com"
-# MAIL_SUBJECT="Disk Usage Report"
-# mail -s "$MAIL_SUBJECT" "$MAIL_RECIPIENT" < "$LOG_FILE"
+MAIL_RECIPIENT="recipient@example.com"
+MAIL_SUBJECT="Disk Usage Report"
+mail -s "$MAIL_SUBJECT" "$MAIL_RECIPIENT" < "$LOG_FILE"
 
 # End of script
 ```

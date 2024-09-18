@@ -372,15 +372,3 @@
 - Kernel debug symbols might be required for detailed kernel profiling.
 
 ---
-
-### Summary for SRE Role
-
-As an SRE, mastering these tools is essential for monitoring system performance, troubleshooting issues, and ensuring optimal system operation.
-
-- **`sar`**: Best for collecting and analyzing historical system performance data.
-- **`vmstat`**: Quick overview of system memory, processes, and CPU usage; helps in identifying immediate bottlenecks.
-- **`iostat`**: Focuses on disk I/O performance; essential for diagnosing storage subsystem issues.
-- **`dstat`**: Versatile tool combining multiple statistics; excellent for real-time monitoring.
-- **`pidstat`**: Provides per-process statistics; crucial for identifying resource-intensive processes.
-- **`perf`**: Advanced profiling tool; invaluable for in-depth performance analysis and optimization.
-

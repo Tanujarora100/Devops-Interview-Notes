@@ -1,4 +1,5 @@
-Load average is a measure of the amount of computational work that a system performs.Load average is typically displayed as three numbers representing the average load over the last `1, 5, and 15 minutes`.
+Load average is a measure of the amount of computational work that a system performs.
+- Load average is typically displayed as three numbers representing the average load over the last `1, 5, and 15 minutes`.
 
 ### Example of Load Average Output
 

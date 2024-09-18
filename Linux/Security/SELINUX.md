@@ -1,4 +1,4 @@
-SELinux (Security-Enhanced Linux) is a security architecture for Linux systems that provides mandatory access control (MAC) to restrict the actions programs can take and the files they can access. It was originally developed by the National Security Agency (NSA) and has been integrated into the Linux kernel since 2003.
+SELinux (Security-Enhanced Linux) is a security architecture for Linux systems that provides mandatory access control (MAC) to restrict the actions programs can take and the files they can access. It was originally developed by the `National Security Agency (NSA)` and has been integrated into the Linux kernel since 2003.
 
 ## Key Features of SELinux
 
