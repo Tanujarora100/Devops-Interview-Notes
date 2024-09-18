@@ -1,7 +1,7 @@
 
 ## What is Nohup?
 - **Nohup** stands for "no hang up." 
-- It prevents the processes from receiving the SIGHUP (Signal Hang Up) signal.
+- It prevents the processes from receiving the SIGHUP.
 
 ```bash
 nohup command [arguments] &
@@ -10,7 +10,7 @@ nohup command [arguments] &
 
 1. **Persistence**: 
 2. **Output Management**:
-3. **Background Execution**: Enables running long tasks without occupying the terminal.
+3. **Background Execution**:
 
 ## DAEMON A PROCESS
 Daemonizing a process in Linux involves running a process in the background, detached from any terminal,
@@ -160,8 +160,6 @@ For systems not using `systemd` or for custom scripts, you can manually daemoniz
    This will run `mydaemon` in the background as a daemon.
 
 ### Method 3: Using `nohup` and `&` (Basic Daemonization)
-
-For simple cases, you can use `nohup` to daemonize a command. This method is not as robust as using `systemd` or writing a custom daemon, but it’s quick and easy.
 
 ```bash
 nohup /path/to/your_command > /dev/null 2>&1 &

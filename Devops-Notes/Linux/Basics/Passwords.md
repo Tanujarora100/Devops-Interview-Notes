@@ -59,8 +59,3 @@ This entry represents the following:
 - **`passwd`**: Change a user's password.
 - **`chage`**: Change the password aging information.
 - **`vipw -s`**: Safely edit the `/etc/shadow` file (locks the file during editing, similar to `visudo` for `/etc/sudoers`).
-
-#### Security Considerations
-
-The `/etc/shadow` file is not world-readable, unlike the `/etc/passwd` file, which is necessary for various system utilities to map user IDs to usernames. 
-- This restriction helps protect the hashed passwords from unauthorized access and potential brute-force attacks.

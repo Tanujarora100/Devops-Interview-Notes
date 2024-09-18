@@ -3,7 +3,8 @@
 ## What is Umask?
 - Default permissions for directories and files
 - In Octal format.
-![alt text](image.png)
+- Default value : `022`
+
 
 ### Default Permissions
 
@@ -59,7 +60,8 @@ To make umask changes permanent, you can add the umask command to user-specific 
 
 ## Sticky Bit
 - Only for **files** and `not for directories`.
-- Restrict the naming and deletion of fles within those directories.
+- Restrict the naming and deletion of fles `within those directories`.
 - When the sticky bit is set, `only the file owner, directory owner, or root user` can delete or rename a file, even if other users have write permissions on the directory.
 - This is commonly used on directories like `/tmp` to prevent users from deleting each other's temporary files.
 - To set the sticky bit, use `chmod +t dir`.
+- Unless i own the directory in which sticky bit is set or i am the root user only then i can rename or delete the files.
