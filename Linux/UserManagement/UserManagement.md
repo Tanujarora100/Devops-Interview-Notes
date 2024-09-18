@@ -138,9 +138,4 @@ ACLs provide more granular file permissions than the traditional Linux file perm
 
 ---
 
-### Summary for SRE Role:
-- **User Management**: Control who can access the system, and ensure users are assigned appropriate groups and privileges.
-- **Password Management**: Enforce security policies like password aging and ensure that accounts are locked if necessary.
-- **Sudo**: Grant users limited, specific root-level access using the sudoers file, following the principle of least privilege.
-- **ACLs**: Use ACLs to fine-tune file and directory permissions, especially in multi-user environments where traditional permissions are insufficient.
 
