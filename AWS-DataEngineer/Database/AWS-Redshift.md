@@ -4,6 +4,7 @@
 - Based on `PostgreSQL` and Used for Online Analytical Processing (OLAP) and high performance querying
 - `Columnar storage` of data with massively parallel query execution in SQL, not like OLTP operations here it is more of read purposes so it is stored in columnar format.
 - Uses Massive Parallel processing across multiple nodes.
+![alt text](image-11.png)
 - When the CPU Utilisation is a problem then go for `Advanced Query Selector Service Present`
 - Faster querying than Athena due to indexes
 - Fine grained Access control using IAM and VPC Security.
@@ -51,13 +52,14 @@
 	- retains until you delete them
 - Feature to automatically copy snapshots into another region for disaster recovery using `S3 cross region replication feature`.
 
-#### Redshift Spectrum:
-- Query data present in S3 without loading it into Redshift
-- Need to have a Redshift cluster to use this feature
-- Query is executed by 1000s of Redshift Spectrum nodes
-- Consumes much less of your cluster's processing capacity than other queries
-- But make sure a redshift cluster is already up in the AZ to use this service.
-#### Node Types
+### Redshift Spectrum:
+- Query exabytes of unstructured data in S3 without loading
+- Limitless concurrency 
+- Horizontal scaling 
+- Separate storage & compute resources
+- Wide variety of data formats 
+- Support of Gzip and Snappy compression
+### Node Types
 ##### RA3 nodes
 - ==Uses Redshift Managed Storage (RMS).==
 - Separates compute and storage.

@@ -15,11 +15,11 @@
 - Data Filtering: on even cells also.
 ![alt text](image.png)
 
-#### Lake Formation TBAC
+### Lake Formation TBAC
 - LF Tags are attached to resources and they control the permission to these tables or rows etc
 - We can assign permissions to these Tags
 - We can Integrate [IAM] , IAM Roles etc
-#### Cross Account Sharing
+### Cross Account Sharing
 - Cross Account Access is possible on AWS.
 - Use Named Resources or LF Tags to share the resources tagged with the same tag.
 - Granular Access with Data Filters for specific Resources on shared tables with another account
