@@ -17,7 +17,7 @@
 - Number of file systems for each customer account in an AWS Region: **1000** but there is no limit on EBS Volumes.
 - You can mount EFS filesystems onto EC2 instances running Linux or MacOS Big Sur. 
 - **Windows is not supported, supported in EBS Volumes.**
-- Aside from EC2 instances, you can also mount EFS filesystems on ECS tasks, EKS pods, and Lambda functions.
+- Aside from EC2 instances, `you can also mount EFS filesystems on ECS tasks, EKS pods, and Lambda functions.`
 - **Amazon EFS** is designed to provide 99.999999999% (11 nines) of durability over a given year.
 - Amazon EFS does not support the `nconnect` mount option.
 - You can mount an Amazon EFS file system from on-premises data center servers using AWS Direct Connect and VPN.
@@ -26,14 +26,14 @@
 # DIFFERENCES WITH EBS:
 - Windows not supported
 - 3x Expensive
-- Can scale to petabytes
+- Can scale to `petabytes`
 - Security Groups can be attached
-- Attached to multiple Instances
+- Attached to `multiple Instances`
 - POSIX file permissions used.
-- Limit of 1000 per account compare to 5000 limit on EBS volumes.
+- Limit of `1000 per account compare to 5000 limit on EBS volumes`.
 
 ## Data Transfer Across Regions
-- You can use DataSync to transfer files between two Amazon EFS file systems, including ones in different AWS Regions.
+- You can use `DataSync to transfer files between two Amazon EFS file systems, including ones in different AWS Regions`.
 - AWS Transfer Family endpoints must be in the same Region as your Amazon EFS file system.
 
 ## EFS Replication
@@ -119,13 +119,13 @@
 - Available only for Linux instances.
 - EFS has a higher price point than EBS.
 - We can use the EFS with ECS Tasks to store the data, and ECS takes care of mounting the EFS on all the ECS Tasks.
-- EFS is pay per second; we can leverage EFS-IA for cost saving.
+- `EFS is pay per second; we can leverage EFS-IA for cost saving.`
 - When the mode is checked, this cannot be later changed from provisioned to bursting or vice versa like we can in EBS Volumes.
 
 ## Mount Targets
 - To access your EFS file system in a VPC, you create one or more mount targets in the VPC.
   - A mount target provides an IP address for an NFSv4 endpoint.
-  - You can create one mount target in each Availability Zone in a region.
+  - You can create `one mount target in each Availability Zone in a region.`
 - You mount your file system using its DNS name, which will resolve to the IP address of the EFS mount target.
   - Format of DNS: `File-system-id.efs.aws-region.amazonaws.com`
 - When using Amazon EFS with an on-premises server, your on-premises server must have a Linux-based operating system.
@@ -149,5 +149,5 @@
 ## Issues While Connecting to EFS by Multiple VPCs
 - Check the security groups of both EC2 instances and mount targets as these act as security groups and can act as virtual firewalls.
 - The security group on a mount target must allow inbound access for TCP on the NFS port on which you want to mount it; otherwise, there will be a connection timeout.
-- Number of security groups for each mount target is 5 and cannot be changed.
-- Number of mount targets for each file system in an Availability Zone is one only.
+- Number of `security groups for each mount target is 5 and cannot be changed.`
+- Number of `mount targets for each file system in an Availability Zone is one only.`

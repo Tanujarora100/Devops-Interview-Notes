@@ -11,14 +11,14 @@
 
 ### 3. **Latency Routing Policy**
 - **Use Case**: When you have resources in `multiple AWS Regions` and want to route traffic to the region that provides the best latency.
-- **Behavior**: Route 53 routes traffic based on latency measurements between users and AWS data centers. It selects the region that provides the lowest latency for the user.
+- **Behavior**: Route 53 routes traffic based on latency measurements between users and AWS data centers. `It selects the region that provides the lowest latency for the user.`
 
 ### 4. **Failover Routing Policy**
 - **Use Case**: To configure active-passive failover.
 - **Behavior**: Route 53 routes traffic to a primary resource unless it is unhealthy, in which case it routes traffic to a secondary resource.
 
 ### 5. **Geolocation Routing Policy**
-- **Use Case**: To route traffic based on the geographic location of your users.
+- **Use Case**: To route traffic based on the `geographic location of your users`.
 - **Behavior**: Route 53 routes traffic to resources based on the user's location (e.g., country, continent).
 
 ### 6. **Geoproximity Routing Policy**
@@ -41,7 +41,7 @@ Amazon Route 53 provides a variety of routing policies to meet different use cas
 |------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | Simple Routing               | Single resource                                                              | Returns all values in the record set in random order                                              |
 | Weighted Routing             | Multiple resources with specified traffic proportions                        | Routes traffic based on assigned weights                                                          |
-| Latency Routing              | Multiple AWS Regions, best latency                                            | Routes traffic to the region with the lowest latency for the user[3]                               |
+| Latency Routing              | Multiple AWS Regions, best latency                                            | Routes traffic to the region with the lowest latency for the user                               |
 | Failover Routing             | Active-passive failover                                                      | Routes traffic to primary resource unless it is unhealthy, then routes to secondary resource      |
 | Geolocation Routing          | Geographic location of users                                                 | Routes traffic based on user's geographic location                                                |
 | Geoproximity Routing         | Geographic location of resources, traffic shifting                           | Routes traffic based on resource proximity and optionally shifts traffic between resources        |
@@ -59,7 +59,8 @@ A **public hosted zone** is a container for records that define how you want to 
 #### **Key Characteristics:**
 
 1. **Accessibility**: 
-   - Public hosted zones can be queried by any internet user. They provide DNS resolution to public-facing domains and services.
+   - Public hosted zones can be queried by any internet user. 
+   - They provide DNS resolution to public-facing domains and services.
 
 2. **Use Cases**:
    - Hosting a website or application that should be accessible to users on the internet.
@@ -80,7 +81,8 @@ A **public hosted zone** is a container for records that define how you want to 
 
 ### **Private Hosted Zones**
 
-A **private hosted zone** is a container for DNS records that define how you want to route traffic within one or more Virtual Private Clouds (VPCs). These records are only accessible within the associated VPC(s) and are not publicly available.
+A **private hosted zone** is a container for DNS records that define how you want to route traffic within one or more Virtual Private Clouds (VPCs).
+-  These records are only accessible within the associated VPC(s) and are not publicly available.
 
 #### **Key Characteristics:**
 
@@ -93,7 +95,7 @@ A **private hosted zone** is a container for DNS records that define how you wan
 
 3. **Example**:
    - A company has an internal service accessible via `internal-service.example.com`. 
-   - This service is hosted on an EC2 instance within a VPC, and a private hosted zone is used to route traffic to the internal IP address of that instance.
+   - This service is hosted on an EC2 instance within a VPC, and a `private hosted zone is used to route traffic to the internal IP address of that instance`.
 
 4. **Record Types**:
    - Similar to public hosted zones, but the records point to private IP addresses within the VPC or other internal resources.

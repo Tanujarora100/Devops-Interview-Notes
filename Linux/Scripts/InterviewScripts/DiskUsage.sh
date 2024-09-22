@@ -2,7 +2,7 @@
 THRESHOLD=80
 CURRENT_USAGE=$(df / | grep / | awk '{print $5}' | sed 's/%//g')
 
-if (( CURRENT_USAGE > THRESHOLD )); then
+if $(( CURRENT_USAGE > THRESHOLD )); then
     echo "Disk usage is above ${THRESHOLD}%. Sending email notification."
     SUBJECT="Disk Usage Alert"
     MESSAGE="Disk usage on $(hostname) is currently at ${CURRENT_USAGE}%."

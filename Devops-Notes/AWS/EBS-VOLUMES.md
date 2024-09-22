@@ -2,7 +2,7 @@
 
 ### General Characteristics
 - **Volume:** A collection of blocks, each with a unique identifier.
-- **Attachment:** Both encrypted and unencrypted volumes can be attached to an EC2 instance simultaneously.
+- **Attachment:** `Both encrypted and unencrypted volumes` can be attached to an EC2 instance simultaneously.
 - **Mountable and Bootable:** Block storage is **mountable and bootable**.
 
 ### EBS Volume Specifics
@@ -20,10 +20,10 @@
   - attach it to the new instance.
 
 ### EBS Volume Upgrade
-- **Modifications:** Increase volume size, change volume type, or adjust performance without detaching.
+- **Modifications:** `Increase volume size, change volume type, or adjust performance without detaching`.
 - **Charges:** No charge to modify the configuration.
 - **Modification Time:** Can take from a few minutes to several hours, depending on the changes.
-- **Size Changes:** Only volume size can be increased, not decreased.
+- **Size Changes:** `Only volume size can be increased, not decreased`.
 - **Performance Changes:** Volume performance can be increased or decreased, but not the size.
 
 
@@ -48,18 +48,18 @@
 #### Provisioned IOPS SSD
 - **Optimized for Transaction-Intensive Applications:**
   - **Examples:** Banking, Payment applications
-  - **Multi-Attach:** Supported
+  - `**Multi-Attach:** Supported`
 
 - **io1 or io2:**
   - **Storage:** 4 GB - 16 TB
-  - **Max IOPS:** 64,000 for Nitro EC2 instances & 32,000 for non-Nitro
+  - **Max IOPS:** `64,000 for Nitro EC2 instances & 32,000 for non-Nitro`
   - **IOPS per GB:** 50
   - **Durability:** io2 is more durable than io1
 
 - **io2 Block Express:**
   - **Storage:** 4 GiB - 64 TB
   - **Latency:** Sub-millisecond
-  - **Max IOPS:** 256,000
+  - **Max IOPS:** `256,000`
   - **IOPS per GB:** 1000
 
 #### Hard Disk Drives (HDD)
@@ -83,11 +83,11 @@
 ### EBS ENCRYPTION
 - EBS encryption is only available on **certain instance types**.
 - There is no direct way to encrypt an existing unencrypted volume, or to remove encryption from an encrypted volume. 
-  - However, you can migrate data between encrypted and unencrypted volumes.
+  - However, `you can migrate data between encrypted and unencrypted volumes.`
 ## Snapshots
 - Snapshots are incremental
 - EBS backups use IO and we should not run them while the application is handling a lot of traffic
-- Snapshots are stored in S3 (we are not able to see them)
+- `Snapshots are stored in S3 (we are not able to see them)`
 - It is not necessary to detach the volume to do a snapshot, but it is recommended
 -  EBS volumes restored from snapshots need to be pre-warmed (using fio or dd commands to read the entire volume)
 - You can’t delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first deregister the AMI before you can delete the snapshot.

@@ -1,0 +1,9 @@
+- fully managed, scalable and `Serverless` service
+- NoSQL document database service designed to be compatible with MongoDB.
+- scales up to `64TB` and can add till `15` read replicas.
+- Support indexes also including secondary indexes.
+- Automatically replicates six copies of your data across three Availability Zones and continuously `backs up your data to Amazon S3`, which is designed for 99.999999999% (11 9’s) of durability.
+- **Self-Healing Storage**: If the storage layer detects a disk failure, it automatically replicates the data from a healthy copy to a new disk without any operational overhead.
+- **Encryption**: Provides encryption at rest using (KMS) and encryption in transit with TLS.
+- Automatic continuous backups to Amazon S3 and point-in-time recovery.
+- **Pay as You Go**: Pricing is based on the resources consumed, such as instance hours, storage, and data transfer.

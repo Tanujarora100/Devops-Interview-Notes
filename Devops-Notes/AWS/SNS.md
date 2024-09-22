@@ -7,21 +7,20 @@ SNS Topics are the base entity of SNS.
 - A publisher sends messages to a topic
 - Topics can have subscribers which will receive messages from a topic
 Supported subscribers are:
-- HTTP(s)
-- Email (JSON)
-- SQS queues
-- Mobile Push Notifications
-- SMS messages
-- Lambda Functions
+   - HTTP(s)
+   - Email (JSON)
+   - SQS queues
+   - Mobile Push Notifications
+   - SMS messages
+   - Lambda Functions
 SNS is used across AWS for notifications, example CloudWatch uses it extensively
 It is possible to apply filters to a subscriber
 - Fan-out architecture: single topic with multiple SQS queue subscribers
-- SNS offers delivery status for supported subscribers which are HTTP, Lambda and SQS
-- SNS supports delivery retries
-- SNS it is a HA and scalable service within a region
+   - SNS offers delivery status for supported subscribers which are `HTTP, Lambda and SQS`
+   - SNS supports delivery retries
+   - SNS it is a HA and scalable service within a region
 - SNS supports Server Side Encryption (SSE)
 - We can use cross-account access to a topic via topic policies
-While both Amazon SNS (Simple Notification Service) and Amazon SES (Simple Email Service) can be used to send emails, they are designed for different purposes and use cases. Here's why you might use SNS to send emails even when SES is available:
 
 ### 1. **Multi-Protocol Messaging with SNS**
    - **Multi-Protocol Support**: Amazon SNS is a flexible notification service that supports multiple protocols, including HTTP/S, SQS (Simple Queue Service), Lambda functions, SMS, mobile push notifications, and email. This makes SNS ideal for scenarios where you need to send notifications through different channels, not just email.
@@ -49,4 +48,3 @@ While both Amazon SNS (Simple Notification Service) and Amazon SES (Simple Email
 - **SNS** is best for multi-protocol notifications and simple email alerts as part of broader event-driven workflows or when you need to broadcast messages across various channels.
 - **SES** is best for dedicated email use cases, such as sending transactional emails, marketing campaigns, or any scenario requiring advanced email features.
 
-Choosing between SNS and SES depends on your specific needs and the context in which you need to send emails. If your use case requires sending notifications across multiple channels (not just email), or if you're integrating with other AWS services like CloudWatch or S3, SNS might be the better choice. If you're focused solely on email delivery and need advanced email features, SES is the better option.

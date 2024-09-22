@@ -2,7 +2,7 @@
 while true; do 
 sleep 240
 PROCESS_STATUS=$(ps -ef | grep -iq java; echo $?)
-if [ $PROCESS_STATUS -gt 0]; then 
+if [ $PROCESS_STATUS -ne 0]; then 
     echo "Process is running" >> /dev/null
 else 
     sudo systemctl start java

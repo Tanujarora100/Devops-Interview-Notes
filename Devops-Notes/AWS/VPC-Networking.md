@@ -58,9 +58,6 @@ A VPC endpoint enables you to privately connect your VPC to supported AWS servic
 | **Use Cases**            | Granular control at instance level           | Broad control at subnet level             |
 | **Configuration**        | Immediate effect, based on IP, protocol, port| Immediate effect, based on IP, protocol, port |
 
-
-
-
 ### **Internet Gateway**
 
 - horizontally scaled, redundant, and highly available VPC component. 
@@ -148,7 +145,7 @@ aws ec2 associate-vpc-cidr-block --vpc-id vpc-12345678 --cidr-block 10.1.0.0/16
 
 2. **Secondary CIDR Blocks**:
    - You can associate additional (secondary) IPv4 CIDR blocks with your VPC.
-   - Upto 5 for IPV6 and IPV4
+   - Upto` 5 for IPV6 and IPV4`
 
 ## **Public and Private NAT Gateways in AWS**
 
@@ -172,7 +169,7 @@ aws ec2 associate-vpc-cidr-block --vpc-id vpc-12345678 --cidr-block 10.1.0.0/16
 
 **Description**:
 - A Private NAT Gateway enables instances in private subnets to connect to **other VPCs or on-premises networks**.
-- It resides in a **private subnet** and does not require an Elastic IP address.
+- It resides in a *`*private subnet** and does not require an Elastic IP address.`
 - Traffic from instances in private subnets is routed to the NAT gateway, which then forwards it to a transit gateway.
 
 **Key Characteristics**:
@@ -222,7 +219,7 @@ An Elastic IP address is a static IPv4 address
 - **Static IP**: Does not change over time, providing a consistent IP address for your resources.
 - **Public IPv4 Address**: Reachable from the internet, enabling **communication with instances that do not have a public IP address**.
 - **Region-Specific**: Elastic IP addresses are specific to a region.
-  - 5 per region.
+  - `5 per region.`
 
 **Use Cases**:
 - **DNS Configuration**: Use the Elastic IP address in DNS records to ensure your domain points to the correct instance.
@@ -230,6 +227,6 @@ An Elastic IP address is a static IPv4 address
 **Pricing**:
 - **Charges**: 
   - AWS charges for Elastic IP addresses that are not associated with running instances. 
-  - There is no charge for Elastic IP addresses associated with running instances.
+  - `There is no charge for Elastic IP addresses associated with running instances`.
 - No, you cannot attach the same Elastic IP address to multiple Amazon EC2 instances simultaneously. Each Elastic IP (EIP) can only be associated with one instance or network interface at a time. 
 - If you need multiple instances to share a single public IP address, you can use a Network Address Translation (NAT) gateway or a load balancer.

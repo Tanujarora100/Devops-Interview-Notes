@@ -128,11 +128,11 @@
 - They offer the maximum possible availability and resiliency
 - They can span multiple AZs
 - Instances in the same spread placement group are located on different racks, having isolated networking and power supplies
-- There is a limit for 7 instances per AZ in case of spread placement groups.
+- There is a `limit for 7 instances per AZ in case of spread placement groups.`
 - Considerations:
     - Spread placement provides infrastructure isolation
     - Hard limit: 7 instances per AZ
-    - We can not use dedicated instances or hosts
+    - We can not `use dedicated instances or hosts`
 
 ### Partition Placement Groups
 
@@ -156,7 +156,7 @@
 - Canceling a spot instances: in order ot cancel a spot instance, it has to be in an **open**, **active** or **disabled** state
 - Spot instance states:
     ![alt text](image-1.png)
-- Cancelling a spot request, it will not terminate the instances themselves. In order to terminate instances, first we have to terminate the spot request, if there is one active
+- `Cancelling a spot request, it will not terminate the instances themselves. In order to terminate instances, first we have to terminate the spot request, if there is one active`
 
 ## Spot Fleets
 
