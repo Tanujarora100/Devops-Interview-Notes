@@ -1,6 +1,6 @@
 ### Client Mode
 
-- In Client mode, ==the driver runs on the same machine where you submit the Spark job.==
+- In Client mode, **the driver runs on the same machine where you submit the Spark job.**
 	- This is the default mode and is ideal for development, testing, or working with small datasets on your local machine.
 - **Benefits:**
     - Simple to set up

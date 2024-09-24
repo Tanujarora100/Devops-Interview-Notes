@@ -51,7 +51,6 @@ sudo vgextend my_volume_group /dev/sdb
 # 3. Extend a Logical Volume (LV) to use the newly added space
 sudo lvextend -l +100%FREE /dev/my_volume_group/my_logical_volume
 
-# 4. Resize the file system to make use of the extended Logical Volume
 sudo resize2fs /dev/my_volume_group/my_logical_volume
 
 ```

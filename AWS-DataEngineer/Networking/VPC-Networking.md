@@ -230,3 +230,188 @@ An Elastic IP address is a static IPv4 address
   - `There is no charge for Elastic IP addresses associated with running instances`.
 - No, you cannot attach the same Elastic IP address to multiple Amazon EC2 instances simultaneously. Each Elastic IP (EIP) can only be associated with one instance or network interface at a time. 
 - If you need multiple instances to share a single public IP address, you can use a Network Address Translation (NAT) gateway or a load balancer.
+
+### Virtual Private Cloud (VPC) in AWS
+
+#### **1. What is a VPC?**
+   - **Amazon Virtual Private Cloud (VPC)** allows you to create a **logically isolated network** in the AWS cloud.
+ 
+
+#### **2. VPC Components:**
+   - **Subnets**: A subdivision of the VPC's IP address range. Subnets can be **public** (access to the internet) or **private** (no direct internet access).
+   - **Route Tables**: Used to control routing for traffic within the VPC. Each subnet must be associated with a route table.
+   - **Internet Gateway (IGW)**: Allows communication between instances in the VPC and the internet.
+   - **Elastic IP**: A static public IP that can be associated with instances for internet access.
+   - **NAT Gateway**: Allows instances in a private subnet to connect to the internet without exposing them to inbound traffic.
+   - **Network Access Control Lists (NACLs)**: A stateless firewall for controlling inbound and outbound traffic at the subnet level.
+   - **Security Groups**: A stateful firewall that controls inbound and outbound traffic for EC2 instances.
+
+---
+
+### **Steps to Create a VPC, Attach Subnets, Route Tables, and Internet Gateway**
+
+#### **Step 1: Create a VPC**
+   - **Go to the VPC Console**:
+     1. Navigate to the **VPC Dashboard** in the AWS Management Console.
+     2. Click on **"Create VPC"**.
+
+   - **Configure VPC Settings**:
+     1. **Name Tag**: Provide a name for your VPC (e.g., `My-VPC`).
+     2. **IPv4 CIDR Block**: Specify the IP address range for the VPC in CIDR notation (e.g., `10.0.0.0/16`).
+        - The `/16` CIDR block provides 65,536 IP addresses, a good range for many deployments.
+     3. **Tenancy**: Choose between **default** (shared hardware) or **dedicated** (instances run on dedicated hardware). 
+
+   - **Click "Create VPC"**: Your VPC is now created, but no subnets or gateways are yet attached.
+
+#### **Step 2: Create Subnets**
+   - **Public Subnet**:
+     1. Navigate to the **Subnets** section of the VPC dashboard.
+     2. Click **"Create Subnet"**.
+     3. Choose the **VPC** created earlier.
+     4. **Name Tag**: Give it a name (e.g., `Public-Subnet`).
+     5. **Availability Zone**: Select an AZ (e.g., `us-east-1a`).
+     6. **IPv4 CIDR Block**: Specify a subset of your VPC’s IP range (e.g., `10.0.1.0/24` for the public subnet).
+     7. **Click "Create"**.
+
+   - **Private Subnet**:
+     1. Repeat the above process to create a **Private Subnet**.
+     2. **IPv4 CIDR Block**: Use a different range from the VPC (e.g., `10.0.2.0/24` for private subnet).
+
+#### **Step 3: Create an Internet Gateway (IGW)**
+   - **Create the IGW**:
+     1. Go to the **Internet Gateways** section.
+     2. Click **"Create Internet Gateway"**.
+     3. **Name Tag**: Give the gateway a name (e.g., `My-IGW`).
+     4. **Click "Create"**.
+
+   - **Attach IGW to VPC**:
+     1. After creating the IGW, select it and click **"Attach to VPC"**.
+     2. Choose the **VPC** you created earlier and attach the IGW.
+
+#### **Step 4: Create and Configure Route Tables**
+   - **Create Route Table for Public Subnet**:
+     1. Navigate to **Route Tables** in the VPC console.
+     2. Click **"Create Route Table"**.
+     3. **Name Tag**: Give it a name (e.g., `Public-Route-Table`).
+     4. Choose the VPC created earlier and click **Create**.
+
+   - **Edit Routes**:
+     1. Select the **Public Route Table** and click **"Edit Routes"**.
+     2. Add a route with the destination `0.0.0.0/0`.
+     3. For the **target**, select the **Internet Gateway (IGW)** you attached earlier.
+     4. Save the changes.
+
+   - **Associate the Route Table with the Public Subnet**:
+     1. Go to **Subnet Associations** under the public route table.
+     2. Click **Edit Subnet Associations**, select your **Public Subnet**, and save.
+
+   - **Create Route Table for Private Subnet**:
+     1. Repeat the process to create a **Private Route Table**, but do not attach an IGW.
+     2. You can add a route for a **NAT Gateway** if you want the private subnet to have outbound internet access (e.g., for software updates).
+
+---
+Here are some **scenario-based interview questions** on **VPC**, covering different concepts like subnets, route tables, internet gateways, and troubleshooting:
+
+---
+
+### **Question 1: Public Subnet Connectivity Issue**
+**Scenario**: You have created a VPC with one public and one private subnet. You launched an EC2 instance in the public subnet, but it is not accessible over the internet. You verified that the security group allows inbound SSH traffic, and the instance has a public IP. What could be the problem and how would you troubleshoot?
+
+**Answer**:
+1. **Check the Internet Gateway (IGW)**:
+   - Ensure that an **Internet Gateway (IGW)** is attached to the VPC.
+   - If no IGW is attached, attach one to the VPC.
+
+2. **Check Route Table for Public Subnet**:
+   - Verify that the **public subnet's route table** has a route for `0.0.0.0/0` that points to the **Internet Gateway**.
+   - If missing, add a route entry in the route table with `0.0.0.0/0` as the destination and the IGW as the target.
+
+3. **Check Network ACLs**:
+   - Ensure that the **Network ACL** (NACL) associated with the public subnet allows inbound and outbound traffic for the relevant ports (e.g., port 22 for SSH).
+   - Check if the NACL is blocking the incoming/outgoing traffic.
+
+4. **Elastic IP**:
+   - If the instance was launched without an Elastic IP and relies on AWS-assigned public IP, ensure that a public IP was assigned during instance launch.
+   - If needed, associate an **Elastic IP** to ensure static access.
+
+---
+
+### **Question 2: Private Subnet Internet Access**
+**Scenario**: You have a private subnet, and you need instances in this subnet to access the internet for software updates, but they should not be publicly accessible. How would you design this setup?
+
+**Answer**:
+1. **Create a NAT Gateway**:
+   - Launch a **NAT Gateway** in the **public subnet** to allow instances in the private subnet to initiate outbound internet connections.
+   - Ensure the NAT Gateway has an **Elastic IP** associated with it.
+
+2. **Configure Route Table for Private Subnet**:
+   - Modify the **private subnet's route table** to add a route:
+     - Destination: `0.0.0.0/0`
+     - Target: The **NAT Gateway** (not the Internet Gateway).
+   
+3. **Security Group and NACLs**:
+   - Ensure that the **Security Group** associated with the private instances allows outbound traffic.
+   - The **NACL** for the private subnet should allow outbound traffic (typically for ports 80/443 for HTTP/HTTPS).
+
+---
+
+### **Question 3: Instances in Private Subnet Can't Connect to the Internet**
+**Scenario**: You configured a NAT Gateway in the public subnet, but instances in the private subnet still can't connect to the internet. What could be the problem, and how would you troubleshoot?
+
+**Answer**:
+1. **Check NAT Gateway**:
+   - Verify that the **NAT Gateway** is **in an active state** and associated with an **Elastic IP**.
+   - Ensure that the NAT Gateway is placed in a **public subnet**.
+
+2. **Check Private Subnet Route Table**:
+   - Ensure the **route table associated with the private subnet** has the route `0.0.0.0/0` pointing to the NAT Gateway's ID.
+   - If not, add the correct route for external internet access.
+
+3. **Check Security Group and NACL**:
+   - Ensure that the **Security Group** for private instances allows outbound internet access (e.g., port 80 for HTTP, port 443 for HTTPS).
+   - The **NACL** associated with the private subnet should allow both inbound and outbound traffic.
+
+4. **Test with Ping**:
+   - From a private instance, try using `ping 8.8.8.8` to verify outbound traffic. If ping works but DNS resolution fails, check if the private subnet’s **DNS settings** allow instances to resolve domain names.
+
+---
+
+### **Question 4: Route Table Mismatch**
+**Scenario**: You have two subnets: one public and one private. Instances in the public subnet are unable to communicate with instances in the private subnet. What could be wrong?
+
+**Answer**:
+1. **Check Route Tables**:
+   - Ensure that the **route tables** of both the public and private subnets have appropriate routes for internal communication.
+   - Example: If the public subnet’s CIDR is `10.0.1.0/24` and the private subnet’s CIDR is `10.0.2.0/24`, both route tables should allow routing between these CIDR blocks.
+   
+2. **Check Security Groups**:
+   - Ensure that the **Security Group** for instances in both subnets allows inbound traffic from each other's CIDR range (e.g., allow traffic from `10.0.2.0/24` to `10.0.1.0/24` and vice versa).
+   
+3. **Check NACLs**:
+   - Ensure that **Network ACLs** for both subnets allow internal traffic between the subnets' IP ranges.
+
+4. **Check Subnet Type**:
+   - Verify that the private subnet isn’t misconfigured as a public subnet. If the **route table** for the private subnet includes a route to the **Internet Gateway**, then it is incorrectly considered a public subnet.
+
+---
+
+### **Question 5: Multi-VPC Communication Issue**
+**Scenario**: You have two VPCs, and you set up **VPC Peering** between them. Instances in both VPCs cannot communicate with each other. What could be the cause?
+
+**Answer**:
+1. **Check VPC Peering Status**:
+   - Ensure that the **VPC Peering connection** is in an **active** state.
+
+2. **Check Route Tables in Both VPCs**:
+   - Ensure that both VPCs’ **route tables** have entries for each other’s CIDR blocks.
+   - Example: If VPC A has CIDR `10.0.0.0/16` and VPC B has `192.168.0.0/16`, the route table in VPC A should have a route for `192.168.0.0/16` pointing to the VPC Peering connection, and vice versa for VPC B.
+
+3. **Check Security Groups and NACLs**:
+   - Ensure that **Security Groups** in both VPCs allow traffic from each other’s CIDR ranges.
+   - Also check **Network ACLs** to ensure they permit the traffic between the VPC CIDR ranges.
+
+4. **Check DNS Settings (Optional)**:
+   - If you're trying to resolve instance names across VPCs, ensure that **DNS resolution and hostname settings** are enabled for the VPC Peering connection.
+
+---
+
