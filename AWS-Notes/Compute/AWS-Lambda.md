@@ -33,12 +33,12 @@ Lambda Layers are a way to manage code and dependencies, making it easier to org
 ### Key Performance Configurations in AWS Lambda
 
 1. **Memory Allocation**:
-   - **Range**: You can allocate memory to your Lambda function from 128 MB to 10,240 MB,
-   - **Impact on CPU and Network**: Increasing memory also proportionally increases the CPU and network bandwidth available to the function. For example, a function with more memory has access to more CPU power.
+   - **Range**: 128 MB to 10,240 MB,
+   - **Impact on CPU and Network**: Increasing memory also proportionally increases the CPU and network bandwidth.
 
 2. **Execution Time**:
-   - **Timeout**: The maximum allowable timeout for a Lambda function is 15 minutes (900 seconds). You can set a lower timeout based on expected execution times to avoid excessive running times in case of errors or inefficient processing.
-   - **Use Case Consideration**: For longer-running jobs, consider breaking the task into smaller chunks that fit within this limit, or use other AWS services like AWS Step Functions for orchestrating multiple Lambda functions.
+   - **Timeout**: 15 minutes (900 seconds).
+   - **Use Case Consideration**: For longer-running jobs, consider breaking the task into smaller chunks that fit within this limit, or use other AWS services like AWS Step Functions.
 
 3. **Concurrency and Throttling**:
    - **Concurrency Limits**: Concurrency is the number of instances of your function that can run simultaneously. The default soft limit is 1,000 concurrent executions per AWS account per region, which can be increased upon request.
