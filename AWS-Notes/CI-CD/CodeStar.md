@@ -1,0 +1,9 @@
+- An abstraction over CICD services in AWS
+- Used to **quickly create CICD-ready projects** for **EC2, Lambda and Elastic Beanstalk**
+- `One dashboard to view all the components`
+- Supported languages: C#, Go, HTML, Java, NodeJS, PHP, Python and Ruby
+- Issue tracking integration with `Jira and GitHub Issues`
+- `Free service`, pay for the underlying resources
+- Limited customization
+- Supports CodeCommit and GitHub as code repo
+- Integrates with **Cloud9** (cloud-based IDE)

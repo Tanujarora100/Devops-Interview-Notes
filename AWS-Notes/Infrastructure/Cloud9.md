@@ -1,0 +1,5 @@
+- **Cloud-based IDE that runs in the browser**
+- Features debugger, terminal and `live pair programming`
+- Pre-packaged with essential tools for popular programming languages
+- **Fully integrated with `SAM`** and Lambda to easily build serverless applications
+- Runs on `EC2 instance under the hood`(hibernates after some period of idleness to reduce unnecessary charges)
