@@ -15,7 +15,7 @@
     - `Size constraints`, `Geo match`
     - Rate-based rules (to count occurrences of events)
 - Rule Actions: Count | Allow | Block | CAPTCHA
-
+![alt text](image-16.png)
 ### Web ACL:
 - To filter based on IP sets(One set has 10k IP)
 - Add Rule Groups or Rules - processed in order
@@ -28,7 +28,7 @@
 - Protects from:
     - Sql Injection
     - Cross site scripting
-
+![alt text](image-17.png)
 #### How to use WAF On an ALB?
 - Challenge is ALB does not have a fixed IP
 - We can go for global accelerator for fixed UP and WAF on ALB.
