@@ -3,6 +3,7 @@
 - AppSync is a managed service which uses *GraphQL*
 - It is used for building APIs on AWS which use *GraphQL*
 - *GraphQL* makes it easy for applications to get the exact data they need. This includes combining data from multiple resources
+![alt text](image-27.png)
 - Datasets behind *GraphQL* can include:
     - NoSQL data stores
     - RDS databases
@@ -37,12 +38,11 @@
     }
     ```
 
-# Security
+## Security
 
-- Four ways we can authorize applications to interact with AppSync:
-    - API_KEY
-    - AWS_IAM ROLE
-    - OPENID_CONNECT (OpenID Connect provider/ JWT)-SSO
-        - SAML Based Authentication is not there only JWT SSO.
-    - AMAZON_COGNITO_USER_POOLS- SSO
-- For custom domain & HTTPS, use CloudFront in front of AppSync
+- **To get HTTPS on AppSync with a custom domain, use CloudFront in front of AppSync**
+- 4 ways to authorize applications to interact with AppSync GraphQL API:
+    - `API_KEY` - generate an API key and give it to the customer
+    - `AWS_IAM` - authorize IAM users or roles / **cross-account access**
+    - `AMAZON_COGNITO_USER_POOLS` - AWS managed IDP for external users
+    - `OPENID_CONNECT` - 3rd party OIDC compatible IDP for external users
