@@ -1,0 +1,32 @@
+- Function as a service
+- RAM: `128MB (default) - 10 GB` (1 MB increments)
+- Disk capacity (`/tmp`): `512 MB (free) - 10 GB`
+- Cannot configure vCPU count directly, increase RAM to increase vCPU count
+    - RAM = 1,792 MB ⇒ vCPU = 1
+- Timeout: default 3s, max 15 mins (900s)
+- Environment variables: `max 4 KB`
+- Deployment
+    - Compressed: max 50 MB
+    - Uncompressed: max 250 MB (for more use `/tmp`)
+## Synchronous Invocation
+
+- The caller invokes the lambda function and waits for it to return the result
+- Error handling (retries, exponential backoff, etc) must be done by the caller
+- Invoking a lambda function using CLI or SDK results in synchronous invocations by default. To invoke explicitly, set `invocation-type` to `RequestResponse`
+- Some services that invoke the lambda function synchronously
+    - Invoked by user
+        - ALB
+        - API Gateway
+        - CloudFront (Lambda@Edge)
+        - S3 Batch
+    - Invoked by service
+        - Cognito
+        - Step Functions
+        - **SQS** (through event source mapping)
+## Profiling using CodeGuru
+- provide runtime performance
+- Supported for `Java and Python` runtimes
+- Just enable from the console
+    - added as a Lambda layer
+    - Required environment variables are populated
+    - `AmazonCodeGuruProfilerAgentAccess` policy is attached
