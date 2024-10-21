@@ -127,7 +127,7 @@ fraudulent one without the user's knowledge. This is often used for phishing att
 - On-path AttackIn IT security, the term "On-path" refers to a type of attack where the attacker positions themselves in the communication path between two parties.
 - This type of attack was previously known as a "Man-in-the-Middle" (MitM) attack. 
 ![alt text](image-5.png)
-- Intercepting Communication: The attacker intercepts the data traffic flowing between two parties (such as a user and a website). This can be achieved through various means like compromising network equipment, exploiting unsecured Wi-Fi networks, or using ARP spoofing in a local
+- Intercepting Communication: The attacker intercepts the data traffic flowing between two parties (such as a user and a website). This can be achieved through various means like compromising network equipment, exploiting unsecured Wi-Fi networks, or using `ARP spoofing` in a local
 network.
 - Eavesdropping: In its simplest form, an on-path attack allows the attacker to passively listen to the
 communication, gaining access to any transmitted information, such as login credentials, personal
@@ -137,7 +137,7 @@ Here’s how an on-path attack works:
 - Session Hijacking: The attacker can hijack sessions, such as web sessions, by stealing session tokens, allowing them to impersonate the victim and gain unauthorized access to systems or information.
 - Data Manipulation: More
 sophisticated on-path attackers can alter the communication. They can modify the data being sent between the parties, inject malicious content, or redirect users to fraudulent sites.
-- SSL Stripping: In this form of on-path attack, the attacker downgrades a secure HTTPS connection to an unencrypted HTTP connection,
+- SSL Stripping: In this form of on-path attack, the attacker downgrades a `secure HTTPS connection to an unencrypted HTTP connection`,
 enabling them to view and modify the data exchanged.
 ### Mitigation Strategies:
 - Encryption: Using end-to-end
@@ -145,6 +145,59 @@ encryption (like HTTPS) makes it
 difficult for an on-path attacker to read or modify the data. 
 - Secure Protocols: Protocols like SSL/TLS and SSH provide secure channels, even over an unsecured network.
 - VPN (Virtual Private Network): Using a VPN can provide a secure tunnel for data transmission, reducing the risk of on-path attacks.
-- Awareness and Training: Educating users about the risks of using
-unsecured networks and the
-importance of secure communication practices.
+- Awareness and Training
+
+## Privilege Escalation
+There are two main types of privilege escalation:
+- **Vertical Privilege Escalation**: This occurs when an attacker gains a
+higher level of privilege than they are supposed to have. For instance, a regular user gaining administrative access. This type is also known as "privilege elevation."
+- **Horizontal Privilege Escalation**: This involves an attacker expanding their control across a network at the `same level of privileges.` For example, an attacker with restricted user permissions accessing other user accounts at the same level.
+## Credential replay
+- An attack where an attacker
+captures and reuses credentials
+(such as usernames and passwords) to gain unauthorized access to a system.
+- This attack exploits scenarios where authentication credentials are
+transmitted over a network or
+stored in a way that allows an
+attacker to intercept and reuse
+them. 
+- Credential Capture: The attacker first needs to capture the credentials. This can be done through various methods, such as using keyloggers, phishing attacks, network sniffers (in cases where credentials are sent over unsecured or poorly secured networks), or through database breaches.
+- Replay the Credentials: Once the
+credentials are obtained, the attacker attempts to use them to log into the system or service for which they are valid
+
+### Mitigation Strategies: 
+- Encryption
+- Two-Factor Authentication (2FA)
+- Regular Password Changes and Strong Password Policies
+## Request Forgery
+- A type of cyber attack where the attacker tricks a user's browser or application into performing an
+unwanted action on a trusted site where the user is authenticated. 
+- The most common forms of request forgery are Cross-Site Request
+Forgery (CSRF) and Server-Side
+Request Forgery (SSRF).
+### Cross-Site Request Forgery (CSRF)
+- In a CSRF attack, the attacker forces a logged-in victim's browser to send a forged request (like changing a password or transferring funds) to a web application. 
+- The application, unable to distinguish between legitimate requests and forged requests, processes the request. 
+- CSRF attacks usually exploit the trust that a web application has in the user's browser. For example, if a user is logged into their bank's website and unknowingly visits a malicious site in the same browser, the malicious site could send a request to the bank's site to
+transfer money without the user's
+consent.
+![alt text](image-6.png)
+### Server-Side Request Forgery (SSRF)
+- In an SSRF attack, the attacker
+manipulates a server to make a
+request to internal services within the organization or to external thirdparty systems.
+- This is achieved by exploiting a
+vulnerable application on the server, which then sends a request to an unintended location.
+- SSRF attacks can be used to bypass firewalls, access sensitive data, and conduct port scanning of internal networks.
+### Mitigation Strategies:
+#### For CSRF: 
+- Implement anti-CSRF tokens in applications. 
+- These tokens ensure that the requests are generated by the actual user, not by a third party. 
+- Use of custom headers and checking the 'Referer' header can also help in validating requests.
+#### For SSRF: 
+- Validate and sanitize user input, especially URL inputs that might be used in requests. 
+- Apply the principle of least privilege to restrict what internal resources can be accessed by the server. 
+- Use firewalls and network segmentation to limit the reach of requests from webfacing servers.
+
+## Impossible Travel
+ - Impossible travel refers to a situation where a user's account is accessed from geographically distant locations in a timeframe that is impossible by normal travel means, suggesting unauthorized access or account compromise.
